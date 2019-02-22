@@ -1,0 +1,379 @@
+#pragma once
+
+#ifndef MATH_API
+#define MATH_API _declspec(dllexport)
+#endif
+
+
+#include "CUserManager.h"
+#include "IStarIMC2CListener.h"
+#include "IStarIMChatroomListener.h"
+#include "IVdnListener.h"
+#include "ISrcListener.h"
+#include "IGroupListener.h"
+
+
+class MATH_API StarRtcCore
+{
+private:
+	StarRtcCore(CUserManager* pUserManager);
+	
+public:
+	static StarRtcCore* getStarRtcCoreInstance(CUserManager* pUserManager);
+	
+	~StarRtcCore();
+
+	void registerCallback();
+
+	/**
+	 * 添加C2C消息监听
+	 * @param listener
+	 */
+	void addC2CListener(IStarIMC2CListener* listener);
+
+	/**
+	 * 添加group消息监听
+	 * @param listener
+	 */
+	void addGroupListener(IGroupListener* listener);
+
+	/**
+	 * 添加StarIMChatroom消息监听
+	 * @param listener
+	 */
+	void addStarIMChatroomListener(IStarIMChatroomListener* listener);
+
+	/**
+	 * 添加Vdn消息监听
+	 * @param listener
+	 */
+	void addVdnListener(IVdnListener* pVdnListener);
+
+	/**
+	 * 添加Src消息监听
+	 * @param listener
+	 */
+	void addSrcListener(ISrcListener* pSrcListener);
+	
+	/**
+	 * 启动IM服务
+	 */
+	bool startIMServer();
+
+	/**
+	 * 停止IM服务
+	 */
+	bool stopIMServer();
+
+	/**
+	 * 发送消息
+	 */
+	bool sendMessage(CIMMessage* pIMMessage);
+
+	/**
+	 * 发送上线消息
+	 */
+	bool sendOnlineMessage(CIMMessage* pIMMessage);
+
+	/**
+	 * 发送群组消息
+	 */
+	int sendGroupMsg(CIMMessage* pIMMessage);
+	
+	/**
+	 * 申请创建群组
+	 */
+	int applyCreateGroup(char* addUsers, char* userDefineData);
+	
+	/**
+	 * 申请删除
+	 */
+	int applyDelGroup(char* groupId);
+
+	/**
+	 * 申请向群组添加用户
+	 */
+	int applyAddUserToGroup(char* groupId, char* addUsers, char* userDefineData);
+	
+	/**
+	 * 申请移除群组用户
+	 */
+	int applyRemoveUserToGroup(char* groupId, char* removeUsers);
+	
+	/**
+	 * 发送系统消息给指定用户
+	 */
+	int sendSystemMsgToUser(char* sendUsers, int msgDataType, char* msgStr, char* msgDigest);
+	
+	/**
+	 * 发送系统消息给群组
+	 */
+	int sendSystemGroupMsg(char* groupId, int msgDataType, char* msgStr, char* msgDigest);
+	
+	/**
+	 * 申请忽略群组消息
+	 */
+	int applySetGroupPushIgnore(char* groupId);
+	
+	/**
+	 * 申请取消忽略群组消息
+	 */
+	int applyUnsetGroupPushIgnore(char* groupId);
+	
+	/**
+	 * 设置推送模式
+	 */
+	int setPushMode(char* pushMode);
+	
+	/**
+	 * 获取推送模式
+	 */
+	int getPushMode();
+
+	/*
+	 * 创建ChatRoom
+	 */
+	bool createChatRoom(string serverIp, int serverPort, string strName, int chatroomType);
+
+	/*
+	 * 加入ChatRoom
+	 */
+	bool joinChatRoom(string serverIp, int serverPort, string strChatroomId);
+	/*
+	 * 查询chatroom在线人数
+	 */
+	bool getOnlineNumber(string strChatroomId);
+
+	bool banToSendMsg(char* banUserId, int banTime);
+	bool kickOutUser(char* kickOutUserId);
+	bool sendChat(CIMMessage* pIMMessage);
+	bool sendPrivateChat(char* toUserId, char* msgData);
+	bool deleteChatRoom();
+
+	/*
+	 *  与ChatRoom断开连接
+	 */
+	bool stopChatRoomConnect();
+
+	/*
+	 * Channel 申请下载
+	 */
+	bool applyDownload(string serverIp, int port, string channelId);
+
+	/*
+	 * Channel 停止下载
+	 */
+	bool stopDownload();
+
+	/*
+	 * 设置数据流配置
+	 */
+	bool setStreamConfig(int* sendBuf, int length);
+
+	void setGlobalSetting(int videoEnable, int audioEnable,
+		int videoBigIsHw,
+		int videoBigWidth, int videoBigHeight, int videoBigFps, int videoBigBitrate,
+		int videoSmallWidth, int videoSmallHeight, int videoSmallFps, int videoSmallBitrate,
+		int openGLESEnable, int dynamicBitrateAndFpsEnable, int voipP2PEnable);
+
+
+	/*
+	 * 创建Channel
+	 */
+	bool createPublicChannel(string strServerIp, int port, string strName, int channelType, string strChatroomId);
+	int startLiveSrcEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
+	int startUploadSrcServer(char* servAddr, int servPort, char* agentId, char* userId, char* starToken, char* channelId/* ,int maxAudioPacketNum,int maxVideoPacketNum */);
+	int stopUploadSrcServer();
+	int stopLiveSrcCodec();
+
+	//=========================================================================
+	//===========================    Msg回调    ===========================
+	//=========================================================================
+	/**
+	 * msgServer错误,这个函数是新线程调用
+	 */
+	static int msgErr(char* errString, void* userData);
+
+	/**
+	 * 重试多次后仍不能连接到msgServer，或用户主动调用stop后回调
+	 */
+	static int stop(void* userData);
+
+	/**
+	 * msgServer处于在线状态
+	 */
+	static int online(int maxContentLen, void* userData);
+
+	/**
+	 * msgServer中断状态
+	 */
+	static int offline(void* userData);
+
+	/**
+	 * 发送消息的群信息还未同步完成，等待5秒再试
+	 */
+	static int groupIsSyncing(char* groupId, void* userData);
+
+	/**
+	 * 收到单聊消息发送成功反馈
+	 */
+	static int sendMsgFin(int msgIndex, char* toUserId, uint32_t time, void* userData);
+
+	/**
+	 * 收到单聊消息
+	 */
+	static int getNewMsg(char* fromUserId, uint32_t time, char* msgData, void* userData);
+
+	/**
+	 * 收到群消息
+	 */
+	static int getNewGroupMsg(char* groupId, char* fromUserId, uint32_t time, char* msgData, void* userData);
+
+	/**
+	 * 收到群推送消息
+	 */
+	static int getGroupSystemMsg(char* groupId, uint32_t time, char* msgData, void* userData);
+
+	/**
+	 * 收到系统推送消息
+	 */
+	static int getSystemMsg(uint32_t time, char* msgData, void* userData);
+
+	/**
+	 * 下面几个函数的status参数为返回状态字
+	 * status常见字串:
+	 * AECERRID_AEC_AUTH_FAILED, //AEC鉴权失败
+	 * AECERRID_AEC_URL_CONNECT_FAILED, //AEC url连接失败
+	 * AECERRID_AEC_RESPONSE_JSON_PARSE_ERR, //AEC返回的json格式解析错误
+	 * GROUPPUSH_ERRID_GROUPID_IS_SYNCING
+	 * GROUPPUSH_ERRID_USERID_IS_NOT_IN_GROUP, //此用户不在指定的群内
+	 * 收到群消息发送成功反馈
+	 */
+	static int sendGroupMsgFin(char* status, int groupMsgIndex, char* groupId, uint32_t time, void* userData);
+	static int applyCreateGroupFin(char* status, int reqIndex, char* groupId, void* userData);
+	static int applyDelGroupFin(char* status, int reqIndex, char* groupId, void* userData);
+	static int applyAddUserToGroupFin(char* status, int reqIndex, char* groupId, void* userData);
+	static int applyRemoveUserFromGroupFin(char* status, int reqIndex, char* groupId, void* userData);
+	static int sendSystemMsgToUserFin(char* status, int reqIndex, void* userData);
+	static int sendSystemGroupMsgFin(char* status, int reqIndex, char* groupId, void* userData);
+	static int setPushModeOK(void* userData);
+	static int setPushModeFailed(void* userData);
+	static int getPushMode(char* pushMode, void* userData);
+	static int setPushIgnoreFin(char* status, char* groupId, void* userData);
+	static int unsetPushIgnoreFin(char* status, char* groupId, void* userData);
+
+	//=========================================================================
+	//===========================    live chatroom回调    ===========================
+	//=========================================================================
+	static int createChatroomOK(char* roomId, int maxContentLen, void* userData);
+
+	static int createChatroomFailed(void* userData, char* errString);
+
+	static int joinChatroomOK(char* roomId, int maxContentLen, void* userData);
+
+	static int joinChatroomFailed(char* roomId, char* errString, void* userData);
+
+	static int chatroomError(char* errString, void* userData);
+
+	static int chatroomStop(void* userData);
+
+	static int deleteChatroomOK(char* roomId, void* userData);
+	static int deleteChatroomFailed(char* roomId, char* errString, void* userData);
+
+	static int chatroomBanToSendMsgOK(char* banUserId, int banTime, void* userData);
+	static int chatroomBanToSendMsgFailed(char* banUserId, int banTime, char* errString, void* userData);
+
+	static int chatroomKickOutOK(char* kickOutUserId, void* userData);
+	static int chatroomKickOutFailed(char* kickOutUserId, char* errString, void* userData);
+
+	//被禁言
+	static int chatroomSendMsgBanned(unsigned int remainTimeSec, void* userData);
+	//被踢出房间
+	static int chatroomKickedOut(void* userData);
+	//收到消息
+	static int chatroomGetNewMsg(char* fromUserId, char* msgData, void* userData);
+	//收到私信消息
+	static int chatroomGetNewPrivateMsg(char* fromUserId, char* msgData, void* userData);
+	//收到房间人数信息
+	static int chatroomGetRoomOnlineNumber(char* roomId, int onlineNum, void* userData);
+	//消息发送失败，余额不足
+	static int chatroomSendMsgNoFee(void* userData);
+
+
+	//=========================================================================
+	//===========================    liveVdn回调    ===========================
+	//=========================================================================
+
+	static int applyDownloadChannelOK(void* userData);
+	static int applyDownloadChannelFailed(char* errString, void* userData);
+	static int downloadChannelError(char* errString, void* userData);
+
+	static int downloadStopOK(void* userData);
+	static int downloadChannelClosed(void* userData);
+	static int downloadChannelLeave(void* userData);
+
+	static int downloadNetworkUnnormal(void* userData);
+	static int queryVDNChannelOnlineNumberFin(char* channelId, int totalOnlineNum, void* userData);
+	static int uploaderAdd(char* upUserId, int upId, void* userData);
+	static int uploaderRemove(char* upUserId, int upId, void* userData);
+	static int downloadStreamConfigOK(char* channelId, void* userData);
+	static int downloadStreamConfigFailed(void* userData);
+	static int getRealtimeData(int upId, uint8_t* data, int len, void* userData);
+
+	//=========================================================================
+	//===========================    liveSrc回调    ===========================
+	//=========================================================================
+	static int createChannelOK(char* channelId, void* userData);
+	static int createChannelFailed(char* errString, void* userData);
+
+	static int applyUploadChannelOK(char* channelId, void* userData);
+	static int applyUploadChannelFailed(char* errString, char* channelId, void* userData);
+
+	static int setUploaderOK(char* channelId, char* uploadUserId, void* userData);
+	static int setUploaderFailed(char* errString, char* channelId, char* uploadUserId, void* userData);
+
+	static int unsetUploaderOK(char* channelId, char* uploadUserId, void* userData);
+	static int unsetUploaderFailed(char* errString, char* channelId, char* uploadUserId, void* userData);
+
+	static int muteUploaderOK(char* channelId, char* uploadUserId, void* userData);
+	static int muteUploaderFailed(char* errString, char* channelId, char* uploadUserId, void* userData);
+
+	static int unmuteUploaderOK(char* channelId, char* uploadUserId, void* userData);
+	static int unmuteUploaderFailed(char* errString, char* channelId, char* uploadUserId, void* userData);
+
+	static int deleteChannelOK(char* channelId, void* userData);
+	static int deleteChannelFailed(char* errString, char* channelId, void* userData);
+
+	static int uploadUnseted(char* channelId, void* userData);
+	static int uploadMuted(char* channelId, void* userData);
+	static int uploadUnmuted(char* channelId, void* userData);
+
+	static int setPeerStreamDownloadConfigOK(char* channelId, void* userData);
+	static int setPeerStreamDownloadConfigFailed(char* channelId, void* userData);
+
+	static int stopOK(void* userData);
+	static int isRetrying(void* userData);
+	static int networkUnnormal(void* userData);
+
+	static int srcError(char* errString, void* userData);
+	static int querySrcChannelOnlineNumberFin(char* channelId, int totalOnlineNum, void* userData);
+
+	static int uploaderAddSrc(char* upUserId, int upId, void* userData);
+	static int uploaderRemoveSrc(char* upUserId, int upId, void* userData);
+	static int getRealtimeDataSrc(int upId, uint8_t* data, int len, void* userData);
+	
+	
+	
+	static int getVideoRaw(int upId, int w, int h, uint8_t* videoData, int videoDataLen, void* userData);
+
+public:
+	CUserManager* m_pUserManager;
+private:
+	IStarIMC2CListener* m_pc2cMsgListener;
+	IGroupListener* m_pGroupMsgListener;
+	IStarIMChatroomListener *m_pStarIMChatroomListener;
+	IVdnListener* m_pVdnListener;
+	ISrcListener* m_pSrcListener;
+//	static StarRtcCore* m_pStarRtcCore;
+	int m_groupReqIndex;
+};

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{30A7D24E-7E15-4654-953F-5FC630FEB9C0}</ProjectGuid>
+    <Keyword>MFCProj</Keyword>
+    <RootNamespace>starrtcdemo</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\debug\starrtc-demo\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\release\starrtc-demo\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\third\sqlite;..\..\third\json\include;..\..\third\opencv\build32\include;..\..\third\starrtccoredll\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>starrtccoreDll_debug.lib;json_debug.lib;opencv_core341.lib;opencv_highgui341.lib;opencv_imgcodecs341.lib;opencv_videoio341.lib;sqlite3.lib</AdditionalDependencies>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\third\opencv\build32\lib\Release;..\..\third\opencv\build32\bin\Release;..\..\third\sqlite;..\..\third\starrtccoredll\lib;..\..\third\json\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>sqlite3.def</ModuleDefinitionFile>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\other\VSProject\starrtcdemo\starrtcdemo\third\pthreads-w32-2-9-1-release\Pre-built.2\include;D:\Program Files\Python37\include;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>libstarRTC.lib;json_debug.lib;python37.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Program Files\Python37\libs</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\third\sqlite;..\..\third\json\include;..\..\third\opencv\build32\include;..\..\third\starrtccoredll\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>starrtccoreDll_release.lib;json_release.lib;opencv_core341.lib;opencv_highgui341.lib;opencv_imgcodecs341.lib;opencv_videoio341.lib;sqlite3.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\third\opencv\build32\lib\Release;..\..\third\opencv\build32\bin\Release;..\..\third\sqlite;..\..\third\starrtccoredll\lib;..\..\third\json\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>sqlite3.def</ModuleDefinitionFile>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\other\VSProject\starrtcdemo\starrtcdemo\third\pthreads-w32-2-9-1-release\Pre-built.2\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libstarRTC.lib;json_release.lib</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\third\starrtccoredll\include\CIMMessage.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\CServiceParam.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\CUserManager.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\IErrorCallback.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\IGroupListener.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\ISrcListener.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\IStarIMC2CListener.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\IStarIMChatroomListener.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\IVdnListener.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\StarIMMessageType.h" />
+    <ClInclude Include="..\..\third\starrtccoredll\include\StarRtcCore.h" />
+    <ClInclude Include="CChatManager.h" />
+    <ClInclude Include="CChatroomDlg.h" />
+    <ClInclude Include="CChatroomManager.h" />
+    <ClInclude Include="CCreateLiveDialog.h" />
+    <ClInclude Include="CCreateNewChatOneToOne.h" />
+    <ClInclude Include="CCreateNewChatroomDlg.h" />
+    <ClInclude Include="CCreateNewGroupDlg.h" />
+    <ClInclude Include="CDataShowView.h" />
+    <ClInclude Include="CFaceFeatureRegisterDlg.h" />
+    <ClInclude Include="CGroupDialog.h" />
+    <ClInclude Include="CGroupManager.h" />
+    <ClInclude Include="ChatroomInfo.h" />
+    <ClInclude Include="CHistoryBean.h" />
+    <ClInclude Include="CIMDialog.h" />
+    <ClInclude Include="CIMOneToOneDialog.h" />
+    <ClInclude Include="CInteracteLiveDlg.h" />
+    <ClInclude Include="CLiveManager.h" />
+    <ClInclude Include="CLiveProgram.h" />
+    <ClInclude Include="CLiveUserInfo.h" />
+    <ClInclude Include="CLogin.h" />
+    <ClInclude Include="CMessageBean.h" />
+    <ClInclude Include="CMultipleMeetingDialog.h" />
+    <ClInclude Include="CNewDlg.h" />
+    <ClInclude Include="CPicControl.h" />
+    <ClInclude Include="CPicControlCallback.h" />
+    <ClInclude Include="CProcessInfo.h" />
+    <ClInclude Include="CSelectShowWndDlg.h" />
+    <ClInclude Include="CSettingDialog.h" />
+    <ClInclude Include="CSeviceParamDialog.h" />
+    <ClInclude Include="CSqliteDB.h" />
+    <ClInclude Include="CSrcManager.h" />
+    <ClInclude Include="CStarRTCMenuDialog.h" />
+    <ClInclude Include="CUtil.h" />
+    <ClInclude Include="CVdnManager.h" />
+    <ClInclude Include="CvvImage.h" />
+    <ClInclude Include="HttpClient.h" />
+    <ClInclude Include="IChatManagerListener.h" />
+    <ClInclude Include="IChatroomManagerListener.h" />
+    <ClInclude Include="IGroupManagerListener.h" />
+    <ClInclude Include="ILiveInterface.h" />
+    <ClInclude Include="ILiveManagerListener.h" />
+    <ClInclude Include="IResultCallback.h" />
+    <ClInclude Include="ISrcManagerListener.h" />
+    <ClInclude Include="IVdnManagerListener.h" />
+    <ClInclude Include="json\json.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="StarIMMessageBuilder.h" />
+    <ClInclude Include="StarIMMessageType.h" />
+    <ClInclude Include="starrtcdemo.h" />
+    <ClInclude Include="starrtcdemoDlg.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CChatManager.cpp" />
+    <ClCompile Include="CChatroomDlg.cpp" />
+    <ClCompile Include="CChatroomManager.cpp" />
+    <ClCompile Include="CCreateLiveDialog.cpp" />
+    <ClCompile Include="CCreateNewChatOneToOne.cpp" />
+    <ClCompile Include="CCreateNewChatroomDlg.cpp" />
+    <ClCompile Include="CCreateNewGroupDlg.cpp" />
+    <ClCompile Include="CDataShowView.cpp" />
+    <ClCompile Include="CFaceFeatureRegisterDlg.cpp" />
+    <ClCompile Include="CGroupDialog.cpp" />
+    <ClCompile Include="CGroupManager.cpp" />
+    <ClCompile Include="CHistoryBean.cpp" />
+    <ClCompile Include="CIMDialog.cpp" />
+    <ClCompile Include="CIMOneToOneDialog.cpp" />
+    <ClCompile Include="CInteracteLiveDlg.cpp" />
+    <ClCompile Include="CLiveManager.cpp" />
+    <ClCompile Include="CLiveProgram.cpp" />
+    <ClCompile Include="CLiveUserInfo.cpp" />
+    <ClCompile Include="CLogin.cpp" />
+    <ClCompile Include="CMessageBean.cpp" />
+    <ClCompile Include="CMultipleMeetingDialog.cpp" />
+    <ClCompile Include="CNewDlg.cpp" />
+    <ClCompile Include="CPicControl.cpp" />
+    <ClCompile Include="CPicControlCallback.cpp" />
+    <ClCompile Include="CProcessInfo.cpp" />
+    <ClCompile Include="CSelectShowWndDlg.cpp" />
+    <ClCompile Include="CSettingDialog.cpp" />
+    <ClCompile Include="CSeviceParamDialog.cpp" />
+    <ClCompile Include="CSqliteDB.cpp" />
+    <ClCompile Include="CSrcManager.cpp" />
+    <ClCompile Include="CStarRTCMenuDialog.cpp" />
+    <ClCompile Include="CUtil.cpp" />
+    <ClCompile Include="CVdnManager.cpp" />
+    <ClCompile Include="CvvImage.cpp" />
+    <ClCompile Include="HttpClient.cpp" />
+    <ClCompile Include="ILiveInterface.cpp" />
+    <ClCompile Include="StarIMMessageBuilder.cpp" />
+    <ClCompile Include="starrtcdemo.cpp" />
+    <ClCompile Include="starrtcdemoDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="starrtcdemo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\starrtcdemo.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\starrtcdemo.ico" />
+    <Image Include="res\startrtcdemo.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
