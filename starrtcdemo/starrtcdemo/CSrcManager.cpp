@@ -3,33 +3,57 @@
 #include "HttpClient.h"
 #include "json.h"
 #include "StarRtcCore.h"
-
+#include "CropType.h"
 CSrcManager::CSrcManager(CUserManager* pUserManager, ISrcManagerListener* pSrcManagerListener) :ILiveInterface(pUserManager)
 {
+	m_liveType = LIVE_TYPE_SRC;
 	m_strApplyUploadChannelServerIp = "";
 	m_nApplyUploadChannelServerPort = 0;
 	m_bApplyUpload = false;
 	m_pSrcManagerListener = pSrcManagerListener;
+	m_pCodecManager = new CCodecManager(pUserManager);
 	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addSrcListener(this);
+	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addRecvDataListener(this);
 }
 
 
 CSrcManager::~CSrcManager()
 {
 	stop();
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addRecvDataListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addSrcListener(NULL);	
 }
 
 /*
 * 全局参数设置
 */
-void CSrcManager::globalSetting(int w, int h, int fps, int bitrate)
+void CSrcManager::globalSetting(int fps, int bitrate)
 {
-	printf("globalSetting w:%d, h:%d, fps:%d, bitrate:%d\n", w, h, fps, bitrate);
+	CPicSize bigSize;
+	CPicSize smallSize;
+	CropTypeInfo::getCropSize((CROP_TYPE)m_pUserManager->m_ServiceParam.m_CropType, bigSize, smallSize);
+	printf("globalSetting w:%d, h:%d, fps:%d, bitrate:%d\n", bigSize.m_nWidth, bigSize.m_nHeight, fps, bitrate);
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setGlobalSetting(1, 0,
 		0,
-		w, h, fps, bitrate,
-		0, 0, 0, 0,
+		bigSize.m_nWidth, bigSize.m_nHeight, fps, bitrate,
+		smallSize.m_nWidth, smallSize.m_nHeight, fps, bitrate,
 		0, 0, 0);
+}
+
+/*
+* 设置数据流配置
+*/
+bool CSrcManager::setStreamConfig(int* sendBuf, int length)
+{
+	bool bret = false;
+	resetReturnVal();
+	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setStreamConfigSrc(sendBuf, length);
+	while (m_bReturn == false)
+	{
+		Sleep(10);
+	}
+	bret = m_bSuccess;
+	return true;
 }
 
 /*
@@ -125,6 +149,11 @@ bool CSrcManager::startEncoder()
 	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startLiveSrcEncoder(0, 0, 0, 0);
 }
 
+void CSrcManager::setUploader(string strUserId)
+{
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setUploader((char*)strUserId.c_str());
+}
+
 /*
  * Channel 停止上传
  */
@@ -154,6 +183,40 @@ bool CSrcManager::stopEncoder()
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopLiveSrcCodec();
 	return true;
 }
+
+void CSrcManager::insertVideoNalu(uint8_t* videoData, int dataLen)
+{
+	if (m_pCodecManager != NULL)
+	{
+		m_pCodecManager->insertVideoNalu(videoData, dataLen);
+	}
+}
+
+//videoData的释放由此函数负责
+void CSrcManager::insertVideoRaw(uint8_t* videoData, int dataLen, int isBig)
+{
+	if (m_pCodecManager != NULL)
+	{
+		uint8_t* insertData = NULL;
+		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->starRTCMalloc(&insertData, dataLen);
+		if (insertData != NULL)
+		{
+			memcpy(insertData, videoData, sizeof(uint8_t)*dataLen);
+			m_pCodecManager->insertVideoRaw(insertData, dataLen, isBig);
+		}
+	}
+}
+
+int CSrcManager::cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall)
+{
+	int nRet = 0;
+	if (m_pCodecManager != NULL)
+	{
+		nRet = m_pCodecManager->cropVideoRawNV12(w, h, videoData, dataLen, yuvProcessPlan, rotation, needMirror, outVideoDataBig, outVideoDataSmall);
+	}
+	return nRet;
+}
+
 
 bool CSrcManager::stop()
 {
@@ -308,7 +371,7 @@ int CSrcManager::uploaderAddSrc(char* upUserId, int upId)
 {
 	if (m_pSrcManagerListener != NULL)
 	{
-		m_pSrcManagerListener->uploaderAdd(upUserId, upId);
+		m_pSrcManagerListener->uploaderAddSrc(upUserId, upId);
 	}
 	return 0;
 }
@@ -316,7 +379,7 @@ int CSrcManager::uploaderRemoveSrc(char* upUserId, int upId)
 {
 	if (m_pSrcManagerListener != NULL)
 	{
-		m_pSrcManagerListener->uploaderRemove(upUserId, upId);
+		m_pSrcManagerListener->uploaderRemoveSrc(upUserId, upId);
 	}
 	return 0;
 }
@@ -324,7 +387,7 @@ int CSrcManager::getRealtimeDataSrc(int upId, uint8_t* data, int len)
 {
 	if (m_pSrcManagerListener != NULL)
 	{
-		m_pSrcManagerListener->getRealtimeData(upId, data, len);
+		m_pSrcManagerListener->getRealtimeDataSrc(upId, data, len);
 	}
 	return 0;
 }
@@ -333,7 +396,7 @@ int CSrcManager::getVideoRaw(int upId, int w, int h, uint8_t* videoData, int vid
 {
 	if (m_pSrcManagerListener != NULL)
 	{
-		m_pSrcManagerListener->getVideoRaw(upId, w, h, videoData, videoDataLen);
+		m_pSrcManagerListener->getVideoRawSrc(upId, w, h, videoData, videoDataLen);
 	}
 	return 0;
 }

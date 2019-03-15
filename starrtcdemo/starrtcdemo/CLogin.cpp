@@ -7,6 +7,9 @@
 CLogin::CLogin(CUserManager* pUserManager)
 {
 	m_pUserManager = pUserManager;
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setLogFile("test");
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setconfigLog(3, 31, 1);
+
 }
 
 
@@ -53,17 +56,12 @@ bool CLogin::readConfig()
 		::GetPrivateProfileString("param", "requestListAddr", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strRequestListAddr = buf;
 
-		::GetPrivateProfileString("param", "bigPicWidth", "", buf, sizeof(buf), strPath.c_str());
-		m_pUserManager->m_ServiceParam.m_BigPic.m_nWidth = atoi(buf);
+		::GetPrivateProfileString("param", "rate", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_FrameRate = atoi(buf);
 
-		::GetPrivateProfileString("param", "bigPicHeight", "", buf, sizeof(buf), strPath.c_str());
-		m_pUserManager->m_ServiceParam.m_BigPic.m_nHeight = atoi(buf);
-
-		::GetPrivateProfileString("param", "smallPicWidth", "", buf, sizeof(buf), strPath.c_str());
-		m_pUserManager->m_ServiceParam.m_SmallPic.m_nWidth = atoi(buf);
-
-		::GetPrivateProfileString("param", "smallPicHeight", "", buf, sizeof(buf), strPath.c_str());
-		m_pUserManager->m_ServiceParam.m_SmallPic.m_nHeight = atoi(buf);
+		::GetPrivateProfileString("param", "cropType", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_CropType = atoi(buf);
+		
 	}
 	return true;
 }
@@ -87,21 +85,13 @@ bool CLogin::writeConfig()
 
 
 		char buf[128] = { 0 };
-		//_itoa(m_BigPic.m_nWidth, buf, 10);
-		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_BigPic.m_nWidth);
-		::WritePrivateProfileString("param", "bigPicWidth", buf, strPath.c_str());
+		memset(buf, 0, sizeof(buf));
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_FrameRate);
+		::WritePrivateProfileString("param", "rate", buf, strPath.c_str());
 
 		memset(buf, 0, sizeof(buf));
-		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_BigPic.m_nHeight);
-		::WritePrivateProfileString("param", "bigPicHeight", buf, strPath.c_str());
-
-		memset(buf, 0, sizeof(buf));
-		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_SmallPic.m_nWidth);
-		::WritePrivateProfileString("param", "smallPicWidth", buf, strPath.c_str());
-
-		memset(buf, 0, sizeof(buf));
-		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_SmallPic.m_nHeight);
-		::WritePrivateProfileString("param", "smallPicHeight", buf, strPath.c_str());
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_CropType);
+		::WritePrivateProfileString("param", "cropType", buf, strPath.c_str());
 	}
 	return true;
 }
@@ -117,7 +107,8 @@ string CLogin::getServiceParam()
 		+ "\",\"chatIP\":\"" + m_pUserManager->m_ServiceParam.m_strChatServiceIP
 		+ "\",\"uploadIP\":\"" + m_pUserManager->m_ServiceParam.m_strUploadServiceIP
 		+ "\",\"downloadIP\":\"" + m_pUserManager->m_ServiceParam.m_strDownloadServiceIP
-		+ "\",\"voipIP\":\"" + m_pUserManager->m_ServiceParam.m_strVOIPServiceIP + "\"";
+		+ "\",\"voipIP\":\"" + m_pUserManager->m_ServiceParam.m_strVOIPServiceIP
+		+ "\",\"requestListAddr\":\"" + m_pUserManager->m_ServiceParam.m_strRequestListAddr + "\"";
 
 	return strRet;
 }
@@ -152,7 +143,7 @@ bool CLogin::getAuthKey(string userId)
 	m_pUserManager->m_strAuthKey = "";
 
 	CString url = "";
-	url.Format(_T("https://%s/public/authKey?userid=%s&appid=%s"), "api.starrtc.com", userId.c_str(), m_pUserManager->m_ServiceParam.m_strAgentId.c_str());
+	url.Format(_T("%s/authKey?userid=%s&appid=%s"), m_pUserManager->m_ServiceParam.m_strRequestListAddr.c_str(), userId.c_str(), m_pUserManager->m_ServiceParam.m_strAgentId.c_str());
 
 	CString strPara = _T("");
 	CString strContent;

@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
 using namespace std;
-#define UPID_MAX_SIZE 8
+#define UPID_MAX_SIZE 7
 #include <queue>
 #include "CPicControl.h"
 #include "CLiveUserInfo.h"
-//#include "CFindFace.h"
+#include "CFindFaceResult.h"
 enum SEND_MESSAGE_TYPE
 {
 	CHILD_PROCESS_ERROR,
@@ -19,6 +19,7 @@ enum SEND_MESSAGE_TYPE
 	CHILD_PROCESS_RECV_VIDEO_DATA,
 	CHILD_PROCESS_FACE_FEATURE,
 	CHILD_PROCESS_FACE_FEATURE_INIT_FAILED,
+	CHILD_PROCESS_REGISTER_FACE_FEATURE,
 	CHILD_PROCESS_ADD_UPID,
 	CHILD_PROCESS_REMOVE_UPID,
 	CHILD_PROCESS_CHANNEL_CLOSE,
@@ -28,6 +29,7 @@ enum SEND_MESSAGE_TYPE
 	PARENT_PROCESS_START_LIVE,
 	PARENT_PROCESS_SET_STREAM_CONFIG,
 	PARENT_PROCESS_FACE_FEATURE,
+	PARENT_PROCESS_REGISTER_FACE_FEATURE,
 	PARENT_PROCESS_LIVE_EXIT
 };
 
@@ -53,6 +55,8 @@ public:
 
 	void liveExit();
 
+	void clearFaceFeatureVector();
+
 public:
 	string m_strWindowName;
 	bool m_bUse;
@@ -76,7 +80,9 @@ public:
 	bool m_bExit;
 	bool m_bThreadExit;
 
-	//	vector<CFindFaceResult> m_vFindFaceResult;
+	bool m_bStartFindFace;
+
+	vector<CFindFaceResult> m_vFindFaceResult;
 	CRITICAL_SECTION m_critFaceFeature;
 
 };

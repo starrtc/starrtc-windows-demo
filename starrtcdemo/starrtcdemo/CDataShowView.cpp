@@ -5,17 +5,39 @@
 CDataShowView::CDataShowView()
 {
 	memset(m_pPictureControlArr, 0, sizeof(m_pPictureControlArr));
-	memset(m_configArr, 0, sizeof(m_configArr));
-	m_configArr[0] = 2;
+	resetStreamConfig(true);
 	InitializeCriticalSection(&m_critPicture);
+	resetFreePictureControlIndex();
 }
 
 
 
 CDataShowView::~CDataShowView()
 {
+	removeAllUpUser();
+	for (int i = 0; i < UPID_MAX_SIZE; i++)
+	{
+		if (m_pPictureControlArr[i] != NULL)
+		{
+			delete m_pPictureControlArr[i];
+			m_pPictureControlArr[i] = NULL;
+		}
+	}
+	
 }
 
+void CDataShowView::resetStreamConfig(bool bHaveBigPic)
+{
+	for (int i = 0; i < UPID_MAX_SIZE; i++)
+	{
+		m_configArr[i] = 1;
+	}
+	if (bHaveBigPic)
+	{
+		m_configArr[0] = 2;
+	}
+	
+}
 void CDataShowView::setDrawRect(CRect drawRect)
 {
 	m_DrawRect = drawRect;
@@ -34,21 +56,32 @@ void CDataShowView::setShowPictures()
 
 	if (nSize > 1 && nSize <= 4)
 	{
-		rect.bottom = m_DrawRect.bottom - (long)(m_DrawRect.Width()*0.25f);
+		rect.bottom = m_DrawRect.bottom - (long)(m_DrawRect.Height()*0.25f);
 	}
 	else if (nSize > 4)
 	{
-		rect.bottom = m_DrawRect.bottom - (long)(m_DrawRect.Width()*0.5f);
+		rect.bottom = m_DrawRect.bottom - (long)(m_DrawRect.Height()*0.5f);
+	}
+	bool bFindMax = false;
+
+	for (int i = 0; i < UPID_MAX_SIZE; i++)
+	{
+		if (m_configArr[i] == 2)
+		{
+			bFindMax = true;
+			break;
+		}
 	}
 	for (int i = 0; i < nSize; i++)
 	{
-		if (m_configArr[m_upUserInfoArr[i]->m_upid] == 2)
+		if ((m_upUserInfoArr[i]->m_upid == -1 && bFindMax == false) || (m_upUserInfoArr[i]->m_upid != -1 && m_configArr[m_upUserInfoArr[i]->m_upid] == 2))
 		{
-			m_upUserInfoArr[i]->m_pPictureControl = m_pPictureControlArr[0];
-			m_upUserInfoArr[i]->m_pPictureControl->m_upId = 0;
+			//m_upUserInfoArr[i]->m_pPictureControl = m_pPictureControlArr[0];
+			//m_upUserInfoArr[i]->m_pPictureControl->m_upId = 0;
 			m_upUserInfoArr[i]->m_bBigPic = true;
 			m_upUserInfoArr[i]->m_nTimes = 0;
 			m_upUserInfoArr[i]->m_showRect = rect;
+			m_upUserInfoArr[i]->m_pPictureControl->m_upId = m_upUserInfoArr[i]->m_upid;
 			m_upUserInfoArr[i]->m_pPictureControl->MoveWindow(rect);
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
 
@@ -66,10 +99,11 @@ void CDataShowView::setShowPictures()
 			smallRect.bottom = smallRect.top + (long)(m_DrawRect.Height()*0.25f);
 
 			m_upUserInfoArr[i]->m_bBigPic = false;
-			m_upUserInfoArr[i]->m_pPictureControl = m_pPictureControlArr[useIndex];
-			m_upUserInfoArr[i]->m_pPictureControl->m_upId = m_upUserInfoArr[i]->m_upid;
+			//m_upUserInfoArr[i]->m_pPictureControl = m_pPictureControlArr[useIndex];
+			//m_upUserInfoArr[i]->m_pPictureControl->m_upId = m_upUserInfoArr[i]->m_upid;
 			useIndex++;
 			m_upUserInfoArr[i]->m_showRect = smallRect;
+			m_upUserInfoArr[i]->m_pPictureControl->m_upId = m_upUserInfoArr[i]->m_upid;
 			m_upUserInfoArr[i]->m_pPictureControl->MoveWindow(smallRect);
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
 		}
@@ -85,10 +119,14 @@ void CDataShowView::addUpId(int nUpId)
 	{
 		pUpUserInfo = new CUpUserInfo();
 		pUpUserInfo->m_upid = nUpId;
-		pUpUserInfo->m_pPictureControl = m_pPictureControlArr[nUpId];// pProcessInfo->m_pPictureControl;
+		CRect rect;
+		int nIndex = getFreePictureControlIndex();
+		pUpUserInfo->m_picIndex = nIndex;
+		m_pPictureControlArr[nIndex]->GetWindowRect(rect);
+		pUpUserInfo->m_showRect = rect;
+		pUpUserInfo->m_pPictureControl = m_pPictureControlArr[nIndex];// pProcessInfo->m_pPictureControl;
 		m_upUserInfoArr.push_back(pUpUserInfo);
 	}
-
 	pUpUserInfo->m_bUse = true;
 }
 
@@ -106,6 +144,42 @@ CUpUserInfo* CDataShowView::findUpUserInfo(int upid)
 	return pUpUserInfo;
 }
 
+int CDataShowView::getFreePictureControlIndex()
+{
+	int nRet = -1;
+	vector<int>::iterator it = m_freePicControlIndex.begin();
+	if (it != m_freePicControlIndex.end())
+	{
+		nRet = *it;
+		m_freePicControlIndex.erase(it);
+	}
+	return nRet;
+}
+
+void CDataShowView::addFreePictureControlIndex(int nIndex)
+{
+	bool bFind = false;
+	for (int i = 0; i < (int)m_freePicControlIndex.size(); i++)
+	{
+		if (m_freePicControlIndex[i] == nIndex)
+		{
+			bFind = true;
+			break;
+		}
+	}
+	if (!bFind)
+	{
+		m_freePicControlIndex.push_back(nIndex);
+	}
+}
+
+void CDataShowView::resetFreePictureControlIndex()
+{
+	for (int i = 0; i < UPID_MAX_SIZE; i++)
+	{
+		m_freePicControlIndex.push_back(i);
+	}
+}
 bool CDataShowView::removeAllUpUser()
 {
 	bool bRet = true;
@@ -118,7 +192,10 @@ bool CDataShowView::removeAllUpUser()
 		(*iter)->m_pPictureControl->m_upId = -1;
 		(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
 		(*iter)->m_pPictureControl->ShowWindow(SW_HIDE);
+		delete (*iter);
+		(*iter) = NULL;
 	}
+	resetFreePictureControlIndex();
 	m_upUserInfoArr.clear();
 	LeaveCriticalSection(&m_critPicture);
 	return bRet;
@@ -138,13 +215,16 @@ bool CDataShowView::removeUpUser(int upid)
 			(*iter)->m_pPictureControl->m_upId = -1;
 			(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
 			(*iter)->m_pPictureControl->ShowWindow(SW_HIDE);
+
+			addFreePictureControlIndex((*iter)->m_picIndex);
+			delete (*iter);
+			(*iter) = NULL;
 			m_upUserInfoArr.erase(iter);
 			bRet = true;
 			break;
 		}
 	}
 	LeaveCriticalSection(&m_critPicture);
-	setShowPictures();
 	return bRet;
 }
 
@@ -164,10 +244,15 @@ void CDataShowView::drawPic(YUV_TYPE type, int upid, int w, int h, uint8_t* vide
 				{
 					CUtil::yuv420sp_to_rgb24(type, videoData, videoDataRGB, w, h);
 				}
-				else
+				else if (type == FMT_YUV420P)
 				{
 					CUtil::yuv420p_to_rgb24(videoData, videoDataRGB, w, h);
 				}
+				else
+				{
+					memcpy(videoDataRGB, videoData, sizeof(uint8_t)*videoDataLen);
+				}
+
 				
 
 				CRect rect;

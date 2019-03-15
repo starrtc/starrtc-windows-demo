@@ -4,26 +4,59 @@
 #define MATH_API _declspec(dllexport)
 #endif
 
-
 #include "CUserManager.h"
 #include "IStarIMC2CListener.h"
 #include "IStarIMChatroomListener.h"
 #include "IVdnListener.h"
 #include "ISrcListener.h"
 #include "IGroupListener.h"
-
-
+#include "IStarVoipListener.h"
+#include "IStarVoipP2PListener.h"
+#include "IRecvDataListener.h"
+/*
+ * StarRtc接口类
+ */
 class MATH_API StarRtcCore
 {
 private:
+	/*
+	 * 构造函数
+	 * @param pUserManager 用户配置信息
+	 */
 	StarRtcCore(CUserManager* pUserManager);
 	
 public:
+
+	/*
+	 * 获取StarRtc接口对象
+	 * @param pUserManager 用户配置信息
+	 */
 	static StarRtcCore* getStarRtcCoreInstance(CUserManager* pUserManager);
 	
+	/*
+	 * 析构函数
+	 */
 	~StarRtcCore();
 
+	/*
+	 * 注册回调函数
+	 */
 	void registerCallback();
+
+	/*
+	 * 申请内存
+	 */
+	void starRTCMalloc(uint8_t** outPtr, int length);
+
+	/*
+	 * 释放内存
+	 */
+	void starRTCFree(uint8_t* ptr);
+
+
+	void setLogFile(char *dir);
+
+	void setconfigLog(int log_level, int log_filter, int log_freq);
 
 	/**
 	 * 添加C2C消息监听
@@ -54,7 +87,25 @@ public:
 	 * @param listener
 	 */
 	void addSrcListener(ISrcListener* pSrcListener);
-	
+
+	/**
+	 * 添加Voip监听
+	 * @param listener
+	 */
+	void addVoipListener(IStarVoipListener* listener);
+
+	/**
+	 * 添加VoipP2P监听
+	 * @param listener
+	 */
+	void addVoipP2PListener(IStarVoipP2PListener* listener);
+
+	/**
+	 * 添加RecvData监听
+	 * @param listener
+	 */
+	void addRecvDataListener(IRecvDataListener* listener);
+
 	/**
 	 * 启动IM服务
 	 */
@@ -139,6 +190,7 @@ public:
 	 * 加入ChatRoom
 	 */
 	bool joinChatRoom(string serverIp, int serverPort, string strChatroomId);
+
 	/*
 	 * 查询chatroom在线人数
 	 */
@@ -147,13 +199,21 @@ public:
 	bool banToSendMsg(char* banUserId, int banTime);
 	bool kickOutUser(char* kickOutUserId);
 	bool sendChat(CIMMessage* pIMMessage);
-	bool sendPrivateChat(char* toUserId, char* msgData);
+	bool sendPrivateChat(char* targetId, CIMMessage* pIMMessage);
 	bool deleteChatRoom();
 
 	/*
 	 *  与ChatRoom断开连接
 	 */
 	bool stopChatRoomConnect();
+
+	//==================================voip====================================
+	int startVoipEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
+	void voipCalling(char* servAddr, int servPort, char* agentId, char* userId, char* starToken, char* responserUserId);
+	void voipResponse(char* servAddr, int servPort, char* agentId, char* userId, char* starToken, char* callerUserId);
+	void stopVoip(int isActive);//主动关闭一方传1   被动关闭一方传0  
+	void voipSpeedTest(char* servIp, int port);
+	void voipEchoTest(char* servIp, int port);
 
 	/*
 	 * Channel 申请下载
@@ -168,7 +228,7 @@ public:
 	/*
 	 * 设置数据流配置
 	 */
-	bool setStreamConfig(int* sendBuf, int length);
+	bool setStreamConfigVdn(int* sendBuf, int length);
 
 	void setGlobalSetting(int videoEnable, int audioEnable,
 		int videoBigIsHw,
@@ -176,15 +236,31 @@ public:
 		int videoSmallWidth, int videoSmallHeight, int videoSmallFps, int videoSmallBitrate,
 		int openGLESEnable, int dynamicBitrateAndFpsEnable, int voipP2PEnable);
 
-
+	/*
+	 * 设置数据流配置
+	 */
+	bool setStreamConfigSrc(int* sendBuf, int length);
+	
 	/*
 	 * 创建Channel
 	 */
 	bool createPublicChannel(string strServerIp, int port, string strName, int channelType, string strChatroomId);
 	int startLiveSrcEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
 	int startUploadSrcServer(char* servAddr, int servPort, char* agentId, char* userId, char* starToken, char* channelId/* ,int maxAudioPacketNum,int maxVideoPacketNum */);
+	void setUploader(char* userId);
+	
 	int stopUploadSrcServer();
 	int stopLiveSrcCodec();
+
+	void insertAudioRaw(uint8_t* audioData, int dataLen);
+	//videoData的释放由此函数负责
+	void insertVideoNalu(uint8_t* videoData, int dataLen);
+	//videoData的释放由此函数负责
+	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
+	//裁剪视频并生成小图,outVideoDataBig与outVideoDataSmall在函数内malloc,由ios自己free，若无小图，则outVideoDataSmall指向的为NULL
+	//videoData由在函数内释放
+	//成功返回0，失败返回-1
+	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
 
 	//=========================================================================
 	//===========================    Msg回调    ===========================
@@ -252,6 +328,14 @@ public:
 	static int sendGroupMsgFin(char* status, int groupMsgIndex, char* groupId, uint32_t time, void* userData);
 	static int applyCreateGroupFin(char* status, int reqIndex, char* groupId, void* userData);
 	static int applyDelGroupFin(char* status, int reqIndex, char* groupId, void* userData);
+
+	//ray0306-3
+	static int applyGetGroupListFin(char* status, int reqIndex, char* groupIdList, char* groupNameList, char* creatorList, void* userData);
+	static int applyGetUserListFin(char* status, int reqIndex, int isIgnore, char* userIdList, void* userData);
+
+	//ray0306-3
+
+
 	static int applyAddUserToGroupFin(char* status, int reqIndex, char* groupId, void* userData);
 	static int applyRemoveUserFromGroupFin(char* status, int reqIndex, char* groupId, void* userData);
 	static int sendSystemMsgToUserFin(char* status, int reqIndex, void* userData);
@@ -261,6 +345,25 @@ public:
 	static int getPushMode(char* pushMode, void* userData);
 	static int setPushIgnoreFin(char* status, char* groupId, void* userData);
 	static int unsetPushIgnoreFin(char* status, char* groupId, void* userData);
+
+	//=========================================================================
+	//===========================    Voip回调    ===========================
+	//=========================================================================
+	static void voipStopOK(void* userData, int stopType);
+	//服务端收到calling请求，此时客户端可以通过消息系统通知对方
+	static void voipCallingAck(void* userData);
+	//calling失败
+	static void voipCallingFailed(char* errString, void* userData);
+	//接收方准备好，可以开始插入数据
+	static void voipResponseOk(void* userData);
+	//response失败
+	static void voipResponseFailed(char* errString, void* userData);
+	//发送方准备好，可以开始插入数据
+	static void voipCallingOk(void* userData);
+	static int voipError(char* errString, void* userData);
+	static int voipSpeedTestFinish(char* userIp, int uploadVariance, int uploadSpeed, int downloadVariance, int downSpeed, void* userData);
+	static int voipEchoTestFinish(int index, int len, int timeCost, void* userData);
+	static int voipGetRealtimeData(uint8_t* data, int len, void* userData);
 
 	//=========================================================================
 	//===========================    live chatroom回调    ===========================
@@ -374,6 +477,9 @@ private:
 	IStarIMChatroomListener *m_pStarIMChatroomListener;
 	IVdnListener* m_pVdnListener;
 	ISrcListener* m_pSrcListener;
+	IStarVoipListener* m_pStarVoipListener;
+	IStarVoipP2PListener* m_pStarVoipP2PListener;
+	IRecvDataListener* m_pRecvDataListener;
 //	static StarRtcCore* m_pStarRtcCore;
 	int m_groupReqIndex;
 };

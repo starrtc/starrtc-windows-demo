@@ -114,13 +114,27 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 					}
 				}
 				break;
+				case CHILD_PROCESS_REGISTER_FACE_FEATURE:
+				{
+					int nRet = 0;
+					memcpy(&nRet, pTemp, sizeof(nRet));
+					if (nRet != 1)
+					{
+						AfxMessageBox("注册是人脸信息失败");
+					}
+					else
+					{
+						AfxMessageBox("注册是人脸信息成功");
+					}
+				}
+				break;
 				case CHILD_PROCESS_FACE_FEATURE_INIT_FAILED:
 					AfxMessageBox("请检查人脸识别配置环境");
 					break;
 				case CHILD_PROCESS_FACE_FEATURE:
 				{
 
-					/*int vResultSize = 0;
+					int vResultSize = 0;
 
 					char strName[256] = { 0 };
 					EnterCriticalSection(&pProcessInfo->m_critFaceFeature);
@@ -144,7 +158,7 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 						result.name = strName;
 						pProcessInfo->m_vFindFaceResult.push_back(result);
 					}
-					LeaveCriticalSection(&pProcessInfo->m_critFaceFeature);*/
+					LeaveCriticalSection(&pProcessInfo->m_critFaceFeature);
 				}
 				break;
 				case CHILD_PROCESS_RECV_VIDEO_DATA:
@@ -214,6 +228,7 @@ CProcessInfo::CProcessInfo(CWnd* pParentWnd, CRect drawRect)
 	m_bThreadExit = false;
 	m_bUse = false;
 	m_bInit = false;
+	m_bStartFindFace = false;
 	memset(m_pPictureControlArr, 0, sizeof(CStatic*)*UPID_MAX_SIZE);
 	memset(m_configArr, 0, sizeof(int)*UPID_MAX_SIZE);
 	m_configArr[0] = 2;
@@ -255,6 +270,14 @@ CProcessInfo::~CProcessInfo()
 			pRecvData = NULL;
 		}
 	}
+	clearFaceFeatureVector();
+}
+
+void CProcessInfo::clearFaceFeatureVector()
+{
+	EnterCriticalSection(&m_critFaceFeature);
+	m_vFindFaceResult.clear();
+	LeaveCriticalSection(&m_critFaceFeature);
 }
 
 bool CProcessInfo::setData(uint8_t* pData, int nDataLength)
@@ -418,7 +441,7 @@ void CProcessInfo::setStreamConfig()
 	{
 		str.Format("%d", m_configArr[i]);
 		strMessage += str;
-		if (i == UPID_MAX_SIZE - 2)
+		if (i == UPID_MAX_SIZE - 1)
 		{
 			break;
 		}
@@ -555,7 +578,7 @@ void CProcessInfo::drawPic(int upid, int w, int h, uint8_t* videoData, int video
 				image.Draw(MemDC.m_hDC, (int)widthEdge, (int)heightEdge, width, height, 0, 0, w, h);      //图片类的图片绘制Draw函数
 				//COLORREF col = RGB(255, 0, 0);
 				//CPen pen(PS_SOLID, 2, col);
-				/*if (pUpUserInfo->m_bBigPic)
+				if (pUpUserInfo->m_bBigPic && m_bStartFindFace)
 				{
 					CBrush br;
 					CPen pen;
@@ -568,10 +591,10 @@ void CProcessInfo::drawPic(int upid, int w, int h, uint8_t* videoData, int video
 					EnterCriticalSection(&m_critFaceFeature);
 					for (int i = 0; i < (int)m_vFindFaceResult.size(); i++)
 					{
-						rect1.left = m_vFindFaceResult[i].pos[0] * rectScale + widthEdge;
-						rect1.top = m_vFindFaceResult[i].pos[1] * rectScale + heightEdge;
-						rect1.right = rect1.left + (m_vFindFaceResult[i].pos[2] - m_vFindFaceResult[i].pos[0])*rectScale;
-						rect1.bottom = (m_vFindFaceResult[i].pos[3] - m_vFindFaceResult[i].pos[1])*rectScale + rect1.top;
+						rect1.left = (long)(m_vFindFaceResult[i].pos[0] * rectScale + widthEdge);
+						rect1.top = (long)(m_vFindFaceResult[i].pos[1] * rectScale + heightEdge);
+						rect1.right = rect1.left + (long)((m_vFindFaceResult[i].pos[2] - m_vFindFaceResult[i].pos[0])*rectScale);
+						rect1.bottom = (long)((m_vFindFaceResult[i].pos[3] - m_vFindFaceResult[i].pos[1])*rectScale) + rect1.top;
 
 						MemDC.Rectangle(rect1);
 						MemDC.TextOut(rect1.left, rect1.top - 10, m_vFindFaceResult[i].name.c_str());
@@ -579,7 +602,7 @@ void CProcessInfo::drawPic(int upid, int w, int h, uint8_t* videoData, int video
 					LeaveCriticalSection(&m_critFaceFeature);
 					MemDC.SelectObject(pOldPen);
 					MemDC.SelectObject(pOldBrush);
-				}*/
+				}
 
 
 				pDC->BitBlt(                                // 从内存DC复制到窗口DC

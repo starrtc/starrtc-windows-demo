@@ -5,12 +5,14 @@
 #include "StarRtcCore.h"
 CVdnManager::CVdnManager(CUserManager* pUserManager, IVdnManagerListener* pVdnManagerListener):ILiveInterface(pUserManager)
 {
+	m_liveType = LIVE_TYPE_VDN;
 	m_pVdnManagerListener = pVdnManagerListener;
 	m_strApplyDownloadChannelServerIp = "";
 	m_nApplyDownloadChannelServerPort = 0;
-	m_pUserManager = pUserManager;
 	m_bApplayDownload = false;
-	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addVdnListener(this);
+	StarRtcCore* pStarRtcCore = StarRtcCore::getStarRtcCoreInstance(pUserManager);
+	pStarRtcCore->addVdnListener(this);
+	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addRecvDataListener(this);
 }
 
 
@@ -22,6 +24,8 @@ CVdnManager::~CVdnManager()
 	{
 		stopLiveDownload();
 	}
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addVdnListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addRecvDataListener(NULL);
 }
 
 /*
@@ -126,7 +130,7 @@ bool CVdnManager::setStreamConfig(int* sendBuf, int length)
 {
 	bool bret = false;
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setStreamConfig(sendBuf, length);
+	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setStreamConfigVdn(sendBuf, length);
 	while (m_bReturn == false)
 	{
 		Sleep(10);
@@ -194,7 +198,7 @@ int CVdnManager::uploaderAdd(char* upUserId, int upId)
 {
 	if (m_pVdnManagerListener != NULL)
 	{
-		m_pVdnManagerListener->uploaderAdd(upUserId, upId);
+		m_pVdnManagerListener->uploaderAddVdn(upUserId, upId);
 	}
 
 	return 0;
@@ -203,7 +207,7 @@ int CVdnManager::uploaderRemove(char* upUserId, int upId)
 {
 	if (m_pVdnManagerListener != NULL)
 	{
-		m_pVdnManagerListener->uploaderRemove(upUserId, upId);
+		m_pVdnManagerListener->uploaderRemoveVdn(upUserId, upId);
 	}	
 	return 0;
 }
@@ -221,7 +225,7 @@ int CVdnManager::getRealtimeData(int upId, uint8_t* data, int len)
 {
 	if (m_pVdnManagerListener != NULL)
 	{
-		m_pVdnManagerListener->getRealtimeData(upId, data, len);
+		m_pVdnManagerListener->getRealtimeDataVdn(upId, data, len);
 	}
 	return 0; 
 }
@@ -229,7 +233,7 @@ int CVdnManager::getVideoRaw(int upId, int w, int h, uint8_t* videoData, int vid
 {
 	if (m_pVdnManagerListener != NULL)
 	{
-		m_pVdnManagerListener->getVideoRaw(upId, w, h, videoData, videoDataLen);
+		m_pVdnManagerListener->getVideoRawVdn(upId, w, h, videoData, videoDataLen);
 	}
 	return 0;
 }

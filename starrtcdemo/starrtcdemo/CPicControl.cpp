@@ -28,7 +28,7 @@ void CPicControl::setInfo(CPicControlCallback* pPicControlCallback, void* pParam
 }
 void CPicControl::OnStnDblclick()
 {
-	if (m_pPicControlCallback != NULL && m_upId != -1)
+	if (m_pPicControlCallback != NULL)
 	{
 		m_pPicControlCallback->changeStreamConfig(m_pParam, m_upId);
 	}

@@ -11,6 +11,7 @@ public:
 	static CIMMessage* getGhatRoomMessage(string fromId, string roomId, string data);
 	static CIMMessage* getGhatRoomContrlMessage(string fromId, string roomId, int code);
 	static CIMMessage* getGroupMessage(string fromId, string groupId, string atUsers, string data);
+	static CIMMessage* getVoipMessage(string fromId, string targetId, int code, string data);
 private:
 	static int msgIndex;
 

@@ -84,6 +84,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\release\starrtc-demo\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -181,6 +182,10 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -225,12 +230,15 @@
     <ClInclude Include="CChatManager.h" />
     <ClInclude Include="CChatroomDlg.h" />
     <ClInclude Include="CChatroomManager.h" />
+    <ClInclude Include="CCodecManager.h" />
     <ClInclude Include="CCreateLiveDialog.h" />
     <ClInclude Include="CCreateNewChatOneToOne.h" />
     <ClInclude Include="CCreateNewChatroomDlg.h" />
     <ClInclude Include="CCreateNewGroupDlg.h" />
+    <ClInclude Include="CDataControl.h" />
     <ClInclude Include="CDataShowView.h" />
     <ClInclude Include="CFaceFeatureRegisterDlg.h" />
+    <ClInclude Include="CFindfaceResult.h" />
     <ClInclude Include="CGroupDialog.h" />
     <ClInclude Include="CGroupManager.h" />
     <ClInclude Include="ChatroomInfo.h" />
@@ -241,7 +249,9 @@
     <ClInclude Include="CLiveManager.h" />
     <ClInclude Include="CLiveProgram.h" />
     <ClInclude Include="CLiveUserInfo.h" />
+    <ClInclude Include="CLocalDataControlListener.h" />
     <ClInclude Include="CLogin.h" />
+    <ClInclude Include="CMeetingManager.h" />
     <ClInclude Include="CMessageBean.h" />
     <ClInclude Include="CMultipleMeetingDialog.h" />
     <ClInclude Include="CNewDlg.h" />
@@ -251,21 +261,29 @@
     <ClInclude Include="CSelectShowWndDlg.h" />
     <ClInclude Include="CSettingDialog.h" />
     <ClInclude Include="CSeviceParamDialog.h" />
+    <ClInclude Include="CShowLiveControl.h" />
+    <ClInclude Include="CShowLiveDlg.h" />
     <ClInclude Include="CSqliteDB.h" />
     <ClInclude Include="CSrcManager.h" />
     <ClInclude Include="CStarRTCMenuDialog.h" />
     <ClInclude Include="CUtil.h" />
     <ClInclude Include="CVdnManager.h" />
+    <ClInclude Include="CVoipDataShowView.h" />
+    <ClInclude Include="CVoipDlg.h" />
+    <ClInclude Include="CVoipManager.h" />
     <ClInclude Include="CvvImage.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="IChatManagerListener.h" />
     <ClInclude Include="IChatroomManagerListener.h" />
     <ClInclude Include="IGroupManagerListener.h" />
     <ClInclude Include="ILiveInterface.h" />
-    <ClInclude Include="ILiveManagerListener.h" />
+    <ClInclude Include="ILiveListener.h" />
+    <ClInclude Include="IMeetingManagerListener.h" />
     <ClInclude Include="IResultCallback.h" />
+    <ClInclude Include="IShowLiveCallback.h" />
     <ClInclude Include="ISrcManagerListener.h" />
     <ClInclude Include="IVdnManagerListener.h" />
+    <ClInclude Include="IVoipManagerListener.h" />
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StarIMMessageBuilder.h" />
@@ -279,10 +297,12 @@
     <ClCompile Include="CChatManager.cpp" />
     <ClCompile Include="CChatroomDlg.cpp" />
     <ClCompile Include="CChatroomManager.cpp" />
+    <ClCompile Include="CCodecManager.cpp" />
     <ClCompile Include="CCreateLiveDialog.cpp" />
     <ClCompile Include="CCreateNewChatOneToOne.cpp" />
     <ClCompile Include="CCreateNewChatroomDlg.cpp" />
     <ClCompile Include="CCreateNewGroupDlg.cpp" />
+    <ClCompile Include="CDataControl.cpp" />
     <ClCompile Include="CDataShowView.cpp" />
     <ClCompile Include="CFaceFeatureRegisterDlg.cpp" />
     <ClCompile Include="CGroupDialog.cpp" />
@@ -295,20 +315,25 @@
     <ClCompile Include="CLiveProgram.cpp" />
     <ClCompile Include="CLiveUserInfo.cpp" />
     <ClCompile Include="CLogin.cpp" />
+    <ClCompile Include="CMeetingManager.cpp" />
     <ClCompile Include="CMessageBean.cpp" />
     <ClCompile Include="CMultipleMeetingDialog.cpp" />
     <ClCompile Include="CNewDlg.cpp" />
     <ClCompile Include="CPicControl.cpp" />
-    <ClCompile Include="CPicControlCallback.cpp" />
     <ClCompile Include="CProcessInfo.cpp" />
     <ClCompile Include="CSelectShowWndDlg.cpp" />
     <ClCompile Include="CSettingDialog.cpp" />
     <ClCompile Include="CSeviceParamDialog.cpp" />
+    <ClCompile Include="CShowLiveControl.cpp" />
+    <ClCompile Include="CShowLiveDlg.cpp" />
     <ClCompile Include="CSqliteDB.cpp" />
     <ClCompile Include="CSrcManager.cpp" />
     <ClCompile Include="CStarRTCMenuDialog.cpp" />
     <ClCompile Include="CUtil.cpp" />
     <ClCompile Include="CVdnManager.cpp" />
+    <ClCompile Include="CVoipDataShowView.cpp" />
+    <ClCompile Include="CVoipDlg.cpp" />
+    <ClCompile Include="CVoipManager.cpp" />
     <ClCompile Include="CvvImage.cpp" />
     <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="ILiveInterface.cpp" />

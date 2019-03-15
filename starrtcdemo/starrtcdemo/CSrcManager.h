@@ -2,7 +2,9 @@
 #include "ILiveInterface.h"
 #include "ISrcListener.h"
 #include "ISrcManagerListener.h"
-class CSrcManager : public ILiveInterface, public ISrcListener
+#include "CCodecManager.h"
+#include "IRecvDataListener.h"
+class CSrcManager : public ILiveInterface, public ISrcListener, public IRecvDataListener
 {
 public:
 	CSrcManager(CUserManager* pUserManager, ISrcManagerListener* pSrcManagerListener);
@@ -13,7 +15,13 @@ public:
 	/*
 	 * 全局参数设置
 	 */
-	void globalSetting(int w, int h, int fps, int bitrate);
+	void globalSetting(int fps, int bitrate);
+
+	/*
+	 * 设置数据流配置
+	 */
+	virtual bool setStreamConfig(int* sendBuf, int length);
+
 	/*
 	 * 通过调度获取ChatRoom服务地址
 	 */
@@ -30,13 +38,11 @@ public:
 	bool applyUpload();
 
 	/*
-	 * 上报chatroom 和 channelID
-	 */
-	bool reportChatRoomAndChannel(string strName, string strChatroomId);
-	/*
 	 * 开启直播编码器
 	 */
 	bool startEncoder();
+
+	void setUploader(string strUserId);
 
 	/*
 	 * Channel 停止上传
@@ -49,6 +55,13 @@ public:
 	bool stopEncoder();
 
 	bool stop();
+
+	//videoData的释放由此函数负责
+	void insertVideoNalu(uint8_t* videoData, int dataLen);
+	//videoData的释放由此函数负责
+	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
+	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
+
 public:
 	virtual int createChannelOK(char* channelId);
 	virtual int createChannelFailed(char* errString);
@@ -95,5 +108,7 @@ private:
 	int m_nApplyUploadChannelServerPort;
 	bool m_bApplyUpload;
 	ISrcManagerListener* m_pSrcManagerListener;
+
+	CCodecManager* m_pCodecManager;
 };
 

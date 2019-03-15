@@ -2,7 +2,8 @@
 #include "ILiveInterface.h"
 #include "IVdnListener.h"
 #include "IVdnManagerListener.h"
-class CVdnManager : public ILiveInterface, public IVdnListener
+#include "IRecvDataListener.h"
+class CVdnManager : public ILiveInterface, public IVdnListener, public IRecvDataListener
 {
 public:
 	CVdnManager(CUserManager* pUserManager, IVdnManagerListener* pVdnManagerListener);
@@ -26,7 +27,7 @@ public:
 	/*
 	 * 设置数据流配置
 	 */
-	bool setStreamConfig(int* sendBuf, int length);
+	virtual bool setStreamConfig(int* sendBuf, int length);
 
 	virtual int applyDownloadChannelOK();
 	virtual int applyDownloadChannelFailed(char* errString);

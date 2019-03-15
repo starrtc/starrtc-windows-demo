@@ -13,6 +13,7 @@ CGroupManager::CGroupManager(CUserManager* pUserManager)
 CGroupManager::~CGroupManager()
 {
 	m_pGroupManagerListener = NULL;
+	m_pStarRtcCore->addGroupListener(NULL);
 }
 
 /**

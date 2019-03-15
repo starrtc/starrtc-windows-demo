@@ -46,7 +46,8 @@ public:
 	bool banToSendMsg(char* banUserId, int banTime);
 	bool kickOutUser(char* kickOutUserId);
 	bool sendChat(CIMMessage* pIMMessage);
-	bool sendPrivateChat(char* toUserId, char* msgData);
+	bool sendPrivateChat(string toUserId, char* msgData);
+	bool sendChatroomPrivateControlMessage(string targetId, int code);
 	bool deleteChatRoom();
 
 	bool reportChatroom(string strName, string strRoomId);

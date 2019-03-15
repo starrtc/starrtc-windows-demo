@@ -25,8 +25,7 @@ public:
 	string  m_strRequestListAddr;
 
 public:
-	CResolutionRatio m_BigPic;
-	CResolutionRatio m_SmallPic;
-
+	int m_CropType;
+	int m_FrameRate;
 };
 

@@ -35,5 +35,4 @@ public:
 	 * @param message
 	 */
 	virtual void onReceivePrivateMessage(CIMMessage* pMessage) = 0;
-
 };

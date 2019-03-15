@@ -1,0 +1,9 @@
+===============================================================
+========================starRTC_INIT===========================
+===============================================================
+[2019-03-15 16:08:46.467] [starrtc_msgSocket]:(264):=======msgServerStart======== addr=msg.starrtc.com:9903,userId=1028868,token=0GX4ZKDKZJ561F698L4RZ16980657476
+[2019-03-15 16:08:46.468] [starrtc_msgSocket]:(3046):contentLoopCheckRead thread start!
+[2019-03-15 16:08:46.468] [starrtc_msgSocket]:(3275):contentLoopCheckWrite thread start!
+[2019-03-15 16:08:46.469] [starrtc_msgSocket]:(1629):start linkToMsgServer
+[2019-03-15 16:08:46.484] [starrtc_msgSocket]:(1767):msg auth ok,maxContentLen=2048
+[2019-03-15 16:08:46.484] [starrtc_msgSocket]:(1643):linkToMsgServer_success!g_localIp=172.30.156.147

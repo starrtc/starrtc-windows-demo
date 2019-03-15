@@ -43,6 +43,12 @@
     <Filter Include="third">
       <UniqueIdentifier>{ca0413e5-35d3-42aa-9820-a10243f9381c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FaceRecognition">
+      <UniqueIdentifier>{fffdb5e9-bc24-4cd6-802e-7139756fc371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="voip">
+      <UniqueIdentifier>{2dbe44ad-6123-4bad-a7c5-a60c241eadf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -141,9 +147,6 @@
     <ClInclude Include="ISrcManagerListener.h">
       <Filter>apiInterface</Filter>
     </ClInclude>
-    <ClInclude Include="ILiveManagerListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
     <ClInclude Include="CCreateNewChatOneToOne.h">
       <Filter>IM\C2C</Filter>
     </ClInclude>
@@ -234,6 +237,48 @@
     <ClInclude Include="CLogin.h">
       <Filter>Login</Filter>
     </ClInclude>
+    <ClInclude Include="CFindfaceResult.h">
+      <Filter>FaceRecognition</Filter>
+    </ClInclude>
+    <ClInclude Include="IVoipManagerListener.h">
+      <Filter>apiInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="CVoipManager.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="CVoipDlg.h">
+      <Filter>voip</Filter>
+    </ClInclude>
+    <ClInclude Include="CCodecManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CVoipDataShowView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDataControl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ILiveListener.h">
+      <Filter>apiInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="CShowLiveDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShowLiveControl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLocalDataControlListener.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IShowLiveCallback.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeetingManager.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="IMeetingManagerListener.h">
+      <Filter>apiInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -255,9 +300,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CPicControl.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CPicControlCallback.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CFaceFeatureRegisterDlg.cpp">
@@ -355,6 +397,30 @@
     </ClCompile>
     <ClCompile Include="CLogin.cpp">
       <Filter>Login</Filter>
+    </ClCompile>
+    <ClCompile Include="CVoipManager.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="CVoipDlg.cpp">
+      <Filter>voip</Filter>
+    </ClCompile>
+    <ClCompile Include="CCodecManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CVoipDataShowView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CDataControl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CShowLiveDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CShowLiveControl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeetingManager.cpp">
+      <Filter>api</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

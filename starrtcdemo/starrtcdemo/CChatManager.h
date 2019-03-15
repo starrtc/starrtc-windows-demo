@@ -12,6 +12,7 @@ public:
 	CIMMessage* sendMessage(char* toUserId, char* msgStr);
 
 	bool sendOnlineMessage(char* toUserId, char* msgStr);
+	bool sendVoipOnlineMessage(char* fromId, char* targetId, int code, char* data);
 
 	virtual void onNewMessage(CIMMessage* var1);
 	virtual void onSendMessageSuccess(int msgIndex);

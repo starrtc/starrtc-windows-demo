@@ -3,6 +3,7 @@
 #include "StarRtcCore.h"
 #include "HttpClient.h"
 #include "json.h"
+#include "StarIMMessageBuilder.h"
 CChatroomManager::CChatroomManager(CUserManager* pUserManager, IChatroomManagerListener* pChatroomManagerListener)
 {
 	m_pUserManager = pUserManager;
@@ -19,6 +20,7 @@ CChatroomManager::CChatroomManager(CUserManager* pUserManager, IChatroomManagerL
 CChatroomManager::~CChatroomManager()
 {
 	stopChatRoomConnect();
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addStarIMChatroomListener(this);
 }
 
 void CChatroomManager::resetReturnVal()
@@ -139,10 +141,29 @@ bool CChatroomManager::sendChat(CIMMessage* pIMMessage)
 	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->sendChat(pIMMessage);
 }
 
-bool CChatroomManager::sendPrivateChat(char* toUserId, char* msgData)
+bool CChatroomManager::sendPrivateChat(string toUserId, char* msgData)
 {
+	bool bRet = false;
 	resetReturnVal();
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->sendPrivateChat(toUserId, msgData);
+	CIMMessage* pMsg = StarIMMessageBuilder::getGhatRoomMessage(m_pUserManager->m_ServiceParam.m_strUserId, m_ChatRoomId, msgData);
+	if (pMsg != NULL)
+	{
+		bRet = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->sendPrivateChat((char*)toUserId.c_str(), pMsg);
+	}
+	return bRet;
+}
+
+bool CChatroomManager::sendChatroomPrivateControlMessage(string targetId, int code)
+{
+	bool bRet = false;
+	resetReturnVal();
+	CIMMessage* pMsg = StarIMMessageBuilder::getGhatRoomContrlMessage(m_pUserManager->m_ServiceParam.m_strUserId, m_ChatRoomId, code);
+	if (pMsg != NULL)
+	{
+		bRet = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->sendPrivateChat((char*)targetId.c_str(), pMsg);
+	}
+	return bRet;
+
 }
 
 bool CChatroomManager::deleteChatRoom()
@@ -154,7 +175,7 @@ bool CChatroomManager::deleteChatRoom()
 bool CChatroomManager::reportChatroom(string strName, string strRoomId)
 {
 	bool bRet = false;
-	string url = "https://api.starrtc.com/public/chat/store?ID=" + strRoomId + "&Name=" + strName + "&Creator=" + m_pUserManager->m_ServiceParam.m_strUserId + "&appid=" + m_pUserManager->m_ServiceParam.m_strAgentId;
+	string url = m_pUserManager->m_ServiceParam.m_strRequestListAddr + "/chat/store?ID=" + strRoomId + "&Name=" + strName + "&Creator=" + m_pUserManager->m_ServiceParam.m_strUserId + "&appid=" + m_pUserManager->m_ServiceParam.m_strAgentId;
 	string strData = "";
 	std::string strVal = "";
 	std::string strErrInfo = "";

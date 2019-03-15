@@ -40,6 +40,16 @@ bool CChatManager::sendOnlineMessage(char* toUserId, char* msgStr)
 	return true;
 }
 
+bool CChatManager::sendVoipOnlineMessage(char* fromId, char* targetId, int code, char* data)
+{
+	CIMMessage* pIMMessage = StarIMMessageBuilder::getVoipMessage(fromId, targetId, code, data);
+	if (pIMMessage != NULL)
+	{
+		m_pStarRtcCore->sendOnlineMessage(pIMMessage);
+	}
+	return true;
+}
+
 void CChatManager::onNewMessage(CIMMessage* var1)
 {
 	if (m_pStarIMC2CListener != NULL)

@@ -49,16 +49,19 @@ public:
 		m_bUse = false;
 		m_bBigPic = false;
 		m_nTimes = 0;
+		m_picIndex = 0;
 	}
 	~CUpUserInfo()
 	{
 		m_pPictureControl = NULL;
 		m_bUse = false;
 		m_bBigPic = false;
+		m_picIndex = 0;
 	}
 public:
 	int m_upid;
 	CPicControl* m_pPictureControl;
+	int m_picIndex;
 	CRect m_showRect;
 	bool m_bUse;
 	bool m_bBigPic;

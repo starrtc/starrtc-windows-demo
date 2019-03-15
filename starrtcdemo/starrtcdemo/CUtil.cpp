@@ -25,6 +25,14 @@ string CUtil::getTime()
 	return tmp;
 }
 
+long long CUtil::getCurrentTime()
+{
+	time_t timep;
+	time(&timep);
+	return timep*1000;
+}
+
+
 
 static long int crv_tab[256];
 static long int cbu_tab[256];
@@ -175,12 +183,12 @@ void CUtil::yuv420sp_to_rgb24(YUV_TYPE type, unsigned char* yuvbuffer, unsigned 
 	{
 		for (i = 0; i < width; i += 2)
 		{
-			if (type == FMT_NV12)
+			if (type == FMT_NV21)
 			{
 				u = *src_u++;
 				v = *src_u++;      // v紧跟u，在u的下一个位置
 			}
-			if (type == FMT_NV21)
+			if (type == FMT_NV12)
 			{
 				v = *src_u++;
 				u = *src_u++;      // u紧跟v，在v的下一个位置
