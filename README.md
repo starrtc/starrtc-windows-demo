@@ -9,6 +9,11 @@
 
 本示例程序可以与[其它端示例程序](https://docs.starrtc.com/en/download/)互连互通。
 
+开发集成
+====
+头文件 third\starrtccoredll
+动态库 release\starrtc-demo
+
 Contact
 =====
 QQ ： 2162498688
