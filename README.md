@@ -4,9 +4,10 @@
 
 工程所在目录：starrtcdemo\starrtcdemo.sln
 
-已实现im单聊，聊天室，群组；
+已实现im单聊，聊天室，群组；视频监控，voip，互动连麦直播，多人视频会议；
 
-视频监控，voip，互动连麦直播，多人视频会议；
+
+本示例程序可以与[其它端示例程序](https://docs.starrtc.com/en/download/)互连互通。
 
 Contact
 =====
