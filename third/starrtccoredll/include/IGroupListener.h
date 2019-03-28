@@ -1,6 +1,7 @@
 #pragma once
 #include "CIMMessage.h"
 #include <string>
+#include "CGroupInfo.h"
 using namespace std;
 
 class IGroupListener
@@ -9,6 +10,10 @@ public:
 	IGroupListener() {}
 	virtual ~IGroupListener() {}
 public:
+	//ray0306-3
+	virtual int applyGetGroupListFin(list<CGroupInfo>& groupInfoList) = 0;
+	virtual int applyGetUserListFin(list<string>& userList) = 0;
+
 	/**
 	 * 群成员数发生变化
 	 * @param groupID

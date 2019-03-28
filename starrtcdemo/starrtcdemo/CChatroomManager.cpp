@@ -4,6 +4,8 @@
 #include "HttpClient.h"
 #include "json.h"
 #include "StarIMMessageBuilder.h"
+
+IChatroomGetListListener* CChatroomManager::m_pChatroomGetListListener = NULL;
 CChatroomManager::CChatroomManager(CUserManager* pUserManager, IChatroomManagerListener* pChatroomManagerListener)
 {
 	m_pUserManager = pUserManager;
@@ -20,7 +22,75 @@ CChatroomManager::CChatroomManager(CUserManager* pUserManager, IChatroomManagerL
 CChatroomManager::~CChatroomManager()
 {
 	stopChatRoomConnect();
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addStarIMChatroomListener(this);
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addStarIMChatroomListener(NULL);
+}
+
+void CChatroomManager::addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener)
+{
+	m_pChatroomGetListListener = pChatroomGetListListener;
+}
+
+void CChatroomManager::getChatroomList(CUserManager* pUserManager, int listType)
+{
+	list<ChatroomInfo> retList;
+	if (pUserManager->m_bUserDispatch)
+	{
+		CString stUrl = "";
+		stUrl.Format(_T("%s/chat/list?appid=%s"), pUserManager->m_ServiceParam.m_strRequestListAddr.c_str(), pUserManager->m_ServiceParam.m_strAgentId.c_str());
+
+		char* data = "";
+
+		CString strPara = _T("");
+		CString strContent;
+
+		CHttpClient httpClient;
+		int nRet = httpClient.HttpPost(stUrl, strPara, strContent);
+
+		string str_json = strContent.GetBuffer(0);
+		Json::Reader reader;
+		Json::Value root;
+		if (nRet == 0 && str_json != "" && reader.parse(str_json, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素   
+		{
+			std::cout << "========================[Dispatch]========================" << std::endl;
+			if (root.isMember("status") && root["status"].asInt() == 1)
+			{
+				if (root.isMember("data"))
+				{
+					Json::Value data = root.get("data", "");
+					int nSize = data.size();
+					for (int i = 0; i < nSize; i++)
+					{
+						ChatroomInfo chatroomInfo;
+						if (data[i].isMember("Creator"))
+						{
+							chatroomInfo.m_strCreaterId = data[i]["Creator"].asCString();
+						}
+
+						if (data[i].isMember("ID"))
+						{
+							chatroomInfo.m_strRoomId = data[i]["ID"].asCString();
+						}
+
+						if (data[i].isMember("Name"))
+						{
+							chatroomInfo.m_strName = data[i]["Name"].asCString();
+						}
+						retList.push_back(chatroomInfo);
+					}
+				}
+			}
+		}
+		if (CChatroomManager::m_pChatroomGetListListener)
+		{
+			CChatroomManager::m_pChatroomGetListListener->chatroomQueryAllListOK(retList);
+		}
+	}
+	else
+	{
+
+		StarRtcCore::getStarRtcCoreInstance(pUserManager)->queryAllChatRoomList((char*)pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), pUserManager->m_ServiceParam.m_nChatServicePort, listType);
+	}
+	
 }
 
 void CChatroomManager::resetReturnVal()
@@ -44,9 +114,15 @@ bool CChatroomManager::getChatRoomServerAddr()
 	string agentId = m_pUserManager->m_ServiceParam.m_strAgentId;
 	m_strChatRoomServerIp = "";
 	m_nChatRoomServerPort = 0;
-
+	if (m_pUserManager->m_bUserDispatch == false)
+	{
+		m_strChatRoomServerIp = m_pUserManager->m_ServiceParam.m_strChatServiceIP;
+		m_nChatRoomServerPort = m_pUserManager->m_ServiceParam.m_nChatServicePort;
+		bRet = true;
+		return bRet;
+	}
 	CString url = "";
-	url.Format("http://%s:9907", m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str());
+	url.Format("http://%s:%d", m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nChatServicePort);
 	string strData = "userId=" + agentId + "_" + userId;
 	CString strContent;
 
@@ -172,18 +248,25 @@ bool CChatroomManager::deleteChatRoom()
 	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->deleteChatRoom();
 }
 
-bool CChatroomManager::reportChatroom(string strName, string strRoomId)
+bool CChatroomManager::reportChatroom(string strRoomId, ChatroomInfo& chatroomInfo, int listType)
 {
 	bool bRet = false;
-	string url = m_pUserManager->m_ServiceParam.m_strRequestListAddr + "/chat/store?ID=" + strRoomId + "&Name=" + strName + "&Creator=" + m_pUserManager->m_ServiceParam.m_strUserId + "&appid=" + m_pUserManager->m_ServiceParam.m_strAgentId;
-	string strData = "";
-	std::string strVal = "";
-	std::string strErrInfo = "";
+	if (m_pUserManager->m_bUserDispatch)
+	{
+		string url = m_pUserManager->m_ServiceParam.m_strRequestListAddr + "/chat/store?ID=" + chatroomInfo.m_strRoomId + "&Name=" + chatroomInfo.m_strName + "&Creator=" + chatroomInfo.m_strCreaterId + "&appid=" + m_pUserManager->m_ServiceParam.m_strAgentId;
+		string strData = "";
+		std::string strVal = "";
+		std::string strErrInfo = "";
 
-	CString strContent;
+		CString strContent;
 
-	CHttpClient httpClient;
-	int nRet = httpClient.HttpPost(url.c_str(), strData.c_str(), strContent);
+		CHttpClient httpClient;
+		int nRet = httpClient.HttpPost(url.c_str(), strData.c_str(), strContent);
+	}
+	else
+	{
+		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->saveToChatRoomList((char*)m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nChatServicePort, listType, (char*)strRoomId.c_str(), chatroomInfo);
+	}
 	return true;
 }
 
@@ -256,6 +339,69 @@ void CChatroomManager::chatroomStopOK()
 {
 	success();
 }
+
+//查询聊天室列表回调
+int CChatroomManager::chatroomQueryAllListOK(list<ChatroomInfo>& chatRoomInfoList)
+{
+	/*list<ChatroomInfo> retList;
+	string str_json = listData;
+	Json::Reader reader;
+	Json::Value root;
+	if (str_json != "" && reader.parse(str_json, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素   
+	{
+		if (root.isMember("userDefineDataList"))
+		{
+			Json::Value data = root.get("userDefineDataList", "");
+			string str = data.asCString();
+
+			int pos = str.find(",");
+			while (pos > 0)
+			{
+				string strInfo = str.substr(0, pos);
+				//strInfo = UrlDecode1(strInfo);
+				strInfo = UrlDecode(strInfo);
+				strInfo = UTF8toANSI(strInfo);
+
+				Json::Reader reader1;
+				Json::Value root1;
+				if (reader1.parse(strInfo, root1))
+				{
+					ChatroomInfo chatroomInfo;
+					if (root1.isMember("id"));
+					{
+						chatroomInfo.m_strRoomId = root1.get("id", "").asCString();;
+					}
+					if (root1.isMember("creator"));
+					{
+						chatroomInfo.m_strCreaterId = root1.get("creator", "").asCString();;
+					}
+					if (root1.isMember("name"));
+					{
+						chatroomInfo.m_strName = root1.get("name", "").asCString();;
+					}
+					retList.push_back(chatroomInfo);
+				}
+				if (str.length() <= pos)
+				{
+					break;
+				}
+				str = str.substr(pos+1, str.length()-pos-1);
+				pos = str.find(",");
+				if (pos <= 0 && str.length() > 0)
+				{
+					pos = str.length();
+				}
+			}
+		}
+	}*/
+	
+	if (m_pChatroomGetListListener != NULL)
+	{
+		m_pChatroomGetListListener->chatroomQueryAllListOK(chatRoomInfoList);
+	}
+	return 0;
+}
+
 //聊天室删除成功
 void CChatroomManager::chatroomDeleteOK(string roomId)
 {

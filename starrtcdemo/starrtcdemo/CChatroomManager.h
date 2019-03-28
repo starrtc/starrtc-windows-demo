@@ -1,7 +1,10 @@
 #pragma once
 #include "IChatroomManagerListener.h"
 #include "IStarIMChatroomListener.h"
+#include "IChatroomGetListListener.h"
 #include "CUserManager.h"
+#include <list>
+#include "ChatroomInfo.h"
 #include <string>
 using namespace std;
 
@@ -12,12 +15,22 @@ enum CHATROOM_TYPE
 	CHATROOM_TYPE_LOGIN		// 需要登录，无需验证
 };
 
+enum CHATROOM_LIST_TYPE
+{
+	CHATROOM_LIST_TYPE_CHATROOM,	
+	CHATROOM_LIST_TYPE_LIVE,	
+	CHATROOM_LIST_TYPE_MEETING		
+};
+
 class CChatroomManager : public IStarIMChatroomListener
 {
 public:
 	CChatroomManager(CUserManager* pUserManager, IChatroomManagerListener* pChatroomManagerListener);
 	~CChatroomManager();
 public:
+	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
+	static void getChatroomList(CUserManager* pUserManager, int listType);
+
 	void resetReturnVal();
 	/*
 	 * 设置chatroom id
@@ -50,7 +63,7 @@ public:
 	bool sendChatroomPrivateControlMessage(string targetId, int code);
 	bool deleteChatRoom();
 
-	bool reportChatroom(string strName, string strRoomId);
+	bool reportChatroom(string strRoomId, ChatroomInfo& chatroomInfo, int listType);
 
 	/*
 	 *  与ChatRoom断开连接
@@ -89,6 +102,11 @@ public:
 	 * 聊天室关闭成功
 	 */
 	virtual void chatroomStopOK();
+
+	/**
+	 * 查询聊天室列表回调
+	 */
+	virtual int chatroomQueryAllListOK(list<ChatroomInfo>& chatRoomInfoList);
 
 	/**
 	 * 聊天室删除成功
@@ -182,6 +200,7 @@ private:
 	
 	CUserManager* m_pUserManager;
 	IChatroomManagerListener* m_pChatroomManagerListener;
+	static IChatroomGetListListener* m_pChatroomGetListListener;
 	string m_strChatRoomServerIp;
 	int m_nChatRoomServerPort;
 

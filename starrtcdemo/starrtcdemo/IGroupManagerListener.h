@@ -1,5 +1,6 @@
 #pragma once
 #include "CIMMessage.h"
+#include "CGroupInfo.h"
 #include <string>
 using namespace std;
 class IGroupManagerListener

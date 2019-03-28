@@ -9,7 +9,6 @@ CLogin::CLogin(CUserManager* pUserManager)
 	m_pUserManager = pUserManager;
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setLogFile("test");
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setconfigLog(3, 31, 1);
-
 }
 
 
@@ -41,18 +40,36 @@ bool CLogin::readConfig()
 
 		::GetPrivateProfileString("param", "agentId", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strAgentId = buf;
-		::GetPrivateProfileString("param", "loginService", "", buf, sizeof(buf), strPath.c_str());
+		::GetPrivateProfileString("param", "loginServiceIP", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strLoginServiceIP = buf;
-		::GetPrivateProfileString("param", "messageSercive", "", buf, sizeof(buf), strPath.c_str());
+		::GetPrivateProfileString("param", "loginServicePort", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_nLoginServicePort = atoi(buf);
+
+		::GetPrivateProfileString("param", "msgServiceIP", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strMessageServiceIP = buf;
-		::GetPrivateProfileString("param", "chatSercive", "", buf, sizeof(buf), strPath.c_str());
+		::GetPrivateProfileString("param", "msgServicePort", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_nMessageServicePort = atoi(buf);
+
+		::GetPrivateProfileString("param", "chatServiceIP", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strChatServiceIP = buf;
-		::GetPrivateProfileString("param", "uploadSercive", "", buf, sizeof(buf), strPath.c_str());
+		::GetPrivateProfileString("param", "chatServicePort", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_nChatServicePort = atoi(buf);
+
+		::GetPrivateProfileString("param", "uploadServiceIP", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strUploadServiceIP = buf;
-		::GetPrivateProfileString("param", "downloadSercive", "", buf, sizeof(buf), strPath.c_str());
+		::GetPrivateProfileString("param", "uploadServicePort", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_nUploadServicePort = atoi(buf);
+
+		::GetPrivateProfileString("param", "downloadServiceIP", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strDownloadServiceIP = buf;
-		::GetPrivateProfileString("param", "voipSercive", "", buf, sizeof(buf), strPath.c_str());
+		::GetPrivateProfileString("param", "downloadServicePort", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_nDownloadServicePort = atoi(buf);
+
+		::GetPrivateProfileString("param", "voipServiceIP", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strVOIPServiceIP = buf;
+		::GetPrivateProfileString("param", "voipServicePort", "", buf, sizeof(buf), strPath.c_str());
+		m_pUserManager->m_ServiceParam.m_nVOIPServicePort = atoi(buf);
+
 		::GetPrivateProfileString("param", "requestListAddr", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strRequestListAddr = buf;
 
@@ -61,7 +78,17 @@ bool CLogin::readConfig()
 
 		::GetPrivateProfileString("param", "cropType", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_CropType = atoi(buf);
-		
+
+		::GetPrivateProfileString("param", "dispatch", "", buf, sizeof(buf), strPath.c_str());
+		int nDispatch = atoi(buf);
+		if (nDispatch == 0)
+		{
+			m_pUserManager->m_bUserDispatch = false;
+		}
+		else
+		{
+			m_pUserManager->m_bUserDispatch = true;
+		}	
 	}
 	return true;
 }
@@ -73,18 +100,42 @@ bool CLogin::writeConfig()
 	//BOOL ifFind = finder.FindFile(strPath);
 	if (true)
 	{
+		char buf[128] = { 0 };
 		::WritePrivateProfileString("param", "userId", m_pUserManager->m_ServiceParam.m_strUserId.c_str(), strPath.c_str());
 		::WritePrivateProfileString("param", "agentId", m_pUserManager->m_ServiceParam.m_strAgentId.c_str(), strPath.c_str());
-		::WritePrivateProfileString("param", "loginService", m_pUserManager->m_ServiceParam.m_strLoginServiceIP.c_str(), strPath.c_str());
-		::WritePrivateProfileString("param", "messageSercive", m_pUserManager->m_ServiceParam.m_strMessageServiceIP.c_str(), strPath.c_str());
-		::WritePrivateProfileString("param", "chatSercive", m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), strPath.c_str());
-		::WritePrivateProfileString("param", "uploadSercive", m_pUserManager->m_ServiceParam.m_strUploadServiceIP.c_str(), strPath.c_str());
-		::WritePrivateProfileString("param", "downloadSercive", m_pUserManager->m_ServiceParam.m_strDownloadServiceIP.c_str(), strPath.c_str());
-		::WritePrivateProfileString("param", "voipSercive", m_pUserManager->m_ServiceParam.m_strVOIPServiceIP.c_str(), strPath.c_str());
+		::WritePrivateProfileString("param", "loginServiceIP", m_pUserManager->m_ServiceParam.m_strLoginServiceIP.c_str(), strPath.c_str());		
+		memset(buf, 0, sizeof(buf));
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nLoginServicePort);
+		::WritePrivateProfileString("param", "loginServicePort", buf, strPath.c_str());
+
+		::WritePrivateProfileString("param", "msgServiceIP", m_pUserManager->m_ServiceParam.m_strMessageServiceIP.c_str(), strPath.c_str());
+		memset(buf, 0, sizeof(buf));
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nMessageServicePort);
+		::WritePrivateProfileString("param", "msgServicePort", buf, strPath.c_str());
+
+		::WritePrivateProfileString("param", "chatServiceIP", m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), strPath.c_str());
+		memset(buf, 0, sizeof(buf));
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nChatServicePort);
+		::WritePrivateProfileString("param", "chatServicePort", buf, strPath.c_str());
+
+		::WritePrivateProfileString("param", "uploadServiceIP", m_pUserManager->m_ServiceParam.m_strUploadServiceIP.c_str(), strPath.c_str());
+		memset(buf, 0, sizeof(buf));
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nUploadServicePort);
+		::WritePrivateProfileString("param", "uploadServicePort", buf, strPath.c_str());
+
+		::WritePrivateProfileString("param", "downloadServiceIP", m_pUserManager->m_ServiceParam.m_strDownloadServiceIP.c_str(), strPath.c_str());
+		memset(buf, 0, sizeof(buf));
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nDownloadServicePort);
+		::WritePrivateProfileString("param", "downloadServicePort", buf, strPath.c_str());
+
+		::WritePrivateProfileString("param", "voipServiceIP", m_pUserManager->m_ServiceParam.m_strVOIPServiceIP.c_str(), strPath.c_str());
+		memset(buf, 0, sizeof(buf));
+		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nVOIPServicePort);
+		::WritePrivateProfileString("param", "voipServicePort", buf, strPath.c_str());
+
 		::WritePrivateProfileString("param", "requestListAddr", m_pUserManager->m_ServiceParam.m_strRequestListAddr.c_str(), strPath.c_str());
 
 
-		char buf[128] = { 0 };
 		memset(buf, 0, sizeof(buf));
 		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_FrameRate);
 		::WritePrivateProfileString("param", "rate", buf, strPath.c_str());
@@ -92,6 +143,17 @@ bool CLogin::writeConfig()
 		memset(buf, 0, sizeof(buf));
 		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_CropType);
 		::WritePrivateProfileString("param", "cropType", buf, strPath.c_str());
+
+		memset(buf, 0, sizeof(buf));
+		if (m_pUserManager->m_bUserDispatch)
+		{
+			sprintf_s(buf, "%d",1);
+		}
+		else
+		{
+			sprintf_s(buf, "%d", 0);
+		}	
+		::WritePrivateProfileString("param", "dispatch", buf, strPath.c_str());	
 	}
 	return true;
 }
@@ -99,31 +161,63 @@ bool CLogin::writeConfig()
 string CLogin::getServiceParam()
 {
 	string strRet = "";
-
+	char buf[128] = { 0 };
 	strRet = "\"userId\":\"" + m_pUserManager->m_ServiceParam.m_strUserId
 		+ "\",\"agentId\":\"" + m_pUserManager->m_ServiceParam.m_strAgentId
 		+ "\",\"loginIP\":\"" + m_pUserManager->m_ServiceParam.m_strLoginServiceIP
-		+ "\",\"messageIP\":\"" + m_pUserManager->m_ServiceParam.m_strMessageServiceIP
-		+ "\",\"chatIP\":\"" + m_pUserManager->m_ServiceParam.m_strChatServiceIP
-		+ "\",\"uploadIP\":\"" + m_pUserManager->m_ServiceParam.m_strUploadServiceIP
-		+ "\",\"downloadIP\":\"" + m_pUserManager->m_ServiceParam.m_strDownloadServiceIP
-		+ "\",\"voipIP\":\"" + m_pUserManager->m_ServiceParam.m_strVOIPServiceIP
-		+ "\",\"requestListAddr\":\"" + m_pUserManager->m_ServiceParam.m_strRequestListAddr + "\"";
+		+ "\",\"loginPort\":";
+	memset(buf, 0, sizeof(buf));
+	sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nLoginServicePort);	
+	strRet += buf;
+	strRet += ",\"messageIP\":\"" + m_pUserManager->m_ServiceParam.m_strMessageServiceIP
+		+ "\",\"messagePort\":";
+	sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nMessageServicePort);
+	strRet += buf;
+	strRet += ",\"chatIP\":\"" + m_pUserManager->m_ServiceParam.m_strChatServiceIP
+		+ "\",\"chatPort\":";
+	sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nChatServicePort);
+	strRet += buf;
+	strRet += ",\"uploadIP\":\"" + m_pUserManager->m_ServiceParam.m_strUploadServiceIP
+		+ "\",\"uploadPort\":";
+	sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nUploadServicePort);
+	strRet += buf;
+	strRet += ",\"downloadIP\":\"" + m_pUserManager->m_ServiceParam.m_strDownloadServiceIP
+		+ "\",\"downloadPort\":";
+	sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nDownloadServicePort);
+	strRet += buf;
+	strRet += ",\"voipIP\":\"" + m_pUserManager->m_ServiceParam.m_strVOIPServiceIP
+		+ "\",\"voipPort\":";
+	sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nVOIPServicePort);
+	strRet += buf;
+	strRet += ",\"requestListAddr\":\"" + m_pUserManager->m_ServiceParam.m_strRequestListAddr + "\"";
 
 	return strRet;
 }
 
 bool CLogin::logIn()
 {
-	bool bRet = getAuthKey(m_pUserManager->m_ServiceParam.m_strUserId);
-	if (bRet == false)
+	bool bRet = false;
+	//CHttpClient httpClient;
+	//CInternetSession temp;
+
+	if (m_pUserManager->m_bUserDispatch)
 	{
-		return bRet;
+		bRet = getAuthKey(m_pUserManager->m_ServiceParam.m_strUserId);
+		if (bRet == false)
+		{
+			return bRet;
+		}
+		bRet = getToken(m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_ServiceParam.m_strAgentId, m_pUserManager->m_strAuthKey);
+		if (bRet == false)
+		{
+			return bRet;
+		}
+		
 	}
-	bRet = getToken(m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_ServiceParam.m_strAgentId, m_pUserManager->m_strAuthKey);
-	if (bRet == false)
+	else
 	{
-		return bRet;
+		bRet = true;
+		m_pUserManager->m_strTokenId = "free";
 	}
 	bRet = getIMServerAddr(m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_ServiceParam.m_strAgentId);
 	if (bRet == false)
@@ -147,7 +241,7 @@ bool CLogin::getAuthKey(string userId)
 
 	CString strPara = _T("");
 	CString strContent;
-
+	
 	CHttpClient httpClient;
 	int nRet = httpClient.HttpPost(url, strPara, strContent);
 
@@ -178,7 +272,7 @@ bool CLogin::getToken(string userId, string agentId, string authKey)
 	m_pUserManager->m_strTokenId = "";
 
 	CString url = "";
-	url.Format(_T("http://%s:9920"), m_pUserManager->m_ServiceParam.m_strLoginServiceIP.c_str());
+	url.Format(_T("http://%s:%d"), m_pUserManager->m_ServiceParam.m_strLoginServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nLoginServicePort);
 
 	string strData = "userId=" + agentId + "_" + userId + "&authKey=" + authKey;
 	CString strContent;
@@ -213,9 +307,15 @@ bool CLogin::getIMServerAddr(string userId, string agentId)
 	bool bRet = false;
 	m_pUserManager->m_strIMServerIp = "";
 	m_pUserManager->m_nIMServerPort = 0;
+	if (m_pUserManager->m_bUserDispatch == false)
+	{
+		m_pUserManager->m_strIMServerIp = m_pUserManager->m_ServiceParam.m_strMessageServiceIP;
+		m_pUserManager->m_nIMServerPort = m_pUserManager->m_ServiceParam.m_nMessageServicePort;
+		return true;
+	}
 
 	CString url = "";
-	url.Format(_T("http://%s:9904"), m_pUserManager->m_ServiceParam.m_strMessageServiceIP.c_str());
+	url.Format(_T("http://%s:%d"), m_pUserManager->m_ServiceParam.m_strMessageServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nMessageServicePort);
 
 	string strData = "userId=" + agentId + "_" + userId;
 	CString strContent;
@@ -252,7 +352,7 @@ bool CLogin::getIMServerAddr(string userId, string agentId)
 */
 bool CLogin::startIMServer(string strIP, int nPort, string userId, string agentId, string strToken)
 {
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startIMServer();
+	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startIMServer((char*)strIP.c_str(), nPort, (char*)agentId.c_str(), (char*)userId.c_str(), (char*)strToken.c_str());
 }
 /*
 * ¿ªÆôIM·þÎñ
@@ -266,6 +366,7 @@ string CLogin::getUserManagerInfo()
 {
 	string strRet = "";
 	strRet = "\"authKey\":\"" + m_pUserManager->m_strAuthKey
-		+ "\",\"tokenId\":\"" + m_pUserManager->m_strTokenId + "\"," + getServiceParam();
+		+ "\",\"dispatch\":" + "1"
+		+ ",\"tokenId\":\"" + m_pUserManager->m_strTokenId + "\"," + getServiceParam();
 	return strRet;
 }

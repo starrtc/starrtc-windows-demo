@@ -38,8 +38,15 @@ bool CVdnManager::getApplyDownloadChannelServerAddr()
 	bool bRet = false;
 	m_strApplyDownloadChannelServerIp = "";
 	m_nApplyDownloadChannelServerPort = 0;
+	if (m_pUserManager->m_bUserDispatch == false)
+	{
+		m_strApplyDownloadChannelServerIp = m_pUserManager->m_ServiceParam.m_strDownloadServiceIP;
+		m_nApplyDownloadChannelServerPort = m_pUserManager->m_ServiceParam.m_nDownloadServicePort;
+		bRet = true;
+		return bRet;
+	}
 	CString url = "";
-	url.Format("http://%s:9926", m_pUserManager->m_ServiceParam.m_strDownloadServiceIP.c_str());
+	url.Format("http://%s:%d", m_pUserManager->m_ServiceParam.m_strDownloadServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nDownloadServicePort);
 
 	string strData = "channelId=" + m_ChannelId + "&userId=" + agentId + "_" + userId;
 	CString strContent;

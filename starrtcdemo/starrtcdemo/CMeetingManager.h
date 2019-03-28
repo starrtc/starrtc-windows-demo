@@ -17,6 +17,8 @@ public:
 	CMeetingManager(CUserManager* pUserManager, IMeetingManagerListener* pListener);
 	virtual ~CMeetingManager();
 public:
+	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
+	static void getMeetingList(CUserManager* pUserManager);
 	bool createAndJoin(string strName, int chatroomType, int channelType, int* streamConfig, int length);
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
 	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
@@ -96,6 +98,7 @@ public:
 	virtual int srcError(char* errString);
 
 public:
+	static IChatroomGetListListener* m_pChatroomGetListListener;
 	IMeetingManagerListener* m_pMeetingManagerListener;
 	CUserManager* m_pUserManager;
 	CChatroomManager* m_pChatroomManager;

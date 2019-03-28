@@ -16,11 +16,17 @@ public:
 	string  m_strAgentId;
 
 	string  m_strLoginServiceIP;
+	int m_nLoginServicePort;
 	string  m_strMessageServiceIP;
+	int m_nMessageServicePort;
 	string  m_strChatServiceIP;
+	int m_nChatServicePort;
 	string  m_strUploadServiceIP;
+	int m_nUploadServicePort;
 	string  m_strDownloadServiceIP;
+	int m_nDownloadServicePort;
 	string  m_strVOIPServiceIP;
+	int m_nVOIPServicePort;
 
 	string  m_strRequestListAddr;
 

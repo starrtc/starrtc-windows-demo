@@ -1,0 +1,14 @@
+﻿  CLogin.cpp
+    正在创建库 ..\..\release\starrtc-demo\starrtcdemo.lib 和对象 ..\..\release\starrtc-demo\starrtcdemo.exp
+  正在生成代码
+  3 of 3432 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    17 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+json_release.lib(json_reader.obj) : warning LNK4099: 未找到 PDB“lib_json.pdb”(使用“json_release.lib(json_reader.obj)”或在“E:\work\star\other-platform-demos\windows-demo\release\starrtc-demo\lib_json.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+json_release.lib(json_value.obj) : warning LNK4099: 未找到 PDB“lib_json.pdb”(使用“json_release.lib(json_value.obj)”或在“E:\work\star\other-platform-demos\windows-demo\release\starrtc-demo\lib_json.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+json_release.lib(json_writer.obj) : warning LNK4099: 未找到 PDB“lib_json.pdb”(使用“json_release.lib(json_writer.obj)”或在“E:\work\star\other-platform-demos\windows-demo\release\starrtc-demo\lib_json.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+  starrtcdemo.vcxproj -> E:\work\star\other-platform-demos\windows-demo\starrtcdemo\starrtcdemo\..\..\release\starrtc-demo\starrtcdemo.exe
+  Microsoft (R) COFF/PE Editor Version 14.15.26732.1
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  

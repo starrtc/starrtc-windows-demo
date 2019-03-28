@@ -234,7 +234,7 @@ list<CMessageBean*> CSqliteDB::getMessageList(string conversationId)
 {
 	sqlite3_stmt * stmt = NULL;
 	list<CMessageBean*> retList;
-	string sql = "select id,conversationId,fromId,msg,time from " + m_strMsgTableName + " where conversationId = ? or fromId = ? order by id desc limit 5";
+	string sql = "select id,conversationId,fromId,msg,time from " + m_strMsgTableName + " where conversationId = ? order by id desc limit 5";
 	int result = sqlite3_prepare_v2(m_pDB, sql.c_str(), -1, &stmt, 0);
 
 	if (result == SQLITE_OK)
@@ -242,8 +242,6 @@ list<CMessageBean*> CSqliteDB::getMessageList(string conversationId)
 		int nColCount = sqlite3_column_count(stmt);
 		CString strConversationId = conversationId.c_str();
 		sqlite3_bind_text(stmt, 1, strConversationId.GetBuffer(0), -1, SQLITE_STATIC);
-
-		sqlite3_bind_text(stmt, 2, strConversationId.GetBuffer(0), -1, SQLITE_STATIC);
 
 		while (sqlite3_step(stmt) == SQLITE_ROW)
 		{

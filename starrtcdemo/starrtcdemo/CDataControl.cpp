@@ -253,7 +253,7 @@ DWORD WINAPI ShowPicThread(LPVOID p)
 			pDataControl->m_ShowPicDataQueue.pop();
 		}
 		LeaveCriticalSection(&pDataControl->m_csShowPicDataQueue);//Àë¿ªÁÙ½çÇø
-		if (pShowPicData != NULL)
+		if (pShowPicData != NULL && pDataControl->m_bExit != true)
 		{
 			pDataControl->drawPic(FMT_NV12, pShowPicData->m_nWidth, pShowPicData->m_nHeight, pShowPicData->m_pVideoData, pShowPicData->m_nDataLength);
 			delete pShowPicData;
@@ -317,6 +317,7 @@ CLocalDataControl::~CLocalDataControl()
 
 	if (m_hGetCameraDataThread != NULL)
 	{
+		WaitForSingleObject(m_hGetCameraDataThread, INFINITE);
 		CloseHandle(m_hGetCameraDataThread);
 		m_hGetCameraDataThread = NULL;
 	}
@@ -360,11 +361,11 @@ void CLocalDataControl::startGetData(CROP_TYPE cropType, bool bInsert)
 
 void CLocalDataControl::stopGetData()
 {
+	m_bStop = true;
+	m_bInsertData = false;
 	clearShowPicDataQueue(m_CropPicDataQueue, m_csCropPicDataQueue);
 	clearInsertPicDataQueue(m_SendPicDataQueue, m_csSendPicDataQueue);
 	clearShowPicDataQueue(m_ShowPicDataQueue, m_csShowPicDataQueue);
-	m_bStop = true;
-	m_bInsertData = false;
 }
 
 /*

@@ -66,8 +66,14 @@ bool CSrcManager::getChannelServerAddr()
 	bool bRet = false;
 	m_strApplyUploadChannelServerIp = "";
 	m_nApplyUploadChannelServerPort = 0;
+
+	if (m_pUserManager->m_bUserDispatch == false)
+	{
+		m_strApplyUploadChannelServerIp = m_pUserManager->m_ServiceParam.m_strUploadServiceIP;
+		m_nApplyUploadChannelServerPort = m_pUserManager->m_ServiceParam.m_nUploadServicePort;
+	}
 	CString url = "";
-	url.Format("http://%s:9929", m_pUserManager->m_ServiceParam.m_strUploadServiceIP.c_str());
+	url.Format("http://%s:%d", m_pUserManager->m_ServiceParam.m_strUploadServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nUploadServicePort);
 
 
 	string strData = "userId=" + agentId + "_" + userId;

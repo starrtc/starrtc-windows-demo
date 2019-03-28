@@ -279,6 +279,12 @@
     <ClInclude Include="IMeetingManagerListener.h">
       <Filter>apiInterface</Filter>
     </ClInclude>
+    <ClInclude Include="IChatroomGetListListener.h">
+      <Filter>apiInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="IGroupGetListListener.h">
+      <Filter>apiInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

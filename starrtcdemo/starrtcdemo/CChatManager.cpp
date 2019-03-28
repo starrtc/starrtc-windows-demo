@@ -16,6 +16,18 @@ CChatManager::~CChatManager()
 	{
 		m_pStarRtcCore->addC2CListener(NULL);
 	}
+	m_pStarIMC2CListener = NULL;
+
+	map<string, CIMMessage*>::iterator iter = m_MsgMap.begin();
+	for (;iter != m_MsgMap.end(); iter++)
+	{
+		if (iter->second != NULL)
+		{
+			delete iter->second;
+			iter->second = NULL;
+		}
+	}
+	m_MsgMap.clear();
 }
 
 CIMMessage* CChatManager::sendMessage(char* toUserId, char* msgStr)

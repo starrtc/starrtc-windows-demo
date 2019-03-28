@@ -109,7 +109,7 @@ public:
 	/**
 	 * 启动IM服务
 	 */
-	bool startIMServer();
+	bool startIMServer(char* servIP, int servPort, char* agentId, char* userId, char* starToken);
 
 	/**
 	 * 停止IM服务
@@ -130,6 +130,15 @@ public:
 	 * 发送群组消息
 	 */
 	int sendGroupMsg(CIMMessage* pIMMessage);
+
+	/**
+	 * 获取群组列表
+	 */
+	int applyGetGroupList();
+	/**
+	 * 获取群组用户列表
+	 */
+	int  applyGetUserList(char* groupId);
 	
 	/**
 	 * 申请创建群组
@@ -180,6 +189,12 @@ public:
 	 * 获取推送模式
 	 */
 	int getPushMode();
+
+	int queryAllChatRoomList(char* servAddr, int servPort, int listType);
+	
+	int saveToChatRoomList(char* servAddr, int servPort, int listType, char* roomId, ChatroomInfo& chatInfo);
+	
+	int delFromChatRoomList(char* servAddr, int servPort, int listType, char* roomId);
 
 	/*
 	 * 创建ChatRoom
@@ -380,6 +395,8 @@ public:
 
 	static int chatroomStop(void* userData);
 
+	static int chatroomQueryAllListOK(char* listData, void* userData);
+
 	static int deleteChatroomOK(char* roomId, void* userData);
 	static int deleteChatroomFailed(char* roomId, char* errString, void* userData);
 
@@ -402,6 +419,11 @@ public:
 	//消息发送失败，余额不足
 	static int chatroomSendMsgNoFee(void* userData);
 
+	//新加接口
+	static int chatroomSaveToChatRoomListOK(char* roomId, void* userData);
+	static int chatroomSaveToChatRoomListFailed(char* roomId, void* userData);
+	static int chatroomDelFromChatRoomListOK(char* roomId, void* userData);
+	static int chatroomDelFromChatRoomListFailed(char* roomId, void* userData);
 
 	//=========================================================================
 	//===========================    liveVdn回调    ===========================
@@ -465,7 +487,12 @@ public:
 	static int uploaderRemoveSrc(char* upUserId, int upId, void* userData);
 	static int getRealtimeDataSrc(int upId, uint8_t* data, int len, void* userData);
 	
-	
+	//新加
+	static int pushRtmpOKSrc(char* channelId, void* userData);
+	static int pushRtmpFailedSrc(char* errString, char* channelId, void* userData);
+	static int stopPushRtmpOKSrc(char* channelId, void* userData);
+	static int stopPushRtmpFailedSrc(char* errString, char* channelId, void* userData);
+
 	
 	static int getVideoRaw(int upId, int w, int h, uint8_t* videoData, int videoDataLen, void* userData);
 

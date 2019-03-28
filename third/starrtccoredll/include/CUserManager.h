@@ -12,6 +12,7 @@ public:
 
 	string m_strIMServerIp;
 	int m_nIMServerPort;
+	bool m_bUserDispatch;
 
 	CServiceParam m_ServiceParam;
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "CIMMessage.h"
-
+#include "ChatroomInfo.h"
+#include <list>
+using namespace std;
 class IStarIMChatroomListener
 {
 public:
@@ -16,6 +18,8 @@ public:
 	virtual void chatRoomErr(string errString) = 0;
 	//聊天室关闭成功
 	virtual void chatroomStopOK() = 0;
+	//查询聊天室列表回调
+	virtual int chatroomQueryAllListOK(list<ChatroomInfo>& chatRoomInfoList) = 0;
 	//聊天室删除成功
 	virtual void chatroomDeleteOK(string roomId) = 0;
 	//聊天室删除失败

@@ -274,7 +274,9 @@
     <ClInclude Include="CvvImage.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="IChatManagerListener.h" />
+    <ClInclude Include="IChatroomGetListListener.h" />
     <ClInclude Include="IChatroomManagerListener.h" />
+    <ClInclude Include="IGroupGetListListener.h" />
     <ClInclude Include="IGroupManagerListener.h" />
     <ClInclude Include="ILiveInterface.h" />
     <ClInclude Include="ILiveListener.h" />

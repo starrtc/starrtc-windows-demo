@@ -44,7 +44,6 @@ int CVoipManager::init()
 void CVoipManager::stopVoip(int isActive)
 {
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopVoip(isActive);
-	m_bInit = false;
 }
 /**
  * 主叫方调用
@@ -160,7 +159,8 @@ void CVoipManager::sendControlMsg(int msgType)
 
 void CVoipManager::voipStopOK(int stopType)
 {
-	
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopLiveSrcCodec();
+	m_bInit = false;
 }
 
 //服务端收到calling请求，此时客户端可以通过消息系统通知对方
@@ -216,9 +216,16 @@ int CVoipManager::voipError(char* errString)
 {
 	string str = "VOIP_MOONSERVER_ERRID_FAR_DISCONNECTED";
 	string strErr = errString;
-	if (m_pVoipManagerListener != NULL && strErr != str)
+	if (m_pVoipManagerListener != NULL)
 	{
-		m_pVoipManagerListener->onError(errString);
+		if (strErr != str)
+		{
+			m_pVoipManagerListener->onError(errString);
+		}
+		else
+		{
+			m_pVoipManagerListener->onHangup(m_strTargetId);
+		}
 	}
 	return 0;
 }

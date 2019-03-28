@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "CGroupManager.h"
 #include "StarIMMessageBuilder.h"
-
+#include "HttpClient.h"
+#include "json.h"
+IGroupGetListListener* CGroupManager::m_pGroupGetListListener = NULL;
 CGroupManager::CGroupManager(CUserManager* pUserManager)
 {
 	m_pGroupManagerListener = NULL;
@@ -16,10 +18,130 @@ CGroupManager::~CGroupManager()
 	m_pStarRtcCore->addGroupListener(NULL);
 }
 
+void CGroupManager::addGroupGetListListener(IGroupGetListListener* pGroupGetListListener)
+{
+	m_pGroupGetListListener = pGroupGetListListener;
+}
+
+void CGroupManager::getGroupList(CUserManager* pUserManager)
+{
+	if (pUserManager->m_bUserDispatch)
+	{
+		list<CGroupInfo> retGroupList;
+		CString stUrl = "";
+		stUrl.Format(_T("%s/group/list_all?userid=%s&appid=%s"), pUserManager->m_ServiceParam.m_strRequestListAddr.c_str(), pUserManager->m_ServiceParam.m_strUserId.c_str(), pUserManager->m_ServiceParam.m_strAgentId.c_str());
+
+		char* data = "";
+
+		CString strPara = _T("");
+		CString strContent;
+
+		CHttpClient httpClient;
+		int nRet = httpClient.HttpPost(stUrl, strPara, strContent);
+
+		string str_json = strContent.GetBuffer(0);
+		Json::Reader reader;
+		Json::Value root;
+		if (nRet == 0 && str_json != "" && reader.parse(str_json, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素   
+		{
+			std::cout << "========================[Dispatch]========================" << std::endl;
+			if (root.isMember("status") && root["status"].asInt() == 1)
+			{
+				if (root.isMember("data"))
+				{
+					Json::Value data = root.get("data", "");
+					int nSize = data.size();
+					for (int i = 0; i < nSize; i++)
+					{
+						CGroupInfo groupInfo;
+						if (data[i].isMember("creator"))
+						{
+							groupInfo.m_strCreaterId = data[i]["creator"].asCString();
+						}
+
+						if (data[i].isMember("groupId"))
+						{
+							groupInfo.m_strId = data[i]["groupId"].asCString();
+						}
+
+						if (data[i].isMember("groupName"))
+						{
+							groupInfo.m_strName = data[i]["groupName"].asCString();
+						}
+						retGroupList.push_back(groupInfo);
+					}
+				}
+			}
+		}
+		if (m_pGroupGetListListener != NULL)
+		{
+			m_pGroupGetListListener->applyGetGroupListFin(retGroupList);
+		}	
+	}
+	else
+	{
+		StarRtcCore::getStarRtcCoreInstance(pUserManager)->applyGetGroupList();
+	}
+	
+}
+
+void CGroupManager::getUserList(CUserManager* pUserManager, string strGroupId)
+{
+	if (pUserManager->m_bUserDispatch)
+	{
+		list<string> userList;
+
+		CString stUrl = "";
+		stUrl.Format(_T("%s/group/members?groupId=%s&appid=%s"), pUserManager->m_ServiceParam.m_strRequestListAddr.c_str(), strGroupId.c_str(), pUserManager->m_ServiceParam.m_strAgentId.c_str());
+
+		char* data = "";
+
+		CString strPara = _T("");
+		CString strContent;
+
+		CHttpClient httpClient;
+		int nRet = httpClient.HttpPost(stUrl, strPara, strContent);
+
+		string str_json = strContent.GetBuffer(0);
+		Json::Reader reader;
+		Json::Value root;
+		if (nRet == 0 && str_json != "" && reader.parse(str_json, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素   
+		{
+			std::cout << "========================[Dispatch]========================" << std::endl;
+			if (root.isMember("status") && root["status"].asInt() == 1)
+			{
+				if (root.isMember("data"))
+				{
+					Json::Value data = root.get("data", "");
+					int nSize = data.size();
+					for (int i = 0; i < nSize; i++)
+					{
+						string str;
+						if (data[i].isMember("userId"))
+						{
+							str = data[i]["userId"].asCString();
+							userList.push_back(str);
+						}
+					}
+				}
+			}
+		}
+		if (m_pGroupGetListListener != NULL)
+		{
+			m_pGroupGetListListener->applyGetUserListFin(userList);
+		}
+	}
+	else
+	{
+		StarRtcCore::getStarRtcCoreInstance(pUserManager)->applyGetUserList((char*)strGroupId.c_str());
+	}
+	
+}
+
 /**
-	 * 添加监听
-	 * @param groupManagerListener
-	 */
+ * 添加监听
+ * @param groupManagerListener
+ */
 void CGroupManager::addListener(IGroupManagerListener* pGroupManagerListener)
 {
 	m_pGroupManagerListener = pGroupManagerListener;
@@ -173,6 +295,32 @@ CIMMessage* CGroupManager::sendOnlineMessage(string groupID, list<string> atUser
 		m_pStarRtcCore->sendOnlineMessage(pIMMessage);
 	}
 	return pIMMessage;
+}
+
+/**
+ * 获取group list回调函数
+ */
+int CGroupManager::applyGetGroupListFin(list<CGroupInfo>& groupInfoList)
+{
+	int ret = 0;
+	if (CGroupManager::m_pGroupGetListListener)
+	{
+		ret = CGroupManager::m_pGroupGetListListener->applyGetGroupListFin(groupInfoList);
+	}
+	return ret;
+}
+
+/**
+ * 获取用户列表回调函数
+ */
+int CGroupManager::applyGetUserListFin(list<string>& userList)
+{
+	int ret = 0;
+	if (CGroupManager::m_pGroupGetListListener)
+	{
+		ret = CGroupManager::m_pGroupGetListListener->applyGetUserListFin(userList);
+	}
+	return ret;
 }
 
 /**

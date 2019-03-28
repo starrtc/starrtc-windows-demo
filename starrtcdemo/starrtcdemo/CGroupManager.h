@@ -1,5 +1,6 @@
 #pragma once
 #include "IGroupManagerListener.h"
+#include "IGroupGetListListener.h"
 #include "IGroupListener.h"
 #include "CIMMessage.h"
 #include "StarRtcCore.h"
@@ -13,6 +14,9 @@ public:
 	CGroupManager(CUserManager* pUserManager);
 	~CGroupManager();
 public:
+	static void addGroupGetListListener(IGroupGetListListener* pGroupGetListListener);
+	static void getGroupList(CUserManager* pUserManager);
+	static void getUserList(CUserManager* pUserManager, string strGroupId);
 	/**
 	 * 添加监听
 	 * @param groupManagerListener
@@ -75,6 +79,11 @@ public:
 	CIMMessage* sendOnlineMessage(string groupID, list<string> atUserIDs, string Message);
 public:
 	/**
+	 * 获取group list回调函数
+	 */
+	virtual int applyGetGroupListFin(list<CGroupInfo>& groupInfoList);
+	virtual int applyGetUserListFin(list<string>& userList);
+	/**
 	 * 群成员数发生变化
 	 * @param groupID
 	 * @param number
@@ -124,6 +133,7 @@ public:
 	virtual void onApplyRemoveUserFromGroupFin(string groupID);
 	
 private:
+	static IGroupGetListListener* m_pGroupGetListListener;
 	IGroupManagerListener* m_pGroupManagerListener;
 	StarRtcCore* m_pStarRtcCore;
 	map<string, CIMMessage*> m_MsgMap;
