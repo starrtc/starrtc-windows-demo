@@ -7,6 +7,7 @@ public:
 	CCodecManager(CUserManager* pUserManager);
 	virtual ~CCodecManager();
 public:
+	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	//videoData的释放由此函数负责
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
 	//videoData的释放由此函数负责
@@ -15,6 +16,7 @@ public:
 	//videoData由在函数内释放
 	//成功返回0，失败返回-1
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
+	void querySoundData(uint8_t** pData, int* nLength);
 public:
 	CUserManager* m_pUserManager;
 };

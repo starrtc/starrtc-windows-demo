@@ -56,6 +56,8 @@ public:
 
 	void setLogFile(char *dir);
 
+	void saveFile(int save_mode);
+
 	void setconfigLog(int log_level, int log_filter, int log_freq);
 
 	/**
@@ -190,11 +192,11 @@ public:
 	 */
 	int getPushMode();
 
-	int queryAllChatRoomList(char* servAddr, int servPort, int listType);
+	int queryAllChatRoomList(char* servAddr, int servPort, char* userId, char* listType);
 	
-	int saveToChatRoomList(char* servAddr, int servPort, int listType, char* roomId, ChatroomInfo& chatInfo);
+	int saveToChatRoomList(char* servAddr, int servPort, char* userId, int listType, char* roomId, ChatroomInfo& chatInfo);
 	
-	int delFromChatRoomList(char* servAddr, int servPort, int listType, char* roomId);
+	int delFromChatRoomList(char* servAddr, int servPort, char* userId, int listType, char* roomId);
 
 	/*
 	 * 创建ChatRoom
@@ -276,7 +278,7 @@ public:
 	//videoData由在函数内释放
 	//成功返回0，失败返回-1
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
-
+	void querySoundData(uint8_t** pData, int* nLength);
 	//=========================================================================
 	//===========================    Msg回调    ===========================
 	//=========================================================================

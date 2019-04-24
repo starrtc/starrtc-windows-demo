@@ -53,7 +53,7 @@ bool CLiveManager::createLiveAndJoin(string strName, int chatroomType, int chann
 					//join channe
 					pSrcManager->globalSetting(15, 1024);
 					bRet = pSrcManager->applyUpload();
-					pSrcManager->startEncoder();
+					pSrcManager->startEncoder(m_pUserManager->m_AudioParam.m_nSampleRateInHz, m_pUserManager->m_AudioParam.m_nChannels, m_pUserManager->m_AudioParam.m_nBitRate, 0);
 					if (length > 7)
 					{
 						length = 7;
@@ -66,6 +66,15 @@ bool CLiveManager::createLiveAndJoin(string strName, int chatroomType, int chann
 	
 	return bRet;
 }
+
+void CLiveManager::insertAudioRaw(uint8_t* audioData, int dataLen)
+{
+	if (m_pLiveInterface != NULL)
+	{
+		((CSrcManager*)m_pLiveInterface)->insertAudioRaw(audioData, dataLen);
+	}
+}
+
 
 void CLiveManager::insertVideoNalu(uint8_t* videoData, int dataLen)
 {
@@ -141,7 +150,7 @@ bool CLiveManager::joinLive(string strChatroomId, string strChannelId, bool bSel
 			pSrcManager->getChannelServerAddr();
 			pSrcManager->globalSetting(15, 1024);
 			bRet = pSrcManager->applyUpload();
-			pSrcManager->startEncoder();
+			pSrcManager->startEncoder(m_pUserManager->m_AudioParam.m_nSampleRateInHz, m_pUserManager->m_AudioParam.m_nChannels, m_pUserManager->m_AudioParam.m_nBitRate, 0);
 			
 		}
 		else
@@ -254,6 +263,14 @@ void CLiveManager::commandToAudience(string toId)
 	if (m_pChatroomManager != NULL)
 	{
 		m_pChatroomManager->sendChatroomPrivateControlMessage(toId, CONTROL_CODE_LIVE_LINK_STOP);
+	}
+}
+
+void CLiveManager::querySoundData(uint8_t** pData, int* nLength)
+{
+	if (m_pLiveInterface != NULL)
+	{
+		m_pLiveInterface->querySoundData(pData, nLength);
 	}
 }
 /**

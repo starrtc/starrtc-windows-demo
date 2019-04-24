@@ -87,8 +87,9 @@ void CChatroomManager::getChatroomList(CUserManager* pUserManager, int listType)
 	}
 	else
 	{
-
-		StarRtcCore::getStarRtcCoreInstance(pUserManager)->queryAllChatRoomList((char*)pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), pUserManager->m_ServiceParam.m_nChatServicePort, listType);
+		char strListType[10] = { 0 };
+		sprintf_s(strListType, "%d", listType);
+		StarRtcCore::getStarRtcCoreInstance(pUserManager)->queryAllChatRoomList((char*)pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), pUserManager->m_ServiceParam.m_nChatServicePort, (char*)pUserManager->m_ServiceParam.m_strUserId.c_str(), strListType);
 	}
 	
 }
@@ -265,7 +266,7 @@ bool CChatroomManager::reportChatroom(string strRoomId, ChatroomInfo& chatroomIn
 	}
 	else
 	{
-		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->saveToChatRoomList((char*)m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nChatServicePort, listType, (char*)strRoomId.c_str(), chatroomInfo);
+		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->saveToChatRoomList((char*)m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nChatServicePort, (char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(), listType, (char*)strRoomId.c_str(), chatroomInfo);
 	}
 	return true;
 }

@@ -145,7 +145,10 @@ bool CVdnManager::setStreamConfig(int* sendBuf, int length)
 	bret = m_bSuccess;
 	return true;
 }
-
+void CVdnManager::querySoundData(uint8_t** pData, int* nLength)
+{
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->querySoundData(pData, nLength);
+}
 
 int CVdnManager::applyDownloadChannelOK()
 {

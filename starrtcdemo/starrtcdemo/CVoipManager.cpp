@@ -33,12 +33,12 @@ int CVoipManager::init()
 	CPicSize smallSize;
 	CropTypeInfo::getCropSize((CROP_TYPE)m_pUserManager->m_ServiceParam.m_CropType, bigSize, smallSize);
 	printf("globalSetting w:%d, h:%d, \n", bigSize.m_nWidth, bigSize.m_nHeight);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setGlobalSetting(1, 0,
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setGlobalSetting(1, 1,
 		0,
 		bigSize.m_nWidth, bigSize.m_nHeight, 15, 1024,
 		smallSize.m_nWidth, smallSize.m_nHeight, 15, 1024,
-		0, 0, 0);
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startVoipEncoder(0, 0, 0, 0);
+		0, 0, 0); 
+	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startVoipEncoder(m_pUserManager->m_AudioParam.m_nSampleRateInHz, m_pUserManager->m_AudioParam.m_nChannels, m_pUserManager->m_AudioParam.m_nBitRate, 0);
 }
 
 void CVoipManager::stopVoip(int isActive)
@@ -243,7 +243,19 @@ int CVoipManager::voipGetRealtimeData(uint8_t* data, int len)
 {
 	return 0;
 }
-
+void CVoipManager::insertAudioRaw(uint8_t* audioData, int dataLen)
+{
+	if (m_bInit && m_pCodecManager != NULL)
+	{
+		uint8_t* insertData = NULL;
+		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->starRTCMalloc(&insertData, dataLen);
+		if (insertData != NULL)
+		{
+			memcpy(insertData, audioData, sizeof(uint8_t)*dataLen);
+			m_pCodecManager->insertAudioRaw(insertData, dataLen);
+		}
+	}
+}
 void CVoipManager::insertVideoNalu(uint8_t* videoData, int dataLen)
 {
 	if (m_bInit && m_pCodecManager != NULL)
@@ -345,5 +357,13 @@ void CVoipManager::onSendMessageSuccess(int msgIndex)
 
 void CVoipManager::onSendMessageFailed(int msgIndex)
 {
+}
+
+void CVoipManager::querySoundData(uint8_t** pData, int* nLength)
+{
+	if (m_pCodecManager != NULL)
+	{
+		m_pCodecManager->querySoundData(pData, nLength);
+	}
 }
 

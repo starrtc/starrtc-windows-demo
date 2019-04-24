@@ -20,6 +20,7 @@ public:
 	CLiveManager(CUserManager* pUserManager, ILiveListener* pLiveListener);
 	virtual ~CLiveManager();
 	bool createLiveAndJoin(string strName, int chatroomType, int channelType, int* streamConfig, int length);
+	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
 	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
@@ -55,7 +56,7 @@ public:
 	void refuseInviteToBroadcaster(string toId);
 	
 	void commandToAudience(string toId);
-
+	void querySoundData(uint8_t** pData, int* nLength);
 public:
 	/**
 	 * 聊天室成员数变化

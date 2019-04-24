@@ -9,6 +9,10 @@ CLogin::CLogin(CUserManager* pUserManager)
 	m_pUserManager = pUserManager;
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setLogFile("test");
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setconfigLog(3, 31, 1);
+	//StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->saveFile(1);
+	m_pUserManager->m_AudioParam.m_nSampleRateInHz = AUDIO_SAMPLE_RATE;
+	m_pUserManager->m_AudioParam.m_nChannels = AUDIO_CHANNELS;
+	m_pUserManager->m_AudioParam.m_nBitRate = AUDIO_BIT_RATE;
 }
 
 
@@ -197,9 +201,6 @@ string CLogin::getServiceParam()
 bool CLogin::logIn()
 {
 	bool bRet = false;
-	//CHttpClient httpClient;
-	//CInternetSession temp;
-
 	if (m_pUserManager->m_bUserDispatch)
 	{
 		bRet = getAuthKey(m_pUserManager->m_ServiceParam.m_strUserId);
@@ -212,18 +213,20 @@ bool CLogin::logIn()
 		{
 			return bRet;
 		}
-		
+		bRet = getIMServerAddr(m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_ServiceParam.m_strAgentId);
+		if (bRet == false)
+		{
+			return bRet;
+		}
 	}
 	else
 	{
 		bRet = true;
 		m_pUserManager->m_strTokenId = "free";
+		m_pUserManager->m_strIMServerIp = m_pUserManager->m_ServiceParam.m_strMessageServiceIP;
+		m_pUserManager->m_nIMServerPort = m_pUserManager->m_ServiceParam.m_nMessageServicePort;
 	}
-	bRet = getIMServerAddr(m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_ServiceParam.m_strAgentId);
-	if (bRet == false)
-	{
-		return bRet;
-	}
+	
 	bRet = startIMServer((char*)m_pUserManager->m_strIMServerIp.c_str(), m_pUserManager->m_nIMServerPort, (char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(), (char*)m_pUserManager->m_ServiceParam.m_strAgentId.c_str(), (char*)m_pUserManager->m_strTokenId.c_str());
 	return bRet;
 }
@@ -307,13 +310,6 @@ bool CLogin::getIMServerAddr(string userId, string agentId)
 	bool bRet = false;
 	m_pUserManager->m_strIMServerIp = "";
 	m_pUserManager->m_nIMServerPort = 0;
-	if (m_pUserManager->m_bUserDispatch == false)
-	{
-		m_pUserManager->m_strIMServerIp = m_pUserManager->m_ServiceParam.m_strMessageServiceIP;
-		m_pUserManager->m_nIMServerPort = m_pUserManager->m_ServiceParam.m_nMessageServicePort;
-		return true;
-	}
-
 	CString url = "";
 	url.Format(_T("http://%s:%d"), m_pUserManager->m_ServiceParam.m_strMessageServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nMessageServicePort);
 
@@ -355,7 +351,7 @@ bool CLogin::startIMServer(string strIP, int nPort, string userId, string agentI
 	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startIMServer((char*)strIP.c_str(), nPort, (char*)agentId.c_str(), (char*)userId.c_str(), (char*)strToken.c_str());
 }
 /*
-* 开启IM服务
+* 停止IM服务
 */
 bool CLogin::stopIMServer()
 {

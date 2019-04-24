@@ -33,6 +33,7 @@ public:
 	 * 设置数据流配置
 	 */
 	virtual bool setStreamConfig(int* sendBuf, int length) = 0;
+	virtual void querySoundData(uint8_t** pData, int* nLength) = 0;
 public:
 	LIVE_TYPE m_liveType;
 protected:

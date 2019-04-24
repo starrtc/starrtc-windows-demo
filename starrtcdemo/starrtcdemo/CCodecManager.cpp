@@ -11,7 +11,10 @@ CCodecManager::CCodecManager(CUserManager* pUserManager)
 CCodecManager::~CCodecManager()
 {
 }
-
+void CCodecManager::insertAudioRaw(uint8_t* audioData, int dataLen)
+{
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->insertAudioRaw(audioData, dataLen);
+}
 //videoData的释放由此函数负责
 void CCodecManager::insertVideoNalu(uint8_t* videoData, int dataLen)
 {
@@ -27,4 +30,9 @@ void CCodecManager::insertVideoRaw(uint8_t* videoData, int dataLen, int isBig)
 int CCodecManager::cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall)
 {
 	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->cropVideoRawNV12(w, h, videoData, dataLen, yuvProcessPlan, rotation, needMirror, outVideoDataBig, outVideoDataSmall);
+}
+
+void CCodecManager::querySoundData(uint8_t** pData, int* nLength)
+{
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->querySoundData(pData, nLength);
 }

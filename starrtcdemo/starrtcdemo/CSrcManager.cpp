@@ -33,7 +33,7 @@ void CSrcManager::globalSetting(int fps, int bitrate)
 	CPicSize smallSize;
 	CropTypeInfo::getCropSize((CROP_TYPE)m_pUserManager->m_ServiceParam.m_CropType, bigSize, smallSize);
 	printf("globalSetting w:%d, h:%d, fps:%d, bitrate:%d\n", bigSize.m_nWidth, bigSize.m_nHeight, fps, bitrate);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setGlobalSetting(1, 0,
+	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setGlobalSetting(1, 1,
 		0,
 		bigSize.m_nWidth, bigSize.m_nHeight, fps, bitrate,
 		smallSize.m_nWidth, smallSize.m_nHeight, fps, bitrate,
@@ -54,6 +54,14 @@ bool CSrcManager::setStreamConfig(int* sendBuf, int length)
 	}
 	bret = m_bSuccess;
 	return true;
+}
+
+void CSrcManager::querySoundData(uint8_t** pData, int* nLength)
+{
+	if (m_pCodecManager != NULL)
+	{
+		m_pCodecManager->querySoundData(pData, nLength);
+	}
 }
 
 /*
@@ -150,9 +158,9 @@ bool CSrcManager::applyUpload()
 /*
  * ¿ªÆôÖ±²¥±àÂëÆ÷
  */
-bool CSrcManager::startEncoder()
+bool CSrcManager::startEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation)
 {
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startLiveSrcEncoder(0, 0, 0, 0);
+	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startLiveSrcEncoder(audioSampleRateInHz, audioChannels, audioBitRate, rotation);
 }
 
 void CSrcManager::setUploader(string strUserId)
@@ -178,7 +186,6 @@ bool CSrcManager::stopUpload()
 	}
 	bret = m_bSuccess;
 	return bret;
-	return true;
 }
 
 /*
@@ -188,6 +195,20 @@ bool CSrcManager::stopEncoder()
 {
 	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopLiveSrcCodec();
 	return true;
+}
+
+void CSrcManager::insertAudioRaw(uint8_t* audioData, int dataLen)
+{
+	if (m_pCodecManager != NULL)
+	{
+		uint8_t* insertData = NULL;
+		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->starRTCMalloc(&insertData, dataLen);
+		if (insertData != NULL)
+		{
+			memcpy(insertData, audioData, sizeof(uint8_t)*dataLen);
+			m_pCodecManager->insertAudioRaw(insertData, dataLen);
+		}
+	}
 }
 
 void CSrcManager::insertVideoNalu(uint8_t* videoData, int dataLen)

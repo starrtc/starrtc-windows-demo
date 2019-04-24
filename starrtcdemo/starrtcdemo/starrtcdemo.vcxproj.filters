@@ -285,6 +285,18 @@
     <ClInclude Include="IGroupGetListListener.h">
       <Filter>apiInterface</Filter>
     </ClInclude>
+    <ClInclude Include="ISoundCallback.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaySound.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RecodeSound.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoundManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -427,6 +439,15 @@
     </ClCompile>
     <ClCompile Include="CMeetingManager.cpp">
       <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaySound.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RecodeSound.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundManager.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,6 @@ public:
 	/**
 	 * 创建群
 	 * @param groupName
-	 * @param callback
 	 */
 	bool createGroup(string groupName);
 
@@ -63,7 +62,6 @@ public:
 	 * @param groupID
 	 * @param atUserIDs
 	 * @param Message
-	 * @param callback
 	 * @return 发出的消息
 	 */
 	CIMMessage* sendMessage(string groupID, list<string> atUserIDs, string Message);
@@ -73,7 +71,6 @@ public:
 	 * @param groupID
 	 * @param atUserIDs
 	 * @param Message
-	 * @param callback
 	 * @return 发出的消息
 	 */
 	CIMMessage* sendOnlineMessage(string groupID, list<string> atUserIDs, string Message);

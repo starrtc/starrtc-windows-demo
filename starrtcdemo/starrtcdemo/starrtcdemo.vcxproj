@@ -153,7 +153,7 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -263,6 +263,7 @@
     <ClInclude Include="CSeviceParamDialog.h" />
     <ClInclude Include="CShowLiveControl.h" />
     <ClInclude Include="CShowLiveDlg.h" />
+    <ClInclude Include="CSoundManager.h" />
     <ClInclude Include="CSqliteDB.h" />
     <ClInclude Include="CSrcManager.h" />
     <ClInclude Include="CStarRTCMenuDialog.h" />
@@ -283,10 +284,13 @@
     <ClInclude Include="IMeetingManagerListener.h" />
     <ClInclude Include="IResultCallback.h" />
     <ClInclude Include="IShowLiveCallback.h" />
+    <ClInclude Include="ISoundCallback.h" />
     <ClInclude Include="ISrcManagerListener.h" />
     <ClInclude Include="IVdnManagerListener.h" />
     <ClInclude Include="IVoipManagerListener.h" />
     <ClInclude Include="json\json.h" />
+    <ClInclude Include="PlaySound.h" />
+    <ClInclude Include="RecodeSound.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StarIMMessageBuilder.h" />
     <ClInclude Include="StarIMMessageType.h" />
@@ -328,6 +332,7 @@
     <ClCompile Include="CSeviceParamDialog.cpp" />
     <ClCompile Include="CShowLiveControl.cpp" />
     <ClCompile Include="CShowLiveDlg.cpp" />
+    <ClCompile Include="CSoundManager.cpp" />
     <ClCompile Include="CSqliteDB.cpp" />
     <ClCompile Include="CSrcManager.cpp" />
     <ClCompile Include="CStarRTCMenuDialog.cpp" />
@@ -339,6 +344,8 @@
     <ClCompile Include="CvvImage.cpp" />
     <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="ILiveInterface.cpp" />
+    <ClCompile Include="PlaySound.cpp" />
+    <ClCompile Include="RecodeSound.cpp" />
     <ClCompile Include="StarIMMessageBuilder.cpp" />
     <ClCompile Include="starrtcdemo.cpp" />
     <ClCompile Include="starrtcdemoDlg.cpp" />

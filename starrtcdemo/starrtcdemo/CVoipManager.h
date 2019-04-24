@@ -25,7 +25,6 @@ public:
 	/**
 	* 主叫方调用
 	* 对方接听或拒绝前 主叫方主动取消呼叫
-	* @param callback
 	*/
 	void cancel();
 
@@ -33,21 +32,18 @@ public:
 	 * 被叫方调用
 	 * 同意跟主叫方通话
 	 * @param fromID
-	 * @param callback
 	 */
 	void accept(string fromID);
 
 	/**
 	 * 被叫方调用
 	 * 拒绝跟主叫方通话
-	 * @param callback
 	 */
 	void refuse();
 
 	/**
 	 * 双方都可调用
 	 * 挂断
-	 * @param callback
 	 */
 	void hangup(int isActive);
 	void sendMsg(string toId, string msg);
@@ -67,7 +63,7 @@ public:
 	virtual int voipSpeedTestFinish(char* userIp, int uploadVariance, int uploadSpeed, int downloadVariance, int downSpeed);
 	virtual int voipEchoTestFinish(int index, int len, int timeCost);
 	virtual int voipGetRealtimeData(uint8_t* data, int len);
-
+	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	//videoData的释放由此函数负责
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
 	//videoData的释放由此函数负责
@@ -79,6 +75,8 @@ public:
 	virtual void onNewMessage(CIMMessage* var1);
 	virtual void onSendMessageSuccess(int msgIndex);
 	virtual void onSendMessageFailed(int msgIndex);
+
+	void querySoundData(uint8_t** pData, int* nLength);
 private:
 	IVoipManagerListener* m_pVoipManagerListener;
 	CChatManager* m_pChatManager;

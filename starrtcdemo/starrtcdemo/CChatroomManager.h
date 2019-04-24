@@ -61,8 +61,13 @@ public:
 	bool sendChat(CIMMessage* pIMMessage);
 	bool sendPrivateChat(string toUserId, char* msgData);
 	bool sendChatroomPrivateControlMessage(string targetId, int code);
+	/*
+	 * 删除聊天室
+	 */
 	bool deleteChatRoom();
-
+	/*
+	 * 创建后上报创建的聊天室信息
+	 */
 	bool reportChatroom(string strRoomId, ChatroomInfo& chatroomInfo, int listType);
 
 	/*

@@ -21,7 +21,7 @@ public:
 	 * 设置数据流配置
 	 */
 	virtual bool setStreamConfig(int* sendBuf, int length);
-
+	virtual void querySoundData(uint8_t** pData, int* nLength);
 	/*
 	 * 通过调度获取ChatRoom服务地址
 	 */
@@ -40,7 +40,7 @@ public:
 	/*
 	 * 开启直播编码器
 	 */
-	bool startEncoder();
+	bool startEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
 
 	void setUploader(string strUserId);
 
@@ -55,7 +55,7 @@ public:
 	bool stopEncoder();
 
 	bool stop();
-
+	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	//videoData的释放由此函数负责
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
 	//videoData的释放由此函数负责

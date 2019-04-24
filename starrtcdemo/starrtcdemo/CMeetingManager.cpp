@@ -119,7 +119,7 @@ bool CMeetingManager::createAndJoin(string strName, int chatroomType, int channe
 					//join channel
 					m_pSrcManager->globalSetting(15, 1024);
 					bRet = m_pSrcManager->applyUpload();
-					m_pSrcManager->startEncoder();
+					m_pSrcManager->startEncoder(m_pUserManager->m_AudioParam.m_nSampleRateInHz, m_pUserManager->m_AudioParam.m_nChannels, m_pUserManager->m_AudioParam.m_nBitRate, 0);
 					if (length > 7)
 					{
 						length = 7;
@@ -132,7 +132,13 @@ bool CMeetingManager::createAndJoin(string strName, int chatroomType, int channe
 
 	return bRet;
 }
-
+void CMeetingManager::insertAudioRaw(uint8_t* audioData, int dataLen)
+{
+	if (m_pSrcManager != NULL)
+	{
+		m_pSrcManager->insertAudioRaw(audioData, dataLen);
+	}
+}
 void CMeetingManager::insertVideoNalu(uint8_t* videoData, int dataLen)
 {
 	if (m_pSrcManager != NULL)
@@ -237,7 +243,7 @@ bool CMeetingManager::join(string strChatroomId, string strChannelId, int* strea
 		m_pSrcManager->getChannelServerAddr();
 		m_pSrcManager->globalSetting(15, 1024);
 		bRet = m_pSrcManager->applyUpload();
-		m_pSrcManager->startEncoder();
+		m_pSrcManager->startEncoder(m_pUserManager->m_AudioParam.m_nSampleRateInHz, m_pUserManager->m_AudioParam.m_nChannels, m_pUserManager->m_AudioParam.m_nBitRate, 0);
 
 		if (length > 7)
 		{
@@ -349,6 +355,13 @@ void CMeetingManager::refuseInviteToBroadcaster(string toId)
 	}
 }
 
+void CMeetingManager::querySoundData(uint8_t** pData, int* nLength)
+{
+	if (m_pSrcManager != NULL)
+	{
+		m_pSrcManager->querySoundData(pData, nLength);
+	}
+}
 /**
  * 聊天室成员数变化
  * @param number

@@ -28,7 +28,7 @@ public:
 	 * 设置数据流配置
 	 */
 	virtual bool setStreamConfig(int* sendBuf, int length);
-
+	virtual void querySoundData(uint8_t** pData, int* nLength);
 	virtual int applyDownloadChannelOK();
 	virtual int applyDownloadChannelFailed(char* errString);
 	virtual int downloadChannelError(char* errString);
