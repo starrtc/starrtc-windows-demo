@@ -7,8 +7,8 @@
 CLogin::CLogin(CUserManager* pUserManager)
 {
 	m_pUserManager = pUserManager;
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setLogFile("test");
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setconfigLog(3, 31, 1);
+	StarRtcCore::getStarRtcCoreInstance()->setLogFile("test");
+	StarRtcCore::getStarRtcCoreInstance()->setconfigLog(3, 31, 1);
 	//StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->saveFile(1);
 	m_pUserManager->m_AudioParam.m_nSampleRateInHz = AUDIO_SAMPLE_RATE;
 	m_pUserManager->m_AudioParam.m_nChannels = AUDIO_CHANNELS;
@@ -42,7 +42,7 @@ bool CLogin::readConfig()
 			::WritePrivateProfileString("param", "userId", m_pUserManager->m_ServiceParam.m_strUserId.c_str(), strPath.c_str());
 		}
 
-		::GetPrivateProfileString("param", "agentId", "", buf, sizeof(buf), strPath.c_str());
+		::GetPrivateProfileString("param", "appId", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strAgentId = buf;
 		::GetPrivateProfileString("param", "loginServiceIP", "", buf, sizeof(buf), strPath.c_str());
 		m_pUserManager->m_ServiceParam.m_strLoginServiceIP = buf;
@@ -92,7 +92,18 @@ bool CLogin::readConfig()
 		else
 		{
 			m_pUserManager->m_bUserDispatch = true;
-		}	
+		}
+
+		::GetPrivateProfileString("param", "VoipP2P", "", buf, sizeof(buf), strPath.c_str());
+		int nP2P = atoi(buf);
+		if (nP2P == 0)
+		{
+			m_pUserManager->m_bVoipP2P = false;
+		}
+		else
+		{
+			m_pUserManager->m_bVoipP2P = true;
+		}
 	}
 	return true;
 }
@@ -106,7 +117,7 @@ bool CLogin::writeConfig()
 	{
 		char buf[128] = { 0 };
 		::WritePrivateProfileString("param", "userId", m_pUserManager->m_ServiceParam.m_strUserId.c_str(), strPath.c_str());
-		::WritePrivateProfileString("param", "agentId", m_pUserManager->m_ServiceParam.m_strAgentId.c_str(), strPath.c_str());
+		::WritePrivateProfileString("param", "appId", m_pUserManager->m_ServiceParam.m_strAgentId.c_str(), strPath.c_str());
 		::WritePrivateProfileString("param", "loginServiceIP", m_pUserManager->m_ServiceParam.m_strLoginServiceIP.c_str(), strPath.c_str());		
 		memset(buf, 0, sizeof(buf));
 		sprintf_s(buf, "%d", m_pUserManager->m_ServiceParam.m_nLoginServicePort);
@@ -158,6 +169,17 @@ bool CLogin::writeConfig()
 			sprintf_s(buf, "%d", 0);
 		}	
 		::WritePrivateProfileString("param", "dispatch", buf, strPath.c_str());	
+
+		memset(buf, 0, sizeof(buf));
+		if (m_pUserManager->m_bVoipP2P)
+		{
+			sprintf_s(buf, "%d", 1);
+		}
+		else
+		{
+			sprintf_s(buf, "%d", 0);
+		}
+		::WritePrivateProfileString("param", "VoipP2P", buf, strPath.c_str());
 	}
 	return true;
 }
@@ -348,21 +370,26 @@ bool CLogin::getIMServerAddr(string userId, string agentId)
 */
 bool CLogin::startIMServer(string strIP, int nPort, string userId, string agentId, string strToken)
 {
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startIMServer((char*)strIP.c_str(), nPort, (char*)agentId.c_str(), (char*)userId.c_str(), (char*)strToken.c_str());
+	return StarRtcCore::getStarRtcCoreInstance()->startIMServer((char*)strIP.c_str(), nPort, (char*)agentId.c_str(), (char*)userId.c_str(), (char*)strToken.c_str());
 }
 /*
 * Í£Ö¹IM·þÎñ
 */
 bool CLogin::stopIMServer()
 {
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopIMServer();
+	return StarRtcCore::getStarRtcCoreInstance()->stopIMServer();
 }
 
 string CLogin::getUserManagerInfo()
 {
 	string strRet = "";
+	string strUserDispatch = "1";
+	if (m_pUserManager->m_bUserDispatch == false)
+	{
+		strUserDispatch = "0";
+	}
 	strRet = "\"authKey\":\"" + m_pUserManager->m_strAuthKey
-		+ "\",\"dispatch\":" + "1"
+		+ "\",\"dispatch\":" + strUserDispatch
 		+ ",\"tokenId\":\"" + m_pUserManager->m_strTokenId + "\"," + getServiceParam();
 	return strRet;
 }

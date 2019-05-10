@@ -3,7 +3,7 @@
 #include "StarIMMessageType.h"
 #include "HttpClient.h"
 #include "json.h"
-IChatroomGetListListener* CMeetingManager::m_pChatroomGetListListener = NULL;;
+IChatroomGetListListener* CMeetingManager::m_pChatroomGetListListener = NULL;
 CMeetingManager::CMeetingManager(CUserManager* pUserManager, IMeetingManagerListener* pListener)
 {
 	m_pMeetingManagerListener = pListener;

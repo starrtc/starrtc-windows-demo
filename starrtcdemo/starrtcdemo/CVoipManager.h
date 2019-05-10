@@ -63,6 +63,7 @@ public:
 	virtual int voipSpeedTestFinish(char* userIp, int uploadVariance, int uploadSpeed, int downloadVariance, int downSpeed);
 	virtual int voipEchoTestFinish(int index, int len, int timeCost);
 	virtual int voipGetRealtimeData(uint8_t* data, int len);
+	virtual int reportVoipTransState(int state);
 	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	//videoData的释放由此函数负责
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
@@ -84,6 +85,7 @@ private:
 	CUserManager* m_pUserManager;
 	IResultCallback* m_pResultCallback;
 	string m_strTargetId;
+	map<string, string> m_RecvControlMsg;
 	static bool m_bCalling;
 	bool m_bInit;
 	int m_nServerPort;

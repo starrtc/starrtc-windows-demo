@@ -10,9 +10,9 @@ CVdnManager::CVdnManager(CUserManager* pUserManager, IVdnManagerListener* pVdnMa
 	m_strApplyDownloadChannelServerIp = "";
 	m_nApplyDownloadChannelServerPort = 0;
 	m_bApplayDownload = false;
-	StarRtcCore* pStarRtcCore = StarRtcCore::getStarRtcCoreInstance(pUserManager);
+	StarRtcCore* pStarRtcCore = StarRtcCore::getStarRtcCoreInstance();
 	pStarRtcCore->addVdnListener(this);
-	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addRecvDataListener(this);
+	StarRtcCore::getStarRtcCoreInstance()->addRecvDataListener(this);
 }
 
 
@@ -24,8 +24,8 @@ CVdnManager::~CVdnManager()
 	{
 		stopLiveDownload();
 	}
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addVdnListener(NULL);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addRecvDataListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance()->addVdnListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance()->addRecvDataListener(NULL);
 }
 
 /*
@@ -87,7 +87,7 @@ bool CVdnManager::applyDownload()
 	bool bret = false;
 	m_bApplayDownload = false;
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->applyDownload((char*)m_strApplyDownloadChannelServerIp.c_str(), m_nApplyDownloadChannelServerPort, (char*)m_ChannelId.c_str());
+	bret = StarRtcCore::getStarRtcCoreInstance()->applyDownload((char*)m_strApplyDownloadChannelServerIp.c_str(), m_nApplyDownloadChannelServerPort, (char*)m_ChannelId.c_str(), m_pUserManager->m_ServiceParam.m_strAgentId, m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_strTokenId);
 	if(bret == false)
 	{
 		bret = false;
@@ -112,7 +112,7 @@ bool CVdnManager::stopLiveDownload()
 		return true;
 	}
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopDownload();
+	bret = StarRtcCore::getStarRtcCoreInstance()->stopDownload();
 
 	if (bret == false)
 	{
@@ -137,7 +137,7 @@ bool CVdnManager::setStreamConfig(int* sendBuf, int length)
 {
 	bool bret = false;
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setStreamConfigVdn(sendBuf, length);
+	bret = StarRtcCore::getStarRtcCoreInstance()->setStreamConfigVdn(sendBuf, length);
 	while (m_bReturn == false)
 	{
 		Sleep(10);
@@ -147,7 +147,7 @@ bool CVdnManager::setStreamConfig(int* sendBuf, int length)
 }
 void CVdnManager::querySoundData(uint8_t** pData, int* nLength)
 {
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->querySoundData(pData, nLength);
+	StarRtcCore::getStarRtcCoreInstance()->querySoundData(pData, nLength);
 }
 
 int CVdnManager::applyDownloadChannelOK()

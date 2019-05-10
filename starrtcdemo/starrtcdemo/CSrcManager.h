@@ -4,7 +4,7 @@
 #include "ISrcManagerListener.h"
 #include "CCodecManager.h"
 #include "IRecvDataListener.h"
-class CSrcManager : public ILiveInterface, public ISrcListener, public IRecvDataListener
+class CSrcManager : public ILiveInterface, virtual public ISrcListener, public IRecvDataListener
 {
 public:
 	CSrcManager(CUserManager* pUserManager, ISrcManagerListener* pSrcManagerListener);

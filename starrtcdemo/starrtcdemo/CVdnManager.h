@@ -3,7 +3,7 @@
 #include "IVdnListener.h"
 #include "IVdnManagerListener.h"
 #include "IRecvDataListener.h"
-class CVdnManager : public ILiveInterface, public IVdnListener, public IRecvDataListener
+class CVdnManager : public ILiveInterface, public IRecvDataListener, virtual public IVdnListener
 {
 public:
 	CVdnManager(CUserManager* pUserManager, IVdnManagerListener* pVdnManagerListener);

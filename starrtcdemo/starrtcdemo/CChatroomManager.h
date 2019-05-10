@@ -19,21 +19,51 @@ enum CHATROOM_LIST_TYPE
 {
 	CHATROOM_LIST_TYPE_CHATROOM,	
 	CHATROOM_LIST_TYPE_LIVE,	
-	CHATROOM_LIST_TYPE_MEETING		
+	CHATROOM_LIST_TYPE_LIVE_PUSH,
+	CHATROOM_LIST_TYPE_MEETING,
+	CHATROOM_LIST_TYPE_MEETING_PUSH,
+	CHATROOM_LIST_TYPE_CLASS,
+	CHATROOM_LIST_TYPE_CLASS_PUSH
 };
 
+/*
+ *聊天室管理类
+ */
 class CChatroomManager : public IStarIMChatroomListener
 {
 public:
+	/*
+	 * 构造函数
+	 * @param pUserManager 用户信息
+	 * @param pChatroomManagerListener 回调函数指针
+	 */
 	CChatroomManager(CUserManager* pUserManager, IChatroomManagerListener* pChatroomManagerListener);
+	/*
+	 * 析构函数
+	 */
 	~CChatroomManager();
 public:
+	/*
+	 * 添加获取列表后回调函数指针
+	 * @param pChatroomGetListListener 回调函数指针
+	 */
 	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
+	
+	/*
+	 * 获取聊天室列表
+	 * @param pUserManager 用户信息
+	 * @param listType 类型
+	 */
 	static void getChatroomList(CUserManager* pUserManager, int listType);
 
+	/*
+	 * 重置返回值
+	 */
 	void resetReturnVal();
+
 	/*
 	 * 设置chatroom id
+	 * @param chatRoomId chatroom id
 	 */
 	void setChatroomId(string chatRoomId);
 
@@ -44,6 +74,8 @@ public:
 
 	/*
 	 * 创建ChatRoom
+	 * @param strName 名字
+	 * @param chatroomType 类型
 	 */
 	bool createChatRoom(string strName, int chatroomType);
 
@@ -58,13 +90,32 @@ public:
 
 	bool banToSendMsg(char* banUserId, int banTime);
 	bool kickOutUser(char* kickOutUserId);
+
+	/*
+	 * 发送消息
+	 * @param pIMMessage 消息内容
+	 */
 	bool sendChat(CIMMessage* pIMMessage);
+
+	/*
+	 * 发送私信
+	 * @param toUserId 对方userId
+	 * @param msgData 消息内容
+	 */
 	bool sendPrivateChat(string toUserId, char* msgData);
+
+	/*
+	 * 发送控制消息
+	 * @param targetId 对方targetId
+	 * @param code 消息类型
+	 */
 	bool sendChatroomPrivateControlMessage(string targetId, int code);
+
 	/*
 	 * 删除聊天室
 	 */
 	bool deleteChatRoom();
+
 	/*
 	 * 创建后上报创建的聊天室信息
 	 */
@@ -75,6 +126,9 @@ public:
 	 */
 	bool stopChatRoomConnect();
 
+	/*
+	 *  退出
+	 */
 	bool exit();
 
 public:
@@ -200,21 +254,26 @@ public:
 	 */
 	virtual void failed(string errMsg);
 
+	/**
+	 * 获取当前Chatroom id
+	 * @return Chatroom id
+	 */
 	string getChatroomId();
 private:
-	
+	//用户信息
 	CUserManager* m_pUserManager;
+	//回调函数指针
 	IChatroomManagerListener* m_pChatroomManagerListener;
+	//获取列表回调函数指针
 	static IChatroomGetListListener* m_pChatroomGetListListener;
+	//服务器Ip
 	string m_strChatRoomServerIp;
+	//服务器端口号
 	int m_nChatRoomServerPort;
-
 	bool m_bJoinChatRoom;
-
 	bool m_bReturn;
 	bool m_bSuccess;
 	string m_strErrInfo;
-
 	string m_ChatRoomId;
 };
 

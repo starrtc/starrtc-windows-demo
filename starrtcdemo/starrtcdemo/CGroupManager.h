@@ -4,6 +4,7 @@
 #include "IGroupListener.h"
 #include "CIMMessage.h"
 #include "StarRtcCore.h"
+#include "CUserManager.h"
 #include <list>
 #include <map>
 using namespace std;
@@ -11,11 +12,31 @@ using namespace std;
 class CGroupManager : public IGroupListener
 {
 public:
+	/*
+	 * 构造函数
+	 * @param pUserManager 用户信息
+	 */
 	CGroupManager(CUserManager* pUserManager);
+	/*
+	 * 析构函数
+	 */
 	~CGroupManager();
 public:
+	/*
+	 * 添加获取列表后回调函数指针
+	 * @param pChatroomGetListListener 回调函数指针
+	 */
 	static void addGroupGetListListener(IGroupGetListListener* pGroupGetListListener);
+	/*
+	 * 获取群组列表
+	 * @param pUserManager 用户信息
+	 */
 	static void getGroupList(CUserManager* pUserManager);
+	/*
+	 * 获取群组成员列表
+	 * @param pUserManager 用户信息
+	 * @param strGroupId 群组id
+	 */
 	static void getUserList(CUserManager* pUserManager, string strGroupId);
 	/**
 	 * 添加监听
@@ -79,6 +100,9 @@ public:
 	 * 获取group list回调函数
 	 */
 	virtual int applyGetGroupListFin(list<CGroupInfo>& groupInfoList);
+	/**
+	 * 获取group 成员信息回调函数
+	 */
 	virtual int applyGetUserListFin(list<string>& userList);
 	/**
 	 * 群成员数发生变化
@@ -131,6 +155,7 @@ public:
 	
 private:
 	static IGroupGetListListener* m_pGroupGetListListener;
+	CUserManager* m_pUserManager;
 	IGroupManagerListener* m_pGroupManagerListener;
 	StarRtcCore* m_pStarRtcCore;
 	map<string, CIMMessage*> m_MsgMap;

@@ -5,6 +5,9 @@
 #include "HttpClient.h"
 #include "StarIMMessageType.h"
 #include "CropType.h"
+#include "HttpClient.h"
+#include "json.h"
+IChatroomGetListListener* CLiveManager::m_pChatroomGetListListener = NULL;
 CLiveManager::CLiveManager(CUserManager* pUserManager, ILiveListener* pLiveListener)
 {
 	m_pUserManager = pUserManager;
@@ -29,7 +32,75 @@ CLiveManager::~CLiveManager()
 		m_pChatroomManager = NULL;
 	}
 }
+void CLiveManager::addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener)
+{
+	CLiveManager::m_pChatroomGetListListener = pChatroomGetListListener;
+	CChatroomManager::addChatroomGetListListener(pChatroomGetListListener);
+}
 
+void CLiveManager::getLiveList(CUserManager* pUserManager)
+{
+	if (pUserManager->m_bUserDispatch)
+	{
+		list<ChatroomInfo> retList;
+		CString stUrl = "";
+		stUrl.Format(_T("%s/live/list?appid=%s"), pUserManager->m_ServiceParam.m_strRequestListAddr.c_str(), pUserManager->m_ServiceParam.m_strAgentId.c_str());
+		int port = 9904;
+		char* data = "";
+
+		CString strPara = _T("");
+		CString strContent;
+
+		CHttpClient httpClient;
+		int nRet = httpClient.HttpPost(stUrl, strPara, strContent);
+
+		string str_json = strContent.GetBuffer(0);
+		Json::Reader reader;
+		Json::Value root;
+		if (nRet == 0 && str_json != "" && reader.parse(str_json, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素   
+		{
+			std::cout << "========================[Dispatch]========================" << std::endl;
+			if (root.isMember("status") && root["status"].asInt() == 1)
+			{
+				if (root.isMember("data"))
+				{
+					Json::Value data = root.get("data", "");
+					int nSize = data.size();
+					for (int i = 0; i < nSize; i++)
+					{
+						ChatroomInfo livePro;
+
+						if (data[i].isMember("ID"))
+						{
+							livePro.m_strRoomId = data[i]["ID"].asCString();
+						}
+
+						if (data[i].isMember("Name"))
+						{
+							livePro.m_strName = data[i]["Name"].asCString();
+						}
+
+						if (data[i].isMember("Creator"))
+						{
+							livePro.m_strCreaterId = data[i]["Creator"].asCString();
+						}
+						
+						retList.push_back(livePro);
+					}
+				}
+			}
+		}
+		if (CLiveManager::m_pChatroomGetListListener != NULL)
+		{
+			CLiveManager::m_pChatroomGetListListener->chatroomQueryAllListOK(retList);
+		}
+
+	}
+	else
+	{
+		CChatroomManager::getChatroomList(pUserManager, CHATROOM_LIST_TYPE_LIVE);
+	}
+}
 bool CLiveManager::createLiveAndJoin(string strName, int chatroomType, int channelType, int* streamConfig, int length)
 {
 	close();
@@ -63,7 +134,6 @@ bool CLiveManager::createLiveAndJoin(string strName, int chatroomType, int chann
 			}		
 		}
 	}
-	
 	return bRet;
 }
 
@@ -106,15 +176,27 @@ int CLiveManager::cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen
 bool CLiveManager::reportChatRoomAndChannel(string strName, string strChatroomId, string strChannelId)
 {
 	bool bRet = false;
-	string url = m_pUserManager->m_ServiceParam.m_strRequestListAddr + "/live/store?ID=" + strChannelId + strChatroomId + "&Name=" + strName + "&Creator=" + m_pUserManager->m_ServiceParam.m_strUserId + "&appid=" + m_pUserManager->m_ServiceParam.m_strAgentId;
-	string strData = "";
-	std::string strVal = "";
-	std::string strErrInfo = "";
+	if (m_pUserManager->m_bUserDispatch)
+	{
+		string url = m_pUserManager->m_ServiceParam.m_strRequestListAddr + "/live/store?ID=" + strChannelId + strChatroomId + "&Name=" + strName + "&Creator=" + m_pUserManager->m_ServiceParam.m_strUserId + "&appid=" + m_pUserManager->m_ServiceParam.m_strAgentId;
+		string strData = "";
+		std::string strVal = "";
+		std::string strErrInfo = "";
 
-	CString strContent;
+		CString strContent;
 
-	CHttpClient httpClient;
-	int nRet = httpClient.HttpPost(url.c_str(), strData.c_str(), strContent);
+		CHttpClient httpClient;
+		int nRet = httpClient.HttpPost(url.c_str(), strData.c_str(), strContent);
+
+	}
+	else
+	{
+		ChatroomInfo chatroomInfo;
+		chatroomInfo.m_strRoomId = strChannelId + strChatroomId;
+		chatroomInfo.m_strCreaterId = m_pUserManager->m_ServiceParam.m_strUserId;
+		chatroomInfo.m_strName = strName;
+		m_pChatroomManager->reportChatroom(strChatroomId, chatroomInfo, CHATROOM_LIST_TYPE_LIVE);
+	}
 	bRet = true;
 	return true;
 }
@@ -160,12 +242,15 @@ bool CLiveManager::joinLive(string strChatroomId, string strChannelId, bool bSel
 			CVdnManager* pVdnManager = (CVdnManager*)m_pLiveInterface;
 			pVdnManager->getApplyDownloadChannelServerAddr();
 			bRet = pVdnManager->applyDownload();
-		}	
-		if (length > 7)
-		{
-			length = 7;
 		}
-		setStreamConfig(streamConfig, length);
+		if (bRet)
+		{
+			if (length > 7)
+			{
+				length = 7;
+			}
+			setStreamConfig(streamConfig, length);
+		}
 	}	
 	return bRet;
 }

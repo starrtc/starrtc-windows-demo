@@ -18,5 +18,5 @@ public:
 	virtual int voipSpeedTestFinish(char* userIp, int uploadVariance, int uploadSpeed, int downloadVariance, int downSpeed) = 0;
 	virtual int voipEchoTestFinish(int index, int len, int timeCost) = 0;
 	virtual int voipGetRealtimeData(uint8_t* data, int len) = 0;
-
+	virtual int reportVoipTransState(int state) = 0;
 };

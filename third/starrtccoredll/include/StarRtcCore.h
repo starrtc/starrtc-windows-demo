@@ -4,7 +4,6 @@
 #define MATH_API _declspec(dllexport)
 #endif
 
-#include "CUserManager.h"
 #include "IStarIMC2CListener.h"
 #include "IStarIMChatroomListener.h"
 #include "IVdnListener.h"
@@ -13,6 +12,7 @@
 #include "IStarVoipListener.h"
 #include "IStarVoipP2PListener.h"
 #include "IRecvDataListener.h"
+#include "IChatroomGetListListener.h"
 /*
  * StarRtc接口类
  */
@@ -23,7 +23,7 @@ private:
 	 * 构造函数
 	 * @param pUserManager 用户配置信息
 	 */
-	StarRtcCore(CUserManager* pUserManager);
+	StarRtcCore();
 	
 public:
 
@@ -31,7 +31,7 @@ public:
 	 * 获取StarRtc接口对象
 	 * @param pUserManager 用户配置信息
 	 */
-	static StarRtcCore* getStarRtcCoreInstance(CUserManager* pUserManager);
+	static StarRtcCore* getStarRtcCoreInstance();
 	
 	/*
 	 * 析构函数
@@ -59,7 +59,11 @@ public:
 	void saveFile(int save_mode);
 
 	void setconfigLog(int log_level, int log_filter, int log_freq);
-
+	/**
+	 * 添加获取列表监听
+	 * @param listener
+	 */
+	void addGetListListener(IChatroomGetListListener* listener);
 	/**
 	 * 添加C2C消息监听
 	 * @param listener
@@ -201,12 +205,12 @@ public:
 	/*
 	 * 创建ChatRoom
 	 */
-	bool createChatRoom(string serverIp, int serverPort, string strName, int chatroomType);
+	bool createChatRoom(string serverIp, int serverPort, string strName, int chatroomType, string strAgentId, string strUserId, string strTokenId);
 
 	/*
 	 * 加入ChatRoom
 	 */
-	bool joinChatRoom(string serverIp, int serverPort, string strChatroomId);
+	bool joinChatRoom(string serverIp, int serverPort, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
 
 	/*
 	 * 查询chatroom在线人数
@@ -235,7 +239,7 @@ public:
 	/*
 	 * Channel 申请下载
 	 */
-	bool applyDownload(string serverIp, int port, string channelId);
+	bool applyDownload(string serverIp, int port, string channelId, string strAgentId, string strUserId, string strTokenId);
 
 	/*
 	 * Channel 停止下载
@@ -261,7 +265,7 @@ public:
 	/*
 	 * 创建Channel
 	 */
-	bool createPublicChannel(string strServerIp, int port, string strName, int channelType, string strChatroomId);
+	bool createPublicChannel(string strServerIp, int port, string strName, int channelType, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
 	int startLiveSrcEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
 	int startUploadSrcServer(char* servAddr, int servPort, char* agentId, char* userId, char* starToken, char* channelId/* ,int maxAudioPacketNum,int maxVideoPacketNum */);
 	void setUploader(char* userId);
@@ -381,7 +385,8 @@ public:
 	static int voipSpeedTestFinish(char* userIp, int uploadVariance, int uploadSpeed, int downloadVariance, int downSpeed, void* userData);
 	static int voipEchoTestFinish(int index, int len, int timeCost, void* userData);
 	static int voipGetRealtimeData(uint8_t* data, int len, void* userData);
-
+	// 1是p2p, 2是中转
+	static int reportVoipTransState(int state, void* userData);
 	//=========================================================================
 	//===========================    live chatroom回调    ===========================
 	//=========================================================================
@@ -497,10 +502,8 @@ public:
 
 	
 	static int getVideoRaw(int upId, int w, int h, uint8_t* videoData, int videoDataLen, void* userData);
-
-public:
-	CUserManager* m_pUserManager;
 private:
+	IChatroomGetListListener* m_pGetListListener;
 	IStarIMC2CListener* m_pc2cMsgListener;
 	IGroupListener* m_pGroupMsgListener;
 	IStarIMChatroomListener *m_pStarIMChatroomListener;
@@ -509,6 +512,5 @@ private:
 	IStarVoipListener* m_pStarVoipListener;
 	IStarVoipP2PListener* m_pStarVoipP2PListener;
 	IRecvDataListener* m_pRecvDataListener;
-//	static StarRtcCore* m_pStarRtcCore;
 	int m_groupReqIndex;
 };

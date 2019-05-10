@@ -3,6 +3,7 @@
 #include "StarRtcCore.h"
 #include "StarIMMessageType.h"
 #include "CropType.h"
+#include "CUtil.h"
 bool CVoipManager::m_bCalling = false;
 CVoipManager::CVoipManager(CUserManager* pUserManager, IVoipManagerListener* pVoipManagerListener)
 {
@@ -10,8 +11,8 @@ CVoipManager::CVoipManager(CUserManager* pUserManager, IVoipManagerListener* pVo
 	m_pUserManager = pUserManager;
 	m_pChatManager = new CChatManager(m_pUserManager, this);
 	m_pCodecManager = new CCodecManager(pUserManager);
-	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addRecvDataListener(this);
-	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addVoipListener(this);
+	StarRtcCore::getStarRtcCoreInstance()->addRecvDataListener(this);
+	StarRtcCore::getStarRtcCoreInstance()->addVoipListener(this);
 	m_bInit = false;
 	m_nServerPort = 10086;
 }
@@ -21,9 +22,10 @@ CVoipManager::~CVoipManager()
 	if (m_bInit)
 	{
 		stopVoip(true);
+		StarRtcCore::getStarRtcCoreInstance()->stopLiveSrcCodec();
 	}
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addRecvDataListener(NULL);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addVoipListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance()->addRecvDataListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance()->addVoipListener(NULL);
 }
 
 int CVoipManager::init()
@@ -33,17 +35,22 @@ int CVoipManager::init()
 	CPicSize smallSize;
 	CropTypeInfo::getCropSize((CROP_TYPE)m_pUserManager->m_ServiceParam.m_CropType, bigSize, smallSize);
 	printf("globalSetting w:%d, h:%d, \n", bigSize.m_nWidth, bigSize.m_nHeight);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setGlobalSetting(1, 1,
+	int nP2P = 0;
+	if (m_pUserManager->m_bVoipP2P)
+	{
+		nP2P = 1;
+	}
+	StarRtcCore::getStarRtcCoreInstance()->setGlobalSetting(1, 1,
 		0,
 		bigSize.m_nWidth, bigSize.m_nHeight, 15, 1024,
 		smallSize.m_nWidth, smallSize.m_nHeight, 15, 1024,
-		0, 0, 0); 
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startVoipEncoder(m_pUserManager->m_AudioParam.m_nSampleRateInHz, m_pUserManager->m_AudioParam.m_nChannels, m_pUserManager->m_AudioParam.m_nBitRate, 0);
+		0, 0, nP2P);
+	return StarRtcCore::getStarRtcCoreInstance()->startVoipEncoder(m_pUserManager->m_AudioParam.m_nSampleRateInHz, m_pUserManager->m_AudioParam.m_nChannels, m_pUserManager->m_AudioParam.m_nBitRate, 0);
 }
 
 void CVoipManager::stopVoip(int isActive)
 {
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopVoip(isActive);
+	StarRtcCore::getStarRtcCoreInstance()->stopVoip(isActive);
 }
 /**
  * 主叫方调用
@@ -59,7 +66,7 @@ bool CVoipManager::call(string strTargetId)
 	}
 	m_strTargetId = strTargetId;
 	CVoipManager::m_bCalling = true;
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->voipCalling((char*)(m_pUserManager->m_ServiceParam.m_strVOIPServiceIP.c_str()),
+	StarRtcCore::getStarRtcCoreInstance()->voipCalling((char*)(m_pUserManager->m_ServiceParam.m_strVOIPServiceIP.c_str()),
 																	m_nServerPort,
 																	(char*)m_pUserManager->m_ServiceParam.m_strAgentId.c_str(),
 																	(char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(),
@@ -97,7 +104,7 @@ void CVoipManager::accept(string fromID)
 	m_strTargetId = fromID;
 	CVoipManager::m_bCalling = true;
 	sendControlMsg(CONTROL_CODE_VOIP_CONNECT);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->voipResponse((char*)m_pUserManager->m_ServiceParam.m_strVOIPServiceIP.c_str(),
+	StarRtcCore::getStarRtcCoreInstance()->voipResponse((char*)m_pUserManager->m_ServiceParam.m_strVOIPServiceIP.c_str(),
 																		m_nServerPort,
 																		(char*)m_pUserManager->m_ServiceParam.m_strAgentId.c_str(),
 																		(char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(),
@@ -145,6 +152,10 @@ void CVoipManager::sendControlMsg(int msgType)
 	char buf[255] = { 0 };
 	_itoa_s(m_nServerPort, buf, sizeof(buf), 10);
 	strData = strData + buf;
+
+	strData = strData + ",\\\"ts\\\":";
+	_i64toa_s(CUtil::getCurrentTime(), buf, sizeof(buf), 10);
+	strData = strData + buf;
 	strData = strData + "}";
 	if (CONTROL_CODE_VOIP_CONNECT == msgType)
 	{
@@ -159,7 +170,8 @@ void CVoipManager::sendControlMsg(int msgType)
 
 void CVoipManager::voipStopOK(int stopType)
 {
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopLiveSrcCodec();
+	CVoipManager::m_bCalling = false;
+	
 	m_bInit = false;
 }
 
@@ -175,6 +187,7 @@ void CVoipManager::voipCallingAck()
 //calling失败
 void CVoipManager::voipCallingFailed(char* errString)
 {
+	CVoipManager::m_bCalling = false;
 	if (m_pVoipManagerListener != NULL)
 	{
 		m_pVoipManagerListener->onError(errString);
@@ -216,6 +229,7 @@ int CVoipManager::voipError(char* errString)
 {
 	string str = "VOIP_MOONSERVER_ERRID_FAR_DISCONNECTED";
 	string strErr = errString;
+	CVoipManager::m_bCalling = false;
 	if (m_pVoipManagerListener != NULL)
 	{
 		if (strErr != str)
@@ -243,12 +257,25 @@ int CVoipManager::voipGetRealtimeData(uint8_t* data, int len)
 {
 	return 0;
 }
+
+int CVoipManager::reportVoipTransState(int state)
+{
+	if (state == 1)
+	{
+		AfxMessageBox("当前状态为P2P");
+	}
+	else
+	{
+		AfxMessageBox("当前状态为中转");
+	}
+	return 0;
+}
 void CVoipManager::insertAudioRaw(uint8_t* audioData, int dataLen)
 {
 	if (m_bInit && m_pCodecManager != NULL)
 	{
 		uint8_t* insertData = NULL;
-		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->starRTCMalloc(&insertData, dataLen);
+		StarRtcCore::getStarRtcCoreInstance()->starRTCMalloc(&insertData, dataLen);
 		if (insertData != NULL)
 		{
 			memcpy(insertData, audioData, sizeof(uint8_t)*dataLen);
@@ -270,7 +297,7 @@ void CVoipManager::insertVideoRaw(uint8_t* videoData, int dataLen, int isBig)
 	if (m_bInit && m_pCodecManager != NULL)
 	{
 		uint8_t* insertData = NULL;
-		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->starRTCMalloc(&insertData, dataLen);
+		StarRtcCore::getStarRtcCoreInstance()->starRTCMalloc(&insertData, dataLen);
 		if (insertData != NULL)
 		{
 			memcpy(insertData, videoData, sizeof(uint8_t)*dataLen);
@@ -307,7 +334,39 @@ void CVoipManager::onNewMessage(CIMMessage* var1)
 		{
 			if (m_pVoipManagerListener != NULL)
 			{
-				m_pVoipManagerListener->onCalling(var1->m_strFromId);
+				map<string,string>::iterator iter = m_RecvControlMsg.find(var1->m_strFromId);
+				if (iter != m_RecvControlMsg.end())
+				{
+					if (iter->second == var1->m_strContentData)
+					{
+						//重复呼叫
+					}
+					else
+					{
+						if (CVoipManager::m_bCalling)
+						{
+							sendControlMsg(CONTROL_CODE_VOIP_BUSY);
+						}
+						else
+						{
+							m_pVoipManagerListener->onCalling(var1->m_strFromId);
+							iter->second = var1->m_strContentData;
+						}
+							
+					}
+				}
+				else
+				{
+					if (CVoipManager::m_bCalling)
+					{
+						sendControlMsg(CONTROL_CODE_VOIP_BUSY);
+					}
+					else
+					{
+						m_pVoipManagerListener->onCalling(var1->m_strFromId);
+						m_RecvControlMsg[var1->m_strFromId] = var1->m_strContentData;
+					}	
+				}	
 			}
 		}
 			break;

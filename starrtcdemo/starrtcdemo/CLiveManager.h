@@ -19,6 +19,8 @@ class CLiveManager: public IChatroomManagerListener, public ISrcManagerListener,
 public:
 	CLiveManager(CUserManager* pUserManager, ILiveListener* pLiveListener);
 	virtual ~CLiveManager();
+	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
+	static void getLiveList(CUserManager* pUserManager);
 	bool createLiveAndJoin(string strName, int chatroomType, int channelType, int* streamConfig, int length);
 	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
@@ -115,6 +117,7 @@ public:
 	virtual int srcError(char* errString);
 
 public:
+	static IChatroomGetListListener* m_pChatroomGetListListener;
 	ILiveListener* m_pLiveListener;
 	CUserManager* m_pUserManager;
 	CChatroomManager* m_pChatroomManager;

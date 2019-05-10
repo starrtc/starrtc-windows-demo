@@ -10,7 +10,7 @@ CChatroomManager::CChatroomManager(CUserManager* pUserManager, IChatroomManagerL
 {
 	m_pUserManager = pUserManager;
 	m_pChatroomManagerListener = pChatroomManagerListener;
-	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addStarIMChatroomListener(this);
+	StarRtcCore::getStarRtcCoreInstance()->addStarIMChatroomListener(this);
 	m_ChatRoomId = "";
 	m_bJoinChatRoom = false;
 	m_strChatRoomServerIp = "";
@@ -22,12 +22,13 @@ CChatroomManager::CChatroomManager(CUserManager* pUserManager, IChatroomManagerL
 CChatroomManager::~CChatroomManager()
 {
 	stopChatRoomConnect();
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addStarIMChatroomListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance()->addStarIMChatroomListener(NULL);
 }
 
 void CChatroomManager::addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener)
 {
 	m_pChatroomGetListListener = pChatroomGetListListener;
+	StarRtcCore::getStarRtcCoreInstance()->addGetListListener(pChatroomGetListListener);
 }
 
 void CChatroomManager::getChatroomList(CUserManager* pUserManager, int listType)
@@ -89,7 +90,7 @@ void CChatroomManager::getChatroomList(CUserManager* pUserManager, int listType)
 	{
 		char strListType[10] = { 0 };
 		sprintf_s(strListType, "%d", listType);
-		StarRtcCore::getStarRtcCoreInstance(pUserManager)->queryAllChatRoomList((char*)pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), pUserManager->m_ServiceParam.m_nChatServicePort, (char*)pUserManager->m_ServiceParam.m_strUserId.c_str(), strListType);
+		StarRtcCore::getStarRtcCoreInstance()->queryAllChatRoomList((char*)pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), pUserManager->m_ServiceParam.m_nChatServicePort, (char*)"", strListType);
 	}
 	
 }
@@ -160,7 +161,7 @@ bool CChatroomManager::getChatRoomServerAddr()
 bool CChatroomManager::createChatRoom(string strName, int chatroomType)
 {
 	resetReturnVal();
-	bool bRet =  StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->createChatRoom(m_strChatRoomServerIp, m_nChatRoomServerPort, strName, chatroomType);
+	bool bRet =  StarRtcCore::getStarRtcCoreInstance()->createChatRoom(m_strChatRoomServerIp, m_nChatRoomServerPort, strName, chatroomType, m_pUserManager->m_ServiceParam.m_strAgentId, m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_strTokenId);
 	if (!bRet)
 	{
 		return bRet;
@@ -178,7 +179,7 @@ bool CChatroomManager::createChatRoom(string strName, int chatroomType)
 bool CChatroomManager::joinChatRoom()
 {
 	resetReturnVal();
-	bool bRet = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->joinChatRoom(m_strChatRoomServerIp, m_nChatRoomServerPort, m_ChatRoomId);
+	bool bRet = StarRtcCore::getStarRtcCoreInstance()->joinChatRoom(m_strChatRoomServerIp, m_nChatRoomServerPort, m_ChatRoomId, m_pUserManager->m_ServiceParam.m_strAgentId, m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_strTokenId);
 	if (!bRet)
 	{
 		return bRet;
@@ -196,26 +197,26 @@ bool CChatroomManager::joinChatRoom()
  */
 bool CChatroomManager::getOnlineNumber(string strChatroomId)
 {
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->getOnlineNumber(m_ChatRoomId);
+	StarRtcCore::getStarRtcCoreInstance()->getOnlineNumber(m_ChatRoomId);
 	return true;
 }
 
 bool CChatroomManager::banToSendMsg(char* banUserId, int banTime)
 {
 	resetReturnVal();
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->banToSendMsg(banUserId, banTime);
+	return StarRtcCore::getStarRtcCoreInstance()->banToSendMsg(banUserId, banTime);
 }
 
 bool CChatroomManager::kickOutUser(char* kickOutUserId)
 {
 	resetReturnVal();
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->kickOutUser(kickOutUserId);
+	return StarRtcCore::getStarRtcCoreInstance()->kickOutUser(kickOutUserId);
 }
 
 bool CChatroomManager::sendChat(CIMMessage* pIMMessage)
 {
 	resetReturnVal();
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->sendChat(pIMMessage);
+	return StarRtcCore::getStarRtcCoreInstance()->sendChat(pIMMessage);
 }
 
 bool CChatroomManager::sendPrivateChat(string toUserId, char* msgData)
@@ -225,7 +226,7 @@ bool CChatroomManager::sendPrivateChat(string toUserId, char* msgData)
 	CIMMessage* pMsg = StarIMMessageBuilder::getGhatRoomMessage(m_pUserManager->m_ServiceParam.m_strUserId, m_ChatRoomId, msgData);
 	if (pMsg != NULL)
 	{
-		bRet = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->sendPrivateChat((char*)toUserId.c_str(), pMsg);
+		bRet = StarRtcCore::getStarRtcCoreInstance()->sendPrivateChat((char*)toUserId.c_str(), pMsg);
 	}
 	return bRet;
 }
@@ -237,7 +238,7 @@ bool CChatroomManager::sendChatroomPrivateControlMessage(string targetId, int co
 	CIMMessage* pMsg = StarIMMessageBuilder::getGhatRoomContrlMessage(m_pUserManager->m_ServiceParam.m_strUserId, m_ChatRoomId, code);
 	if (pMsg != NULL)
 	{
-		bRet = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->sendPrivateChat((char*)targetId.c_str(), pMsg);
+		bRet = StarRtcCore::getStarRtcCoreInstance()->sendPrivateChat((char*)targetId.c_str(), pMsg);
 	}
 	return bRet;
 
@@ -246,7 +247,7 @@ bool CChatroomManager::sendChatroomPrivateControlMessage(string targetId, int co
 bool CChatroomManager::deleteChatRoom()
 {
 	resetReturnVal();
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->deleteChatRoom();
+	return StarRtcCore::getStarRtcCoreInstance()->deleteChatRoom();
 }
 
 bool CChatroomManager::reportChatroom(string strRoomId, ChatroomInfo& chatroomInfo, int listType)
@@ -266,7 +267,7 @@ bool CChatroomManager::reportChatroom(string strRoomId, ChatroomInfo& chatroomIn
 	}
 	else
 	{
-		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->saveToChatRoomList((char*)m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nChatServicePort, (char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(), listType, (char*)strRoomId.c_str(), chatroomInfo);
+		StarRtcCore::getStarRtcCoreInstance()->saveToChatRoomList((char*)m_pUserManager->m_ServiceParam.m_strChatServiceIP.c_str(), m_pUserManager->m_ServiceParam.m_nChatServicePort, (char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(), listType, (char*)strRoomId.c_str(), chatroomInfo);
 	}
 	return true;
 }
@@ -280,7 +281,7 @@ bool CChatroomManager::stopChatRoomConnect()
 	if (m_bJoinChatRoom)
 	{
 		resetReturnVal();
-		bool bRet = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopChatRoomConnect();
+		bool bRet = StarRtcCore::getStarRtcCoreInstance()->stopChatRoomConnect();
 		if (!bRet)
 		{
 			return bRet;

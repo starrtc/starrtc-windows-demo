@@ -4,7 +4,8 @@
 
 CChatManager::CChatManager(CUserManager* pUserManager, IStarIMC2CListener* pListener)
 {
-	m_pStarRtcCore = StarRtcCore::getStarRtcCoreInstance(pUserManager);
+	m_pUserManager = pUserManager;
+	m_pStarRtcCore = StarRtcCore::getStarRtcCoreInstance();
 	m_pStarRtcCore->addC2CListener(this);
 	m_pStarIMC2CListener = pListener;
 }
@@ -32,7 +33,7 @@ CChatManager::~CChatManager()
 
 CIMMessage* CChatManager::sendMessage(char* toUserId, char* msgStr)
 {
-	CIMMessage* pIMMessage = StarIMMessageBuilder::getC2CMessage(m_pStarRtcCore->m_pUserManager->m_ServiceParam.m_strUserId, toUserId, msgStr);
+	CIMMessage* pIMMessage = StarIMMessageBuilder::getC2CMessage(m_pUserManager->m_ServiceParam.m_strUserId, toUserId, msgStr);
 	if (pIMMessage != NULL)
 	{
 		addMessageToMap(pIMMessage);
@@ -43,7 +44,7 @@ CIMMessage* CChatManager::sendMessage(char* toUserId, char* msgStr)
 
 bool CChatManager::sendOnlineMessage(char* toUserId, char* msgStr)
 {
-	CIMMessage* pIMMessage = StarIMMessageBuilder::getC2CMessage(m_pStarRtcCore->m_pUserManager->m_ServiceParam.m_strUserId, toUserId, msgStr);
+	CIMMessage* pIMMessage = StarIMMessageBuilder::getC2CMessage(m_pUserManager->m_ServiceParam.m_strUserId, toUserId, msgStr);
 	if (pIMMessage != NULL)
 	{
 		addMessageToMap(pIMMessage);

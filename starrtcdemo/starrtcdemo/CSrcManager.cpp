@@ -12,16 +12,16 @@ CSrcManager::CSrcManager(CUserManager* pUserManager, ISrcManagerListener* pSrcMa
 	m_bApplyUpload = false;
 	m_pSrcManagerListener = pSrcManagerListener;
 	m_pCodecManager = new CCodecManager(pUserManager);
-	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addSrcListener(this);
-	StarRtcCore::getStarRtcCoreInstance(pUserManager)->addRecvDataListener(this);
+	StarRtcCore::getStarRtcCoreInstance()->addSrcListener(this);
+	StarRtcCore::getStarRtcCoreInstance()->addRecvDataListener(this);
 }
 
 
 CSrcManager::~CSrcManager()
 {
 	stop();
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addRecvDataListener(NULL);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->addSrcListener(NULL);	
+	StarRtcCore::getStarRtcCoreInstance()->addRecvDataListener(NULL);
+	StarRtcCore::getStarRtcCoreInstance()->addSrcListener(NULL);	
 }
 
 /*
@@ -33,7 +33,7 @@ void CSrcManager::globalSetting(int fps, int bitrate)
 	CPicSize smallSize;
 	CropTypeInfo::getCropSize((CROP_TYPE)m_pUserManager->m_ServiceParam.m_CropType, bigSize, smallSize);
 	printf("globalSetting w:%d, h:%d, fps:%d, bitrate:%d\n", bigSize.m_nWidth, bigSize.m_nHeight, fps, bitrate);
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setGlobalSetting(1, 1,
+	StarRtcCore::getStarRtcCoreInstance()->setGlobalSetting(1, 1,
 		0,
 		bigSize.m_nWidth, bigSize.m_nHeight, fps, bitrate,
 		smallSize.m_nWidth, smallSize.m_nHeight, fps, bitrate,
@@ -47,7 +47,7 @@ bool CSrcManager::setStreamConfig(int* sendBuf, int length)
 {
 	bool bret = false;
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setStreamConfigSrc(sendBuf, length);
+	bret = StarRtcCore::getStarRtcCoreInstance()->setStreamConfigSrc(sendBuf, length);
 	while (m_bReturn == false)
 	{
 		Sleep(10);
@@ -122,7 +122,7 @@ bool CSrcManager::createChannel(string strName, int channelType, string strChatr
 {
 	bool bret = false;
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->createPublicChannel((char*)m_strApplyUploadChannelServerIp.c_str(), m_nApplyUploadChannelServerPort, strName, channelType, strChatroomId);
+	bret = StarRtcCore::getStarRtcCoreInstance()->createPublicChannel((char*)m_strApplyUploadChannelServerIp.c_str(), m_nApplyUploadChannelServerPort, strName, channelType, strChatroomId, m_pUserManager->m_ServiceParam.m_strAgentId, m_pUserManager->m_ServiceParam.m_strUserId, m_pUserManager->m_strTokenId);
 	if (bret == false)
 	{
 		bret = false;
@@ -142,7 +142,7 @@ bool CSrcManager::applyUpload()
 {
 	bool bret = false;
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startUploadSrcServer((char*)m_strApplyUploadChannelServerIp.c_str(), m_nApplyUploadChannelServerPort, (char*)m_pUserManager->m_ServiceParam.m_strAgentId.c_str(), (char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(), (char*)m_pUserManager->m_strTokenId.c_str(), (char*)m_ChannelId.c_str());
+	bret = StarRtcCore::getStarRtcCoreInstance()->startUploadSrcServer((char*)m_strApplyUploadChannelServerIp.c_str(), m_nApplyUploadChannelServerPort, (char*)m_pUserManager->m_ServiceParam.m_strAgentId.c_str(), (char*)m_pUserManager->m_ServiceParam.m_strUserId.c_str(), (char*)m_pUserManager->m_strTokenId.c_str(), (char*)m_ChannelId.c_str());
 	if (bret == false)
 	{
 		bret = false;
@@ -160,12 +160,12 @@ bool CSrcManager::applyUpload()
  */
 bool CSrcManager::startEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation)
 {
-	return StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->startLiveSrcEncoder(audioSampleRateInHz, audioChannels, audioBitRate, rotation);
+	return StarRtcCore::getStarRtcCoreInstance()->startLiveSrcEncoder(audioSampleRateInHz, audioChannels, audioBitRate, rotation);
 }
 
 void CSrcManager::setUploader(string strUserId)
 {
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->setUploader((char*)strUserId.c_str());
+	StarRtcCore::getStarRtcCoreInstance()->setUploader((char*)strUserId.c_str());
 }
 
 /*
@@ -175,7 +175,7 @@ bool CSrcManager::stopUpload()
 {
 	bool bret = false;
 	resetReturnVal();
-	bret = StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopUploadSrcServer();
+	bret = StarRtcCore::getStarRtcCoreInstance()->stopUploadSrcServer();
 	if (bret == false)
 	{
 		bret = false;
@@ -193,7 +193,7 @@ bool CSrcManager::stopUpload()
  */
 bool CSrcManager::stopEncoder()
 {
-	StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->stopLiveSrcCodec();
+	StarRtcCore::getStarRtcCoreInstance()->stopLiveSrcCodec();
 	return true;
 }
 
@@ -202,7 +202,7 @@ void CSrcManager::insertAudioRaw(uint8_t* audioData, int dataLen)
 	if (m_pCodecManager != NULL)
 	{
 		uint8_t* insertData = NULL;
-		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->starRTCMalloc(&insertData, dataLen);
+		StarRtcCore::getStarRtcCoreInstance()->starRTCMalloc(&insertData, dataLen);
 		if (insertData != NULL)
 		{
 			memcpy(insertData, audioData, sizeof(uint8_t)*dataLen);
@@ -225,7 +225,7 @@ void CSrcManager::insertVideoRaw(uint8_t* videoData, int dataLen, int isBig)
 	if (m_pCodecManager != NULL)
 	{
 		uint8_t* insertData = NULL;
-		StarRtcCore::getStarRtcCoreInstance(m_pUserManager)->starRTCMalloc(&insertData, dataLen);
+		StarRtcCore::getStarRtcCoreInstance()->starRTCMalloc(&insertData, dataLen);
 		if (insertData != NULL)
 		{
 			memcpy(insertData, videoData, sizeof(uint8_t)*dataLen);

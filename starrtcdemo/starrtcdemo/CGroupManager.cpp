@@ -6,8 +6,9 @@
 IGroupGetListListener* CGroupManager::m_pGroupGetListListener = NULL;
 CGroupManager::CGroupManager(CUserManager* pUserManager)
 {
+	m_pUserManager = pUserManager;
 	m_pGroupManagerListener = NULL;
-	m_pStarRtcCore = StarRtcCore::getStarRtcCoreInstance(pUserManager);
+	m_pStarRtcCore = StarRtcCore::getStarRtcCoreInstance();
 	m_pStarRtcCore->addGroupListener(this);
 }
 
@@ -80,7 +81,7 @@ void CGroupManager::getGroupList(CUserManager* pUserManager)
 	}
 	else
 	{
-		StarRtcCore::getStarRtcCoreInstance(pUserManager)->applyGetGroupList();
+		StarRtcCore::getStarRtcCoreInstance()->applyGetGroupList();
 	}
 	
 }
@@ -133,7 +134,7 @@ void CGroupManager::getUserList(CUserManager* pUserManager, string strGroupId)
 	}
 	else
 	{
-		StarRtcCore::getStarRtcCoreInstance(pUserManager)->applyGetUserList((char*)strGroupId.c_str());
+		StarRtcCore::getStarRtcCoreInstance()->applyGetUserList((char*)strGroupId.c_str());
 	}
 	
 }
@@ -260,7 +261,7 @@ CIMMessage* CGroupManager::sendMessage(string groupID, list<string> atUserIDs, s
 		strAtList = strAtList + *iter;
 	}
 
-	CIMMessage* pIMMessage = StarIMMessageBuilder::getGroupMessage(m_pStarRtcCore->m_pUserManager->m_ServiceParam.m_strUserId, groupID, strAtList, strMessage);
+	CIMMessage* pIMMessage = StarIMMessageBuilder::getGroupMessage(m_pUserManager->m_ServiceParam.m_strUserId, groupID, strAtList, strMessage);
 	if (pIMMessage != NULL)
 	{
 		m_pStarRtcCore->sendGroupMsg(pIMMessage);
@@ -289,7 +290,7 @@ CIMMessage* CGroupManager::sendOnlineMessage(string groupID, list<string> atUser
 		strAtList = strAtList + *iter;
 	}
 
-	CIMMessage* pIMMessage = StarIMMessageBuilder::getGroupMessage(m_pStarRtcCore->m_pUserManager->m_ServiceParam.m_strUserId, groupID, strAtList, strMessage);
+	CIMMessage* pIMMessage = StarIMMessageBuilder::getGroupMessage(m_pUserManager->m_ServiceParam.m_strUserId, groupID, strAtList, strMessage);
 	if (pIMMessage != NULL)
 	{
 		m_pStarRtcCore->sendOnlineMessage(pIMMessage);

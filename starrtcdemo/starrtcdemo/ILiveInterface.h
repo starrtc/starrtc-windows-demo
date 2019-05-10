@@ -39,7 +39,6 @@ public:
 protected:
 	CUserManager* m_pUserManager;
 	string m_ChannelId;
-
 	bool m_bReturn;
 	bool m_bSuccess;
 	string m_strErrInfo;

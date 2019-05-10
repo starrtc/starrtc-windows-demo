@@ -24,7 +24,7 @@ public:
 	string m_strIMServerIp;
 	int m_nIMServerPort;
 	bool m_bUserDispatch;
-
+	bool m_bVoipP2P;
 	CServiceParam m_ServiceParam;
 	CAudioParam m_AudioParam;
 };
