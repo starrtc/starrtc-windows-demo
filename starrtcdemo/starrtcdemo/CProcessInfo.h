@@ -41,15 +41,20 @@ public:
 	CProcessInfo(CWnd* pParentWnd, CRect drawRect);
 	~CProcessInfo();
 public:
-	void drawPic(int upid, int w, int h, uint8_t* videoData, int videoDataLen);
+	
 	void drawBackground(CStatic* pPicture);
 	bool setData(uint8_t* pData, int nDataLength);
-	CUpUserInfo* findUpUserInfo(int upid);
 
-	bool removeAllUpUser();
-	bool removeUpUser(int upid);
-	void clearUpUser();
+	CUpUserInfo* findUpUserInfo(string strUserId);
+	bool addUser(string strUserId, bool isBigPic);
+	bool removeUser(string strUserId);
+	void removeAllUser();
+
+	void setDrawRect(CRect drawRect);
 	void setShowPictures();
+
+	void drawPic(string userId, int w, int h, uint8_t* videoData, int videoDataLen);
+
 	bool sendMessage(CString winName, CString strData);
 	void setStreamConfig();
 
@@ -61,19 +66,20 @@ public:
 	string m_strWindowName;
 	bool m_bUse;
 	bool m_bInit;
+	vector<CPicControl*> m_pPictureControlArr;
 	vector<CUpUserInfo*> m_upUserInfoArr;
-	CPicControl* m_pPictureControl;
-	CPicControl* m_pPictureControlArr[UPID_MAX_SIZE];
+	CRITICAL_SECTION m_critPicture;
+	CRect m_DrawRect;
+
 	int m_configArr[UPID_MAX_SIZE];
 	PROCESS_INFORMATION* m_pPi;
 	string m_strChatRoomId;
 	string m_strChannelId;
 	CWnd* m_pParentWnd;
-	CRect m_DrawRect;
+
 	queue<CRecvData*> m_recvDataQueue;
 	CRITICAL_SECTION m_crit;
 
-	CRITICAL_SECTION m_critPicture;
 
 
 	HANDLE m_hThread;

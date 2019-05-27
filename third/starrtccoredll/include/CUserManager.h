@@ -1,4 +1,8 @@
 #pragma once
+#ifndef MATH_API
+#define MATH_API _declspec(dllexport)
+#endif
+
 #include<string>
 using namespace std;
 #include "CServiceParam.h"
@@ -14,9 +18,15 @@ public:
 	int m_nBitRate;
 };
 
-class CUserManager
+class MATH_API CUserManager
 {
-
+public:
+	CUserManager();
+	~CUserManager();
+	bool readConfig();
+	bool writeConfig();
+	string getServiceParam();
+	string getUserManagerInfo();
 public:
 	string m_strAuthKey;
 	string  m_strTokenId;
@@ -27,5 +37,6 @@ public:
 	bool m_bVoipP2P;
 	CServiceParam m_ServiceParam;
 	CAudioParam m_AudioParam;
+	
 };
 

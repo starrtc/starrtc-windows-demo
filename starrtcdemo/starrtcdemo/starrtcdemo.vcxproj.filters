@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="api">
-      <UniqueIdentifier>{1736a66a-4fa5-4d83-bc45-1e981cdcefe3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="apiInterface">
-      <UniqueIdentifier>{8775c711-dfe0-451c-af9e-687db48de474}</UniqueIdentifier>
-    </Filter>
     <Filter Include="IM">
       <UniqueIdentifier>{3d768253-96c2-4e19-8b4f-7bba94161247}</UniqueIdentifier>
     </Filter>
@@ -93,15 +87,6 @@
     <ClInclude Include="CDataShowView.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CChatManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="IChatManagerListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="IResultCallback.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
     <ClInclude Include="CIMDialog.h">
       <Filter>IM</Filter>
     </ClInclude>
@@ -114,38 +99,11 @@
     <ClInclude Include="CvvImage.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="CUtil.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="CSeviceParamDialog.h">
       <Filter>Login</Filter>
     </ClInclude>
     <ClInclude Include="CSettingDialog.h">
       <Filter>Login</Filter>
-    </ClInclude>
-    <ClInclude Include="CChatroomManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="IChatroomManagerListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="CVdnManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="ILiveInterface.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="IVdnManagerListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="CLiveManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="CSrcManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="ISrcManagerListener.h">
-      <Filter>apiInterface</Filter>
     </ClInclude>
     <ClInclude Include="CCreateNewChatOneToOne.h">
       <Filter>IM\C2C</Filter>
@@ -155,12 +113,6 @@
     </ClInclude>
     <ClInclude Include="CIMOneToOneDialog.h">
       <Filter>IM\C2C</Filter>
-    </ClInclude>
-    <ClInclude Include="StarIMMessageType.h">
-      <Filter>IM</Filter>
-    </ClInclude>
-    <ClInclude Include="StarIMMessageBuilder.h">
-      <Filter>IM</Filter>
     </ClInclude>
     <ClInclude Include="ChatroomInfo.h">
       <Filter>IM\Chatroom</Filter>
@@ -173,12 +125,6 @@
     </ClInclude>
     <ClInclude Include="CCreateNewChatroomDlg.h">
       <Filter>IM\Chatroom</Filter>
-    </ClInclude>
-    <ClInclude Include="CGroupManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="IGroupManagerListener.h">
-      <Filter>apiInterface</Filter>
     </ClInclude>
     <ClInclude Include="CGroupDialog.h">
       <Filter>IM\group</Filter>
@@ -234,32 +180,17 @@
     <ClInclude Include="..\..\third\starrtccoredll\include\StarRtcCore.h">
       <Filter>third</Filter>
     </ClInclude>
-    <ClInclude Include="CLogin.h">
-      <Filter>Login</Filter>
-    </ClInclude>
     <ClInclude Include="CFindfaceResult.h">
       <Filter>FaceRecognition</Filter>
     </ClInclude>
-    <ClInclude Include="IVoipManagerListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="CVoipManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
     <ClInclude Include="CVoipDlg.h">
       <Filter>voip</Filter>
-    </ClInclude>
-    <ClInclude Include="CCodecManager.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CVoipDataShowView.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CDataControl.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ILiveListener.h">
-      <Filter>apiInterface</Filter>
     </ClInclude>
     <ClInclude Include="CShowLiveDlg.h">
       <Filter>头文件</Filter>
@@ -273,18 +204,6 @@
     <ClInclude Include="IShowLiveCallback.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CMeetingManager.h">
-      <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="IMeetingManagerListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="IChatroomGetListListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="IGroupGetListListener.h">
-      <Filter>apiInterface</Filter>
-    </ClInclude>
     <ClInclude Include="ISoundCallback.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -295,6 +214,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CSoundManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAudioChatroomDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CVoipP2PDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -329,17 +254,11 @@
     <ClCompile Include="CDataShowView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CChatManager.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
     <ClCompile Include="CIMDialog.cpp">
       <Filter>IM</Filter>
     </ClCompile>
     <ClCompile Include="CSqliteDB.cpp">
       <Filter>IM</Filter>
-    </ClCompile>
-    <ClCompile Include="CUtil.cpp">
-      <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="CvvImage.cpp">
       <Filter>util</Filter>
@@ -353,21 +272,6 @@
     <ClCompile Include="CSeviceParamDialog.cpp">
       <Filter>Login</Filter>
     </ClCompile>
-    <ClCompile Include="CChatroomManager.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
-    <ClCompile Include="CVdnManager.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
-    <ClCompile Include="ILiveInterface.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
-    <ClCompile Include="CLiveManager.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
-    <ClCompile Include="CSrcManager.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
     <ClCompile Include="CCreateNewChatOneToOne.cpp">
       <Filter>IM\C2C</Filter>
     </ClCompile>
@@ -377,9 +281,6 @@
     <ClCompile Include="CIMOneToOneDialog.cpp">
       <Filter>IM\C2C</Filter>
     </ClCompile>
-    <ClCompile Include="StarIMMessageBuilder.cpp">
-      <Filter>IM</Filter>
-    </ClCompile>
     <ClCompile Include="CMessageBean.cpp">
       <Filter>IM\C2C</Filter>
     </ClCompile>
@@ -388,9 +289,6 @@
     </ClCompile>
     <ClCompile Include="CCreateNewChatroomDlg.cpp">
       <Filter>IM\Chatroom</Filter>
-    </ClCompile>
-    <ClCompile Include="CGroupManager.cpp">
-      <Filter>api</Filter>
     </ClCompile>
     <ClCompile Include="CGroupDialog.cpp">
       <Filter>IM\group</Filter>
@@ -413,17 +311,8 @@
     <ClCompile Include="CNewDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CLogin.cpp">
-      <Filter>Login</Filter>
-    </ClCompile>
-    <ClCompile Include="CVoipManager.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
     <ClCompile Include="CVoipDlg.cpp">
       <Filter>voip</Filter>
-    </ClCompile>
-    <ClCompile Include="CCodecManager.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CVoipDataShowView.cpp">
       <Filter>源文件</Filter>
@@ -437,9 +326,6 @@
     <ClCompile Include="CShowLiveControl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CMeetingManager.cpp">
-      <Filter>api</Filter>
-    </ClCompile>
     <ClCompile Include="PlaySound.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -447,6 +333,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CSoundManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CAudioChatroomDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CVoipP2PDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

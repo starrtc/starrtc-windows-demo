@@ -16,7 +16,7 @@
 /*
  * StarRtc接口类
  */
-class MATH_API StarRtcCore
+class StarRtcCore
 {
 private:
 	/*
@@ -366,7 +366,9 @@ public:
 	static int getPushMode(char* pushMode, void* userData);
 	static int setPushIgnoreFin(char* status, char* groupId, void* userData);
 	static int unsetPushIgnoreFin(char* status, char* groupId, void* userData);
-
+	static int msg_getAllUserListOk(int totalPageNum, int reqPageNum, char* userIdList, void* userData);
+	static int msg_getAllUserListFailed(int totalPageNum, int reqPageNum, void* userData);
+	static int msg_getAliveNum(int userCount, int totalPageNum, void* userData);
 	//=========================================================================
 	//===========================    Voip回调    ===========================
 	//=========================================================================

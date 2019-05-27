@@ -1,21 +1,15 @@
 #include "stdafx.h"
 #include "CDataShowView.h"
 
-
 CDataShowView::CDataShowView()
 {
-	memset(m_pPictureControlArr, 0, sizeof(m_pPictureControlArr));
-	resetStreamConfig(true);
 	InitializeCriticalSection(&m_critPicture);
-	resetFreePictureControlIndex();
 }
-
-
 
 CDataShowView::~CDataShowView()
 {
-	removeAllUpUser();
-	for (int i = 0; i < UPID_MAX_SIZE; i++)
+	removeAllUser();
+	for (int i = 0; i < (int)m_pPictureControlArr.size(); i++)
 	{
 		if (m_pPictureControlArr[i] != NULL)
 		{
@@ -23,21 +17,142 @@ CDataShowView::~CDataShowView()
 			m_pPictureControlArr[i] = NULL;
 		}
 	}
-	
+	m_pPictureControlArr.clear();
 }
 
-void CDataShowView::resetStreamConfig(bool bHaveBigPic)
+bool CDataShowView::addUser(string strUserId, bool isBigPic)
 {
-	for (int i = 0; i < UPID_MAX_SIZE; i++)
+	bool bRet = false;
+	EnterCriticalSection(&m_critPicture);
+	CUpUserInfo* pUpUserInfo = findUpUserInfo(strUserId);
+
+	if (pUpUserInfo == NULL)
 	{
-		m_configArr[i] = 1;
+		pUpUserInfo = new CUpUserInfo();
+		pUpUserInfo->m_strUserId = strUserId;
+		pUpUserInfo->m_bBigPic = isBigPic;
+		CPicControl* pPicControl = NULL;
+		vector<CPicControl*>::iterator iter = m_pPictureControlArr.begin();
+		if (iter != m_pPictureControlArr.end())
+		{
+			pPicControl = *iter;
+			m_pPictureControlArr.erase(iter);
+		}
+		if (pPicControl != NULL)
+		{
+			pPicControl->m_strUserId = strUserId;
+			pPicControl->m_bIsBig = isBigPic;
+			pUpUserInfo->m_pPictureControl = pPicControl;
+			pPicControl->GetWindowRect(pUpUserInfo->m_showRect);
+			m_upUserInfoArr.push_back(pUpUserInfo);
+			bRet = true;
+		}
+		else
+		{
+			delete pUpUserInfo;
+		}
 	}
-	if (bHaveBigPic)
+	else
 	{
-		m_configArr[0] = 2;
+		pUpUserInfo->m_bBigPic = isBigPic;
+		bRet = true;
 	}
-	
+	LeaveCriticalSection(&m_critPicture);
+	return bRet;
 }
+
+bool CDataShowView::removeUser(string strUserId)
+{
+	bool bRet = false;
+	CUpUserInfo* pUpUserInfo = NULL;
+	EnterCriticalSection(&m_critPicture);
+	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
+
+	for (; iter != m_upUserInfoArr.end(); iter++)
+	{
+		if ((*iter)->m_strUserId == strUserId)
+		{
+			(*iter)->m_pPictureControl->m_strUserId = "";
+			(*iter)->m_pPictureControl->m_bIsBig = false;
+			(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
+			(*iter)->m_pPictureControl->ShowWindow(SW_HIDE);
+
+			m_pPictureControlArr.push_back((*iter)->m_pPictureControl);
+			m_upUserInfoArr.erase(iter);
+			bRet = true;
+			break;
+		}
+	}
+	LeaveCriticalSection(&m_critPicture);
+	return bRet;
+}
+
+void CDataShowView::removeAllUser()
+{
+	EnterCriticalSection(&m_critPicture);
+	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
+
+	for (; iter != m_upUserInfoArr.end(); )
+	{
+		(*iter)->m_pPictureControl->m_strUserId = "";
+		(*iter)->m_pPictureControl->m_bIsBig = false;
+		(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
+		(*iter)->m_pPictureControl->ShowWindow(SW_HIDE);
+
+		m_pPictureControlArr.push_back((*iter)->m_pPictureControl);
+		iter = m_upUserInfoArr.erase(iter);
+	}
+	LeaveCriticalSection(&m_critPicture);
+}
+
+bool CDataShowView::isLeftOneUser(string& strUserId)
+{
+	bool bLeftOneUser = false;
+	int nSize = 0;
+	EnterCriticalSection(&m_critPicture);
+	nSize = (int)m_upUserInfoArr.size();
+	if (nSize == 1)
+	{
+		strUserId = m_upUserInfoArr[0]->m_strUserId;
+		bLeftOneUser = true;
+	}
+	LeaveCriticalSection(&m_critPicture);
+	return bLeftOneUser;
+}
+
+int CDataShowView::getUserCount()
+{
+	int nSize = 0;
+	EnterCriticalSection(&m_critPicture);
+	nSize = (int)m_upUserInfoArr.size();
+	LeaveCriticalSection(&m_critPicture);
+	return nSize;
+}
+
+string CDataShowView::changeShowStyle(string strUserId, bool bBigPic)
+{
+	string changeUserId;
+	EnterCriticalSection(&m_critPicture);
+	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
+
+	for (; iter != m_upUserInfoArr.end(); iter++)
+	{
+		if (bBigPic && (*iter)->m_bBigPic && strUserId != (*iter)->m_strUserId)
+		{
+			(*iter)->m_bBigPic = false;
+			(*iter)->m_pPictureControl->m_bIsBig = false;
+			changeUserId = (*iter)->m_strUserId;
+		}
+		if (strUserId == (*iter)->m_strUserId)
+		{
+			(*iter)->m_bBigPic = bBigPic;
+			(*iter)->m_pPictureControl->m_bIsBig = bBigPic;
+		}
+	}
+	LeaveCriticalSection(&m_critPicture);
+	return changeUserId;
+}
+
 void CDataShowView::setDrawRect(CRect drawRect)
 {
 	m_DrawRect = drawRect;
@@ -47,7 +162,6 @@ void CDataShowView::setShowPictures()
 {
 	CUpUserInfo* pUpUserInfo = NULL;
 	int useIndex = 1;
-
 	EnterCriticalSection(&m_critPicture);
 	int nSize = (int)m_upUserInfoArr.size();
 	CRect rect = m_DrawRect;
@@ -64,27 +178,13 @@ void CDataShowView::setShowPictures()
 	}
 	bool bFindMax = false;
 
-	for (int i = 0; i < UPID_MAX_SIZE; i++)
-	{
-		if (m_configArr[i] == 2)
-		{
-			bFindMax = true;
-			break;
-		}
-	}
 	for (int i = 0; i < nSize; i++)
 	{
-		if ((m_upUserInfoArr[i]->m_upid == -1 && bFindMax == false) || (m_upUserInfoArr[i]->m_upid != -1 && m_configArr[m_upUserInfoArr[i]->m_upid] == 2))
+		if (m_upUserInfoArr[i]->m_bBigPic)
 		{
-			//m_upUserInfoArr[i]->m_pPictureControl = m_pPictureControlArr[0];
-			//m_upUserInfoArr[i]->m_pPictureControl->m_upId = 0;
-			m_upUserInfoArr[i]->m_bBigPic = true;
-			m_upUserInfoArr[i]->m_nTimes = 0;
 			m_upUserInfoArr[i]->m_showRect = rect;
-			m_upUserInfoArr[i]->m_pPictureControl->m_upId = m_upUserInfoArr[i]->m_upid;
 			m_upUserInfoArr[i]->m_pPictureControl->MoveWindow(rect);
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
-
 		}
 		else
 		{
@@ -98,12 +198,7 @@ void CDataShowView::setShowPictures()
 			smallRect.right = smallRect.left + nWidth;
 			smallRect.bottom = smallRect.top + (long)(m_DrawRect.Height()*0.25f);
 
-			m_upUserInfoArr[i]->m_bBigPic = false;
-			//m_upUserInfoArr[i]->m_pPictureControl = m_pPictureControlArr[useIndex];
-			//m_upUserInfoArr[i]->m_pPictureControl->m_upId = m_upUserInfoArr[i]->m_upid;
-			useIndex++;
 			m_upUserInfoArr[i]->m_showRect = smallRect;
-			m_upUserInfoArr[i]->m_pPictureControl->m_upId = m_upUserInfoArr[i]->m_upid;
 			m_upUserInfoArr[i]->m_pPictureControl->MoveWindow(smallRect);
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
 		}
@@ -111,31 +206,13 @@ void CDataShowView::setShowPictures()
 	LeaveCriticalSection(&m_critPicture);
 }
 
-void CDataShowView::addUpId(int nUpId)
-{
-	CUpUserInfo* pUpUserInfo = findUpUserInfo(nUpId);
 
-	if (pUpUserInfo == NULL)
-	{
-		pUpUserInfo = new CUpUserInfo();
-		pUpUserInfo->m_upid = nUpId;
-		CRect rect;
-		int nIndex = getFreePictureControlIndex();
-		pUpUserInfo->m_picIndex = nIndex;
-		m_pPictureControlArr[nIndex]->GetWindowRect(rect);
-		pUpUserInfo->m_showRect = rect;
-		pUpUserInfo->m_pPictureControl = m_pPictureControlArr[nIndex];// pProcessInfo->m_pPictureControl;
-		m_upUserInfoArr.push_back(pUpUserInfo);
-	}
-	pUpUserInfo->m_bUse = true;
-}
-
-CUpUserInfo* CDataShowView::findUpUserInfo(int upid)
+CUpUserInfo* CDataShowView::findUpUserInfo(string strUserId)
 {
 	CUpUserInfo* pUpUserInfo = NULL;
 	for (int i = 0; i < (int)m_upUserInfoArr.size(); i++)
 	{
-		if (m_upUserInfoArr[i]->m_upid == upid)
+		if (m_upUserInfoArr[i]->m_strUserId == strUserId)
 		{
 			pUpUserInfo = m_upUserInfoArr[i];
 			break;
@@ -144,97 +221,12 @@ CUpUserInfo* CDataShowView::findUpUserInfo(int upid)
 	return pUpUserInfo;
 }
 
-int CDataShowView::getFreePictureControlIndex()
-{
-	int nRet = -1;
-	vector<int>::iterator it = m_freePicControlIndex.begin();
-	if (it != m_freePicControlIndex.end())
-	{
-		nRet = *it;
-		m_freePicControlIndex.erase(it);
-	}
-	return nRet;
-}
-
-void CDataShowView::addFreePictureControlIndex(int nIndex)
-{
-	bool bFind = false;
-	for (int i = 0; i < (int)m_freePicControlIndex.size(); i++)
-	{
-		if (m_freePicControlIndex[i] == nIndex)
-		{
-			bFind = true;
-			break;
-		}
-	}
-	if (!bFind)
-	{
-		m_freePicControlIndex.push_back(nIndex);
-	}
-}
-
-void CDataShowView::resetFreePictureControlIndex()
-{
-	for (int i = 0; i < UPID_MAX_SIZE; i++)
-	{
-		m_freePicControlIndex.push_back(i);
-	}
-}
-bool CDataShowView::removeAllUpUser()
-{
-	bool bRet = true;
-	CUpUserInfo* pUpUserInfo = NULL;
-	EnterCriticalSection(&m_critPicture);
-	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
-
-	for (; iter != m_upUserInfoArr.end(); iter++)
-	{
-		(*iter)->m_pPictureControl->m_upId = -1;
-		(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
-		(*iter)->m_pPictureControl->ShowWindow(SW_HIDE);
-		delete (*iter);
-		(*iter) = NULL;
-	}
-	resetFreePictureControlIndex();
-	m_upUserInfoArr.clear();
-	LeaveCriticalSection(&m_critPicture);
-	return bRet;
-}
-
-bool CDataShowView::removeUpUser(int upid)
-{
-	bool bRet = false;
-	CUpUserInfo* pUpUserInfo = NULL;
-	EnterCriticalSection(&m_critPicture);
-	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
-
-	for (; iter != m_upUserInfoArr.end(); iter++)
-	{
-		if ((*iter)->m_upid == upid)
-		{
-			(*iter)->m_pPictureControl->m_upId = -1;
-			(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
-			(*iter)->m_pPictureControl->ShowWindow(SW_HIDE);
-
-			addFreePictureControlIndex((*iter)->m_picIndex);
-			delete (*iter);
-			(*iter) = NULL;
-			m_upUserInfoArr.erase(iter);
-			bRet = true;
-			break;
-		}
-	}
-	LeaveCriticalSection(&m_critPicture);
-	return bRet;
-}
-
-void CDataShowView::drawPic(YUV_TYPE type, int upid, int w, int h, uint8_t* videoData, int videoDataLen)
+void CDataShowView::drawPic(YUV_TYPE type, string userId, int w, int h, uint8_t* videoData, int videoDataLen)
 {
 	try
 	{
 		EnterCriticalSection(&m_critPicture);
-
-		CUpUserInfo* pUpUserInfo = findUpUserInfo(upid);
+		CUpUserInfo* pUpUserInfo = findUpUserInfo(userId);
 		if (pUpUserInfo != NULL && pUpUserInfo->m_pPictureControl != NULL)
 		{
 			if (videoData != NULL && videoDataLen > 0)
@@ -401,18 +393,17 @@ void CDataShowView::drawPic(YUV_TYPE type, int upid, int w, int h, uint8_t* vide
 	}
 	catch (char *str)
 	{
-		printf("err");
+		printf(str);
 	}
 
 }
 
-void CDataShowView::drawPic(int upid, int w, int h, CImage image)
+void CDataShowView::drawPic(string userId, int w, int h, CImage image)
 {
 	try
 	{
 		EnterCriticalSection(&m_critPicture);
-
-		CUpUserInfo* pUpUserInfo = findUpUserInfo(upid);
+		CUpUserInfo* pUpUserInfo = findUpUserInfo(userId);
 		if (pUpUserInfo != NULL && pUpUserInfo->m_pPictureControl != NULL)
 		{
 			CRect rect;
@@ -470,11 +461,8 @@ void CDataShowView::drawPic(int upid, int w, int h, CImage image)
 			}
 
 			CDC* pDC = pUpUserInfo->m_pPictureControl->GetWindowDC();    //获得显示控件的DC
-
-
 			CDC MemDC;
 			CBitmap memBitmap;
-
 			MemDC.CreateCompatibleDC(pDC);         // 利用屏幕DC创建内存DC
 			memBitmap.CreateCompatibleBitmap(         // 利用屏幕DC创建兼容的位图
 				pDC,
@@ -505,6 +493,6 @@ void CDataShowView::drawPic(int upid, int w, int h, CImage image)
 	}
 	catch (char *str)
 	{
-		printf("err");
+		printf(str);
 	}
 }

@@ -47,7 +47,7 @@ void CShowLiveControl::setVoipShow()
 	CUpUserInfo* pUpUserInfo = NULL;
 	int useIndex = 1;
 
-	EnterCriticalSection(&m_critPicture);
+	/*EnterCriticalSection(&m_critPicture);
 	int nSize = (int)m_upUserInfoArr.size();
 	CRect rect = m_DrawRect;
 
@@ -83,11 +83,11 @@ void CShowLiveControl::setVoipShow()
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
 		}
 	}
-	LeaveCriticalSection(&m_critPicture);
+	LeaveCriticalSection(&m_critPicture);*/
 }
 void CShowLiveControl::setLiveShow()
 {
-	CUpUserInfo* pUpUserInfo = NULL;
+	/*CUpUserInfo* pUpUserInfo = NULL;
 	int useIndex = 1;
 
 	EnterCriticalSection(&m_critPicture);
@@ -138,7 +138,7 @@ void CShowLiveControl::setLiveShow()
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
 		}
 	}
-	LeaveCriticalSection(&m_critPicture);
+	LeaveCriticalSection(&m_critPicture);*/
 }
 
 void CShowLiveControl::resetPicControlPos()
@@ -154,7 +154,7 @@ void CShowLiveControl::resetPicControlPos()
 
 void CShowLiveControl::addUpId(int nUpId)
 {
-	CUpUserInfo* pUpUserInfo = findUpUserInfo(nUpId);
+	/*CUpUserInfo* pUpUserInfo = findUpUserInfo(nUpId);
 
 	if (pUpUserInfo == NULL)
 	{
@@ -166,27 +166,27 @@ void CShowLiveControl::addUpId(int nUpId)
 		pUpUserInfo->m_pPictureControl = m_pPictureControlArr[nUpId];// pProcessInfo->m_pPictureControl;
 		m_upUserInfoArr.push_back(pUpUserInfo);
 	}
-	pUpUserInfo->m_bUse = true;
+	pUpUserInfo->m_bUse = true;*/
 }
 
 CUpUserInfo* CShowLiveControl::findUpUserInfo(int upid)
 {
 	CUpUserInfo* pUpUserInfo = NULL;
-	for (int i = 0; i < (int)m_upUserInfoArr.size(); i++)
+	/*for (int i = 0; i < (int)m_upUserInfoArr.size(); i++)
 	{
 		if (m_upUserInfoArr[i]->m_upid == upid)
 		{
 			pUpUserInfo = m_upUserInfoArr[i];
 			break;
 		}
-	}
+	}*/
 	return pUpUserInfo;
 }
 
 bool CShowLiveControl::removeAllUpUser()
 {
 	bool bRet = true;
-	CUpUserInfo* pUpUserInfo = NULL;
+	/*CUpUserInfo* pUpUserInfo = NULL;
 	EnterCriticalSection(&m_critPicture);
 	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
 
@@ -197,14 +197,14 @@ bool CShowLiveControl::removeAllUpUser()
 		(*iter)->m_pPictureControl->ShowWindow(SW_HIDE);
 	}
 	m_upUserInfoArr.clear();
-	LeaveCriticalSection(&m_critPicture);
+	LeaveCriticalSection(&m_critPicture);*/
 	return bRet;
 }
 
 bool CShowLiveControl::removeUpUser(int upid)
 {
 	bool bRet = false;
-	CUpUserInfo* pUpUserInfo = NULL;
+	/*CUpUserInfo* pUpUserInfo = NULL;
 	EnterCriticalSection(&m_critPicture);
 	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
 
@@ -220,7 +220,7 @@ bool CShowLiveControl::removeUpUser(int upid)
 			break;
 		}
 	}
-	LeaveCriticalSection(&m_critPicture);
+	LeaveCriticalSection(&m_critPicture);*/
 	return bRet;
 }
 
@@ -397,7 +397,7 @@ void CShowLiveControl::drawPic(YUV_TYPE type, int upid, int w, int h, uint8_t* v
 	}
 	catch (char *str)
 	{
-		printf("err");
+		printf(str);
 	}
 
 }
@@ -501,6 +501,6 @@ void CShowLiveControl::drawPic(int upid, int w, int h, CImage image)
 	}
 	catch (char *str)
 	{
-		printf("err");
+		printf(str);
 	}
 }

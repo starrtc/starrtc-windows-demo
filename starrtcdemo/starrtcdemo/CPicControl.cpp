@@ -4,13 +4,15 @@
 
 CPicControl::CPicControl()
 {
-	m_upId = -1;
+	m_strUserId = "";
+	m_bIsBig = false;
 }
 
 
 CPicControl::~CPicControl()
 {
-	m_upId = -1;
+	m_strUserId = "";
+	m_bIsBig = false;
 }
 BEGIN_MESSAGE_MAP(CPicControl, CStatic)
 	ON_CONTROL_REFLECT(STN_DBLCLK, &CPicControl::OnStnDblclick)
@@ -21,16 +23,18 @@ BEGIN_MESSAGE_MAP(CPicControl, CStatic)
 	ON_COMMAND(ID_STOP_FACE_FEATURE, &CPicControl::OnStopFaceFeature)
 END_MESSAGE_MAP()
 
-void CPicControl::setInfo(CPicControlCallback* pPicControlCallback, void* pParam)
+void CPicControl::setInfo(CPicControlCallback* pPicControlCallback)
 {
 	m_pPicControlCallback = pPicControlCallback;
-	m_pParam = pParam;
 }
 void CPicControl::OnStnDblclick()
 {
 	if (m_pPicControlCallback != NULL)
 	{
-		m_pPicControlCallback->changeStreamConfig(m_pParam, m_upId);
+		if (!m_bIsBig)
+		{
+			m_pPicControlCallback->changeShowStyle(m_strUserId);
+		}	
 	}
 }
 
@@ -39,7 +43,7 @@ void CPicControl::OnMenuCloseLookLive()
 {
 	if (m_pPicControlCallback != NULL)
 	{
-		m_pPicControlCallback->closeCurrentLive(m_pParam);
+		m_pPicControlCallback->closeCurrentLive();
 	}
 }
 
@@ -64,17 +68,11 @@ void CPicControl::OnRButtonDown(UINT nFlags, CPoint point)
 
 void CPicControl::OnMenuStartFaceFeature()
 {
-	if (m_pPicControlCallback != NULL)
-	{
-		m_pPicControlCallback->startFaceFeature(m_pParam);
-	}
+
 }
 
 
 void CPicControl::OnStopFaceFeature()
 {
-	if (m_pPicControlCallback != NULL)
-	{
-		m_pPicControlCallback->stopFaceFeature(m_pParam);
-	}
+	
 }

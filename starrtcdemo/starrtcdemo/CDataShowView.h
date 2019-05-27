@@ -13,25 +13,22 @@ class CDataShowView
 public:
 	CDataShowView();
 	virtual ~CDataShowView();
-	void resetStreamConfig(bool bHaveBigPic);
+
+	CUpUserInfo* findUpUserInfo(string strUserId);
+	bool addUser(string strUserId, bool isBigPic);
+	bool removeUser(string strUserId);
+	void removeAllUser();
+	bool isLeftOneUser(string& strUserId);
+	int getUserCount();
+	string changeShowStyle(string strUserId, bool bBigPic);
 	void setDrawRect(CRect drawRect);
 	void setShowPictures();
-
-	void addUpId(int nUpId);
-	CUpUserInfo* findUpUserInfo(int upid);
-	int getFreePictureControlIndex();
-	void addFreePictureControlIndex(int nIndex);
-	void resetFreePictureControlIndex();
-	bool removeAllUpUser();
-	bool removeUpUser(int upid);
-	void drawPic(YUV_TYPE type, int upid, int w, int h, uint8_t* videoData, int videoDataLen);
-	void drawPic(int upid, int w, int h, CImage image);
+	void drawPic(YUV_TYPE type, string userId, int w, int h, uint8_t* videoData, int videoDataLen);
+	void drawPic(string userId, int w, int h, CImage image);
 public:
-	CPicControl* m_pPictureControlArr[UPID_MAX_SIZE];
-	int m_configArr[UPID_MAX_SIZE];
+	vector<CPicControl*> m_pPictureControlArr;
 	vector<CUpUserInfo*> m_upUserInfoArr;
 	CRITICAL_SECTION m_critPicture;
 	CRect m_DrawRect;
-	vector<int> m_freePicControlIndex;
 };
 

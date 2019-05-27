@@ -13,7 +13,7 @@ CVoipDataShowView::~CVoipDataShowView()
 
 void CVoipDataShowView::setShowPictures()
 {
-	CUpUserInfo* pUpUserInfo = NULL;
+	/*CUpUserInfo* pUpUserInfo = NULL;
 	int useIndex = 1;
 
 	EnterCriticalSection(&m_critPicture);
@@ -46,7 +46,7 @@ void CVoipDataShowView::setShowPictures()
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
 		}
 	}
-	LeaveCriticalSection(&m_critPicture);
+	LeaveCriticalSection(&m_critPicture);*/
 }
 
 
