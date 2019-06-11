@@ -6,25 +6,8 @@
 #include <list>
 #include "ChatroomInfo.h"
 #include <string>
+#include "CChatroomType.h"
 using namespace std;
-
-enum CHATROOM_TYPE
-{
-	CHATROOM_TYPE_UNABLE,	// 占位
-	CHATROOM_TYPE_PUBLIC,	// 无需登录和验证
-	CHATROOM_TYPE_LOGIN		// 需要登录，无需验证
-};
-
-enum CHATROOM_LIST_TYPE
-{
-	CHATROOM_LIST_TYPE_CHATROOM,	
-	CHATROOM_LIST_TYPE_LIVE,	
-	CHATROOM_LIST_TYPE_LIVE_PUSH,
-	CHATROOM_LIST_TYPE_MEETING,
-	CHATROOM_LIST_TYPE_MEETING_PUSH,
-	CHATROOM_LIST_TYPE_CLASS,
-	CHATROOM_LIST_TYPE_CLASS_PUSH
-};
 
 /*
  *聊天室管理类
@@ -54,7 +37,7 @@ public:
 	 * @param pUserManager 用户信息
 	 * @param listType 类型
 	 */
-	static void getChatroomList(CUserManager* pUserManager, int listType);
+	static void getChatroomList(CUserManager* pUserManager, string strUserId, int listType);
 
 	/*
 	 * 重置返回值
@@ -88,21 +71,21 @@ public:
 	 */
 	bool getOnlineNumber(string strChatroomId);
 
-	bool banToSendMsg(char* banUserId, int banTime);
-	bool kickOutUser(char* kickOutUserId);
+	bool banToSendMsg(string banUserId, int banTime);
+	bool kickOutUser(string kickOutUserId);
 
 	/*
 	 * 发送消息
 	 * @param pIMMessage 消息内容
 	 */
-	bool sendChat(CIMMessage* pIMMessage);
+	CIMMessage* sendChat(string strMsg);
 
 	/*
 	 * 发送私信
 	 * @param toUserId 对方userId
 	 * @param msgData 消息内容
 	 */
-	bool sendPrivateChat(string toUserId, char* msgData);
+	CIMMessage* sendPrivateChat(string toUserId, string msgData);
 
 	/*
 	 * 发送控制消息
@@ -114,12 +97,12 @@ public:
 	/*
 	 * 删除聊天室
 	 */
-	bool deleteChatRoom();
+	bool deleteChatRoom(string strRoomId, int listType);
 
 	/*
 	 * 创建后上报创建的聊天室信息
 	 */
-	bool reportChatroom(string strRoomId, ChatroomInfo& chatroomInfo, int listType);
+	bool reportChatroom(string strRoomId, int listType, string data);
 
 	/**
 	 * 退出聊天室

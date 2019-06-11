@@ -3,7 +3,7 @@
 using namespace std;
 #define UPID_MAX_SIZE 7
 #include <queue>
-#include "CPicControl.h"
+#include "CPicControlMonitor.h"
 #include "CLiveUserInfo.h"
 #include "CFindFaceResult.h"
 enum SEND_MESSAGE_TYPE
@@ -45,7 +45,7 @@ public:
 	void drawBackground(CStatic* pPicture);
 	bool setData(uint8_t* pData, int nDataLength);
 
-	CUpUserInfo* findUpUserInfo(string strUserId);
+	CUpUserInfoMonitor* findUpUserInfo(string strUserId);
 	bool addUser(string strUserId, bool isBigPic);
 	bool removeUser(string strUserId);
 	void removeAllUser();
@@ -59,15 +59,13 @@ public:
 	void setStreamConfig();
 
 	void liveExit();
-
 	void clearFaceFeatureVector();
-
 public:
 	string m_strWindowName;
 	bool m_bUse;
 	bool m_bInit;
-	vector<CPicControl*> m_pPictureControlArr;
-	vector<CUpUserInfo*> m_upUserInfoArr;
+	vector<CPicControlMonitor*> m_pPictureControlArr;
+	vector<CUpUserInfoMonitor*> m_upUserInfoArr;
 	CRITICAL_SECTION m_critPicture;
 	CRect m_DrawRect;
 
@@ -79,8 +77,6 @@ public:
 
 	queue<CRecvData*> m_recvDataQueue;
 	CRITICAL_SECTION m_crit;
-
-
 
 	HANDLE m_hThread;
 	bool m_bExit;

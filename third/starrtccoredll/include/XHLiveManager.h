@@ -3,20 +3,27 @@
 #ifndef MATH_API
 #define MATH_API _declspec(dllexport)
 #endif
+
+enum LIVE_MEDIA_TYPE {
+	LIVE_MEDIA_TYPE_VIDEO_AND_AUDIO,
+	LIVE_MEDIA_TYPE_VIDEO_ONLY,
+	LIVE_MEDIA_TYPE_AUDIO_ONLY
+};
+
 class MATH_API XHLiveManager
 {
 public:
 	XHLiveManager(ILiveManagerListener* pLiveListener);
 	virtual ~XHLiveManager();
 	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
-	static void getLiveList();
+	static void getLiveList(string strUserId, int listType);
 
 
 	/**
 	 * 设置媒体类型，音频和视频可以都打开，也可以单独打开一个。
 	 * @param mediaTypeEnum 
 	 */
-	void setRtcMediaType(int mediaTypeEnum);
+	void setRtcMediaType(LIVE_MEDIA_TYPE mediaTypeEnum);
 
 	/**
 	 * 创建直播

@@ -157,7 +157,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\third\sqlite;..\..\third\json\include;..\..\third\opencv\build32\include;..\..\third\starrtccoredll\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -243,6 +243,7 @@
     <ClInclude Include="CIMDialog.h" />
     <ClInclude Include="CIMOneToOneDialog.h" />
     <ClInclude Include="CInteracteLiveDlg.h" />
+    <ClInclude Include="CInterfaceUrls.h" />
     <ClInclude Include="CLiveProgram.h" />
     <ClInclude Include="CLiveUserInfo.h" />
     <ClInclude Include="CLocalDataControlListener.h" />
@@ -251,6 +252,8 @@
     <ClInclude Include="CNewDlg.h" />
     <ClInclude Include="CPicControl.h" />
     <ClInclude Include="CPicControlCallback.h" />
+    <ClInclude Include="CPicControlMonitor.h" />
+    <ClInclude Include="CPicControlMonitorCallback.h" />
     <ClInclude Include="CProcessInfo.h" />
     <ClInclude Include="CSelectShowWndDlg.h" />
     <ClInclude Include="CSettingDialog.h" />
@@ -260,6 +263,7 @@
     <ClInclude Include="CSoundManager.h" />
     <ClInclude Include="CSqliteDB.h" />
     <ClInclude Include="CStarRTCMenuDialog.h" />
+    <ClInclude Include="CUserInformation.h" />
     <ClInclude Include="CVoipDataShowView.h" />
     <ClInclude Include="CVoipDlg.h" />
     <ClInclude Include="CVoipP2PDlg.h" />
@@ -291,12 +295,13 @@
     <ClCompile Include="CIMDialog.cpp" />
     <ClCompile Include="CIMOneToOneDialog.cpp" />
     <ClCompile Include="CInteracteLiveDlg.cpp" />
+    <ClCompile Include="CInterfaceUrls.cpp" />
     <ClCompile Include="CLiveProgram.cpp" />
-    <ClCompile Include="CLiveUserInfo.cpp" />
     <ClCompile Include="CMessageBean.cpp" />
     <ClCompile Include="CMultipleMeetingDialog.cpp" />
     <ClCompile Include="CNewDlg.cpp" />
     <ClCompile Include="CPicControl.cpp" />
+    <ClCompile Include="CPicControlMonitor.cpp" />
     <ClCompile Include="CProcessInfo.cpp" />
     <ClCompile Include="CSelectShowWndDlg.cpp" />
     <ClCompile Include="CSettingDialog.cpp" />

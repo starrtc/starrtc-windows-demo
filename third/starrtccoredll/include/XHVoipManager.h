@@ -23,10 +23,16 @@ public:
 	/**
 	 * 主叫方调用
 	 * 发起通话
-	 * @param toID
-	 * @param callback
+	 * @param strTargetId 对方ID
 	 */
 	bool call(string strTargetId);
+
+	/**
+	 * 主叫方调用
+	 * 发起语音通话
+	 * @param strTargetId 对方ID
+	 */
+	bool audioCall(string strTargetId);
 
 	/**
 	* 主叫方调用
@@ -58,6 +64,5 @@ public:
 	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);	
 	void querySoundData(uint8_t** pData, int* nLength);
-
 };
 

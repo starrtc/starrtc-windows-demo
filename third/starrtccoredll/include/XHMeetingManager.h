@@ -10,7 +10,7 @@ public:
 	virtual ~XHMeetingManager();
 public:
 	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
-	static void getMeetingList();
+	static void getMeetingList(string strUserId, int listType);
 
 	/**
 	 * 设置媒体类型
@@ -22,9 +22,10 @@ public:
 	 * 创建会议
 	 * @param strName 名
 	 * @param chatroomType chatroom类型
-	  *@param channelType channel类型
+	 * @param channelType channel类型
+	 * @return meeting id
 	 */
-	bool createMeeting(string strName, int chatroomType, int channelType);
+	string createMeeting(string strName, int chatroomType, int channelType);
 	/**
 	 * 加入会议
 	 * @param strMeetingID 会议ID

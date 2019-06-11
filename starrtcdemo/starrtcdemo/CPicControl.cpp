@@ -8,7 +8,6 @@ CPicControl::CPicControl()
 	m_bIsBig = false;
 }
 
-
 CPicControl::~CPicControl()
 {
 	m_strUserId = "";
@@ -27,6 +26,7 @@ void CPicControl::setInfo(CPicControlCallback* pPicControlCallback)
 {
 	m_pPicControlCallback = pPicControlCallback;
 }
+
 void CPicControl::OnStnDblclick()
 {
 	if (m_pPicControlCallback != NULL)
@@ -38,7 +38,6 @@ void CPicControl::OnStnDblclick()
 	}
 }
 
-
 void CPicControl::OnMenuCloseLookLive()
 {
 	if (m_pPicControlCallback != NULL)
@@ -46,8 +45,6 @@ void CPicControl::OnMenuCloseLookLive()
 		m_pPicControlCallback->closeCurrentLive();
 	}
 }
-
-
 
 void CPicControl::OnRButtonDown(UINT nFlags, CPoint point)
 {
@@ -65,12 +62,10 @@ void CPicControl::OnRButtonDown(UINT nFlags, CPoint point)
 	CStatic::OnRButtonDown(nFlags, point);
 }
 
-
 void CPicControl::OnMenuStartFaceFeature()
 {
 
 }
-
 
 void CPicControl::OnStopFaceFeature()
 {

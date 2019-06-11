@@ -198,7 +198,7 @@ public:
 
 	int queryAllChatRoomList(char* servAddr, int servPort, char* userId, char* listType);
 	
-	int saveToChatRoomList(char* servAddr, int servPort, char* userId, int listType, char* roomId, ChatroomInfo& chatInfo);
+	int saveToChatRoomList(char* servAddr, int servPort, char* userId, int listType, char* roomId, char* data);
 	
 	int delFromChatRoomList(char* servAddr, int servPort, char* userId, int listType, char* roomId);
 
@@ -235,6 +235,15 @@ public:
 	void stopVoip(int isActive);//主动关闭一方传1   被动关闭一方传0  
 	void voipSpeedTest(char* servIp, int port);
 	void voipEchoTest(char* servIp, int port);
+
+	void initStarVoipDirectLink();
+	void stopStarVoipDirectLink();
+	// 按照这个顺序执行 :interface_connectFarVoip-interface_startTransVoipData-interface_startVoipDirectLinkEncoder-interface_closeFarVoip
+	void connectFarVoip(char* farUrl_c);
+	void startTransVoipData();
+	int  startVoipDirectLinkEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
+	void closeFarVoip();
+	void sendMsgDataToFar(CIMMessage* pIMMessage);
 
 	/*
 	 * Channel 申请下载
@@ -389,6 +398,11 @@ public:
 	static int voipGetRealtimeData(uint8_t* data, int len, void* userData);
 	// 1是p2p, 2是中转
 	static int reportVoipTransState(int state, void* userData);
+	//=============================    voip direct回调    ============================
+	static void connectFarVoipOK(void* userData);
+	static void connectFarVoipFailed(void* userData);
+	static void starVoipDirectLinkError(char* errString, void* userData);
+	static void voipDirectLinkRecvMsg(char* msg, void* userData);
 	//=========================================================================
 	//===========================    live chatroom回调    ===========================
 	//=========================================================================
