@@ -68,7 +68,6 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 
 				case CHILD_PROCESS_START_LIVE_SUCCESS:
 				{
-					pProcessInfo->setStreamConfig();
 				}
 				break;
 
@@ -76,9 +75,15 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 				{
 					if (pProcessInfo->m_bInit)
 					{
-						string strUserId = "";
+						int nUserIdLength = 0;
+						memcpy(&nUserIdLength, pTemp, sizeof(nUserIdLength));
+						pTemp = pTemp + sizeof(nUserIdLength);
+
+						char strUserId[256] = { 0 };
+						memcpy((void*)strUserId, pTemp, sizeof(char)*nUserIdLength);
+						pTemp = pTemp + sizeof(char)*nUserIdLength;
 						//memcpy(&upid, pTemp, sizeof(upid));					
-						CUpUserInfo* pUpUserInfo = pProcessInfo->findUpUserInfo(strUserId);
+						CUpUserInfoMonitor* pUpUserInfo = pProcessInfo->findUpUserInfo(strUserId);
 						pProcessInfo->addUser(strUserId, true);
 						pProcessInfo->setShowPictures();
 					}
@@ -88,7 +93,12 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 				{
 					if (pProcessInfo->m_bInit)
 					{
-						string strUserId = "";
+						int nUserIdLength = 0;
+						memcpy(&nUserIdLength, pTemp, sizeof(nUserIdLength));
+						pTemp = pTemp + sizeof(nUserIdLength);
+
+						char strUserId[256] = { 0 };
+						memcpy((void*)strUserId, pTemp, sizeof(char)*nUserIdLength);
 
 						bool bRet = pProcessInfo->removeUser(strUserId);
 						pProcessInfo->setShowPictures();
@@ -114,9 +124,7 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 					break;
 				case CHILD_PROCESS_FACE_FEATURE:
 				{
-
 					int vResultSize = 0;
-
 					char strName[256] = { 0 };
 					EnterCriticalSection(&pProcessInfo->m_critFaceFeature);
 					pProcessInfo->m_vFindFaceResult.clear();
@@ -146,7 +154,6 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 				{
 					if (pProcessInfo->m_bInit)
 					{
-						string strUserId = "";
 						int w = 0;
 						int h = 0;
 						int vResultSize = 0;
@@ -154,9 +161,13 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 						char strName[256] = { 0 };
 
 						int nDataLength = 0;
+						int nUserIdLength = 0;
+						memcpy(&nUserIdLength, pTemp, sizeof(nUserIdLength));
+						pTemp = pTemp + sizeof(nUserIdLength);
 
-						//memcpy(&upid, pTemp, sizeof(upid));
-						//pTemp = pTemp + sizeof(upid);
+						char strUserId[256] = { 0 };
+						memcpy(strUserId, pTemp, sizeof(char)*nUserIdLength);
+						pTemp = pTemp + sizeof(char)*nUserIdLength;
 
 						memcpy(&w, pTemp, sizeof(w));
 						pTemp = pTemp + sizeof(w);
@@ -275,9 +286,9 @@ bool CProcessInfo::setData(uint8_t* pData, int nDataLength)
 	return true;
 }
 
-CUpUserInfo* CProcessInfo::findUpUserInfo(string strUserId)
+CUpUserInfoMonitor* CProcessInfo::findUpUserInfo(string strUserId)
 {
-	CUpUserInfo* pUpUserInfo = NULL;
+	CUpUserInfoMonitor* pUpUserInfo = NULL;
 	for (int i = 0; i < (int)m_upUserInfoArr.size(); i++)
 	{
 		if (m_upUserInfoArr[i]->m_strUserId == strUserId)
@@ -293,15 +304,15 @@ bool CProcessInfo::addUser(string strUserId, bool isBigPic)
 {
 	bool bRet = false;
 	EnterCriticalSection(&m_critPicture);
-	CUpUserInfo* pUpUserInfo = findUpUserInfo(strUserId);
+	CUpUserInfoMonitor* pUpUserInfo = findUpUserInfo(strUserId);
 
 	if (pUpUserInfo == NULL)
 	{
-		pUpUserInfo = new CUpUserInfo();
+		pUpUserInfo = new CUpUserInfoMonitor();
 		pUpUserInfo->m_strUserId = strUserId;
 		pUpUserInfo->m_bBigPic = isBigPic;
-		CPicControl* pPicControl = NULL;
-		vector<CPicControl*>::iterator iter = m_pPictureControlArr.begin();
+		CPicControlMonitor* pPicControl = NULL;
+		vector<CPicControlMonitor*>::iterator iter = m_pPictureControlArr.begin();
 		if (iter != m_pPictureControlArr.end())
 		{
 			pPicControl = *iter;
@@ -311,6 +322,7 @@ bool CProcessInfo::addUser(string strUserId, bool isBigPic)
 		{
 			pPicControl->m_strUserId = strUserId;
 			pPicControl->m_bIsBig = isBigPic;
+			pPicControl->m_pParam = this;
 			pUpUserInfo->m_pPictureControl = pPicControl;
 			pPicControl->GetWindowRect(pUpUserInfo->m_showRect);
 			m_upUserInfoArr.push_back(pUpUserInfo);
@@ -335,12 +347,13 @@ bool CProcessInfo::removeUser(string strUserId)
 	bool bRet = false;
 	CUpUserInfo* pUpUserInfo = NULL;
 	EnterCriticalSection(&m_critPicture);
-	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
+	vector<CUpUserInfoMonitor*>::iterator iter = m_upUserInfoArr.begin();
 
 	for (; iter != m_upUserInfoArr.end(); iter++)
 	{
 		if ((*iter)->m_strUserId == strUserId)
 		{
+			(*iter)->m_pPictureControl->m_pParam = NULL;
 			(*iter)->m_pPictureControl->m_strUserId = "";
 			(*iter)->m_pPictureControl->m_bIsBig = false;
 			(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
@@ -359,10 +372,11 @@ bool CProcessInfo::removeUser(string strUserId)
 void CProcessInfo::removeAllUser()
 {
 	EnterCriticalSection(&m_critPicture);
-	vector<CUpUserInfo*>::iterator iter = m_upUserInfoArr.begin();
+	vector<CUpUserInfoMonitor*>::iterator iter = m_upUserInfoArr.begin();
 
 	for (; iter != m_upUserInfoArr.end(); )
 	{
+		(*iter)->m_pPictureControl->m_pParam = NULL;
 		(*iter)->m_pPictureControl->m_strUserId = "";
 		(*iter)->m_pPictureControl->m_bIsBig = false;
 		(*iter)->m_pPictureControl->MoveWindow(CRect(0, 0, 0, 0), true);
@@ -431,12 +445,12 @@ void CProcessInfo::setShowPictures()
 
 void CProcessInfo::drawPic(string userId, int w, int h, uint8_t* videoData, int videoDataLen)
 {
-	YUV_TYPE type = FMT_NV12;
+	YUV_TYPE type = FMT_YUV420P;
 	try
 	{
 		EnterCriticalSection(&m_critPicture);
 
-		CUpUserInfo* pUpUserInfo = findUpUserInfo(userId);
+		CUpUserInfoMonitor* pUpUserInfo = findUpUserInfo(userId);
 		if (pUpUserInfo != NULL && pUpUserInfo->m_pPictureControl != NULL)
 		{
 			if (videoData != NULL && videoDataLen > 0)

@@ -222,6 +222,18 @@
     <ClInclude Include="CVoipP2PDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CPicControlMonitor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPicControlMonitorCallback.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CInterfaceUrls.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CUserInformation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -246,9 +258,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CFaceFeatureRegisterDlg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CLiveUserInfo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CDataShowView.cpp">
@@ -339,6 +348,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CVoipP2PDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CPicControlMonitor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CInterfaceUrls.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

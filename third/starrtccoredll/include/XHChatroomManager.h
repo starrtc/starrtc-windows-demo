@@ -34,20 +34,21 @@ public:
 	 * @param pUserManager 用户信息
 	 * @param listType 类型
 	 */
-	static void getChatroomList(int listType);
+	static void getChatroomList(string strUserId, int listType);
 
 	/*
 	 * 创建ChatRoom
 	 * @param strName 名字
 	 * @param chatroomType 类型
+	 * @return chatroom id
 	 */
-	bool createChatRoom(string strName, int chatroomType);
+	string createChatRoom(string strName, int chatroomType);
 
 	/**
 	 * 删除聊天室
 	 * @param strChatroomId 删除的聊天室ID
 	 */
-	bool deleteChatRoom(string strChatroomId);
+	bool deleteChatRoom(string strRoomId);
 
 	/**
 	 * 加入聊天室
@@ -95,6 +96,15 @@ public:
 	 * @param msgData 消息内容
 	 */
 	CIMMessage* sendPrivateChat(string toUserId, char* msgData);
+
+	/**(仅限私有部署时使用)
+	 * 保存到列表
+	 * @param userId 用户Id
+	 * @param type 列表类型
+	 * @param chatroomId
+	 * @param data
+	 */
+	bool saveToList(string userId, int type, string chatroomId, string data);
 
 	/**
 	 * 查询列表

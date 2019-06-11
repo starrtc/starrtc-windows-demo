@@ -13,6 +13,13 @@ public:
 	virtual void onCalling(string fromID) = 0;
 
 	/**
+	 * 被叫方响应语音呼叫
+	 * 被叫方收到主叫方的呼叫
+	 * @param fromID
+	 */
+	virtual void onAudioCalling(string fromID) = 0;
+
+	/**
 	 * 被叫方响应
 	 * 主叫方在被叫方接听之前挂断（通话被取消）
 	 * @param fromID

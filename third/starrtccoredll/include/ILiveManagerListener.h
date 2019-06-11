@@ -85,7 +85,6 @@ public:
 	 * @param message
 	 */
 	virtual void onReceivePrivateMessage(CIMMessage* pMessage) = 0;
-
 	virtual int getRealtimeData(string strUserId, uint8_t* data, int len) = 0;
 	virtual int getVideoRaw(string strUserId, int w, int h, uint8_t* videoData, int videoDataLen) = 0;
 };

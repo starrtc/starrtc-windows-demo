@@ -2,6 +2,7 @@
 #include <string>
 using namespace std;
 #include "CPicControl.h"
+#include "CPicControlMonitor.h"
 class CRecvData
 {
 public:
@@ -18,7 +19,6 @@ public:
 			delete[] m_pData;
 			m_pData = NULL;
 		}
-
 		m_nDataLength = 0;
 	}
 
@@ -62,10 +62,25 @@ public:
 	bool m_bBigPic;
 };
 
-class CLiveUserInfo
+class CUpUserInfoMonitor
 {
 public:
-	CLiveUserInfo();
-	~CLiveUserInfo();
+	CUpUserInfoMonitor()
+	{
+		m_strUserId = "";
+		m_pPictureControl = NULL;
+		m_bBigPic = false;
+	}
+	~CUpUserInfoMonitor()
+	{
+		m_strUserId = "";
+		m_pPictureControl = NULL;
+		m_bBigPic = false;
+	}
+public:
+	CPicControlMonitor* m_pPictureControl;
+	string m_strUserId;
+	CRect m_showRect;
+	bool m_bBigPic;
 };
 
