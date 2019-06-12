@@ -12,8 +12,6 @@ enum MEETING_TYPE
 	MEETING_TYPE_LOGIN_SPECIFY	// 需要登录和验证
 };
 
-
-
 class CMeetingManager: public IChatroomManagerListener, public ISrcManagerListener
 {
 public:
@@ -126,7 +124,7 @@ public:
 	virtual void onSelfKicked();
 
 	/**
-	 * 自己被踢出聊天室
+	 * 自己被禁言
 	 */
 	virtual void onSelfMuted(int seconds);
 

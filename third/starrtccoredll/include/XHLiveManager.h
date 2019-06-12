@@ -180,6 +180,11 @@ public:
 	 */
 	void stopPushRtmp();
 
+	/*
+	 * 查询在线人数
+	 */
+	bool getOnlineNumber(string strLiveId);
+
 	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);

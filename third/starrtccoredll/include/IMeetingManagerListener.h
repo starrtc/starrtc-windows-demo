@@ -38,7 +38,7 @@ public:
 	virtual void onSelfKicked() = 0;
 
 	/**
-	 * 自己被踢出聊天室
+	 * 自己被禁言
 	 */
 	virtual void onSelfMuted(int seconds) = 0;
 
@@ -54,5 +54,13 @@ public:
 	 */
 	virtual void onReceivePrivateMessage(CIMMessage* pMessage) = 0;
 	virtual int getRealtimeData(string strUserId, uint8_t* data, int len) = 0;
+	/**
+	 * 收到视频数据
+	 * @param upId
+	 * @param w 宽度
+	 * @param h 高度
+	 * @param videoData 数据
+	 * @param videoDataLen 数据长度
+	 */
 	virtual int getVideoRaw(string strUserId, int w, int h, uint8_t* videoData, int videoDataLen) = 0;
 };

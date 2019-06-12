@@ -16,7 +16,7 @@ public:
 	virtual void onSelfKicked() = 0;
 
 	/**
-	 * 自己被踢出聊天室
+	 * 自己被禁言
 	 */
 	virtual void onSelfMuted(int seconds) = 0;
 
