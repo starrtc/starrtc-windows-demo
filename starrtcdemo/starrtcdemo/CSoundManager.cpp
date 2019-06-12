@@ -100,7 +100,7 @@ void CSoundManager::querySoundData(char** pData, int* nLength)
 
 }
 
-void CSoundManager::startGetSoundData(bool bGetLocalData)
+void CSoundManager::startSoundData(bool bGetLocalData)
 {
 	if (bGetLocalData)
 	{
@@ -122,7 +122,7 @@ void CSoundManager::startGetSoundData(bool bGetLocalData)
 	
 	
 }
-void CSoundManager::stopGetSoundData()
+void CSoundManager::stopSoundData()
 {
 	m_bStop = true;
 	if (m_bGetLocalData)
@@ -138,6 +138,23 @@ void CSoundManager::stopGetSoundData()
 	{
 		m_pPlaySound->PostThreadMessage(WM_PLAYSOUND_STOPPLAYING, 0, 0);
 	}
+}
+
+void CSoundManager::startGetSoundData()
+{
+	if (m_pRecodeSound != NULL)
+	{
+		m_pRecodeSound->PostThreadMessage(WM_RECORDSOUND_STARTRECORDING, 0, 0);
+	}
+	m_bGetLocalData = true;
+}
+void CSoundManager::stopGetSoundData()
+{
+	if (m_pRecodeSound != NULL && m_bGetLocalData)
+	{
+		m_pRecodeSound->PostThreadMessage(WM_RECORDSOUND_STOPRECORDING, 0, 0);
+	}
+	m_bGetLocalData = false;
 }
 
 void CSoundManager::setSoundData(char* pData, int nLength)

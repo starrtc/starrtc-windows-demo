@@ -104,6 +104,13 @@ public:
 	 * 上报chatroom 和 channelID
 	 */
 	bool reportChatRoomAndChannel(string strName, string strChatroomId, string strChannelId);
+	/**
+	 * 从列表删除
+	 * @param userId 用户ID
+	 * @param type 类型
+	 * @param strChatroomId chatRoom ID
+	 */
+	void deleteFromList(string userId, int type, string strChatroomId);
 
 	bool closeChatroom();
 
@@ -138,7 +145,7 @@ public:
 	virtual void onSelfKicked();
 
 	/**
-	 * 自己被踢出聊天室
+	 * 自己被禁言
 	 */
 	virtual void onSelfMuted(int seconds);
 

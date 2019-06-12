@@ -9,7 +9,10 @@ public:
 public:
 	virtual void getLocalSoundData(char* pData, int nLength);
 	virtual void querySoundData(char** pData, int* nLength);
-	void startGetSoundData(bool bGetLocalData);
+	void startSoundData(bool bGetLocalData);
+	void stopSoundData();
+
+	void startGetSoundData();
 	void stopGetSoundData();
 	void setSoundData(char* pData, int nLength);
 public:
