@@ -12,7 +12,7 @@
 https://github.com/starrtc/starrtc-server
 
 
-示例程序请运行release目录里面的starrtcdemo.exe
+示例程序请运行release目录里面的starrtcdemo.exe , 配置私有部署请编辑文件 param.ini
 
 工程所在目录：starrtcdemo\starrtcdemo.sln
 
@@ -50,6 +50,10 @@ VOIP视频通话
 监控
 ====
 ![监控](assets/监控.png)
+
+更新记录
+=====
+https://github.com/starrtc/starrtc-windows-demo/wiki/Changelog
 
 Contact
 =====
