@@ -249,6 +249,9 @@
     <ClInclude Include="CLiveUserInfo.h" />
     <ClInclude Include="CLocalDataControlListener.h" />
     <ClInclude Include="CMessageBean.h" />
+    <ClInclude Include="CMinClassDataShowView.h" />
+    <ClInclude Include="CMinClassDlg.h" />
+    <ClInclude Include="CMinClassListDlg.h" />
     <ClInclude Include="CMultipleMeetingDialog.h" />
     <ClInclude Include="CNewDlg.h" />
     <ClInclude Include="CPicControl.h" />
@@ -264,16 +267,18 @@
     <ClInclude Include="CSoundManager.h" />
     <ClInclude Include="CSqliteDB.h" />
     <ClInclude Include="CStarRTCMenuDialog.h" />
+    <ClInclude Include="CStarWhitePanel.h" />
     <ClInclude Include="CUserInformation.h" />
     <ClInclude Include="CVoipDataShowView.h" />
     <ClInclude Include="CVoipDlg.h" />
     <ClInclude Include="CVoipP2PDlg.h" />
     <ClInclude Include="CvvImage.h" />
+    <ClInclude Include="CWhitePanelDlg.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="IButtonCallback.h" />
     <ClInclude Include="IShowLiveCallback.h" />
     <ClInclude Include="ISoundCallback.h" />
-    <ClInclude Include="json\json.h" />
+    <ClInclude Include="IWhitePanelCallback.h" />
     <ClInclude Include="PlaySound.h" />
     <ClInclude Include="RecodeSound.h" />
     <ClInclude Include="Resource.h" />
@@ -281,6 +286,7 @@
     <ClInclude Include="starrtcdemoDlg.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="WhitePanelActionType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAudioChatroomDlg.cpp" />
@@ -301,6 +307,9 @@
     <ClCompile Include="CInterfaceUrls.cpp" />
     <ClCompile Include="CLiveProgram.cpp" />
     <ClCompile Include="CMessageBean.cpp" />
+    <ClCompile Include="CMinClassDataShowView.cpp" />
+    <ClCompile Include="CMinClassDlg.cpp" />
+    <ClCompile Include="CMinClassListDlg.cpp" />
     <ClCompile Include="CMultipleMeetingDialog.cpp" />
     <ClCompile Include="CNewDlg.cpp" />
     <ClCompile Include="CPicControl.cpp" />
@@ -314,10 +323,12 @@
     <ClCompile Include="CSoundManager.cpp" />
     <ClCompile Include="CSqliteDB.cpp" />
     <ClCompile Include="CStarRTCMenuDialog.cpp" />
+    <ClCompile Include="CStarWhitePanel.cpp" />
     <ClCompile Include="CVoipDataShowView.cpp" />
     <ClCompile Include="CVoipDlg.cpp" />
     <ClCompile Include="CVoipP2PDlg.cpp" />
     <ClCompile Include="CvvImage.cpp" />
+    <ClCompile Include="CWhitePanelDlg.cpp" />
     <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="PlaySound.cpp" />
     <ClCompile Include="RecodeSound.cpp" />

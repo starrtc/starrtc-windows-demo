@@ -132,6 +132,7 @@ public:
 	
 	void commandToAudience(string toId);
 	void querySoundData(uint8_t** pData, int* nLength);
+	void insertRealtimeData(uint8_t* realtimeData, int dataLen);
 public:
 	/**
 	 * 聊天室成员数变化

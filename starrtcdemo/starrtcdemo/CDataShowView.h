@@ -22,7 +22,7 @@ public:
 	int getUserCount();
 	string changeShowStyle(string strUserId, bool bBigPic);
 	void setDrawRect(CRect drawRect);
-	void setShowPictures();
+	virtual void setShowPictures();
 	void drawPic(YUV_TYPE type, string userId, int w, int h, uint8_t* videoData, int videoDataLen);
 	void drawPic(string userId, int w, int h, CImage image);
 public:

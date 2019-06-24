@@ -19,9 +19,6 @@
     <Filter Include="util">
       <UniqueIdentifier>{8aa3a647-f0c3-4554-9887-a297676ee5b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="util\json">
-      <UniqueIdentifier>{4f45cd46-fcfa-4366-a188-9752b1186454}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Login">
       <UniqueIdentifier>{777b67e2-22c5-42dd-938b-0e5aca13f03e}</UniqueIdentifier>
     </Filter>
@@ -53,9 +50,6 @@
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="json\json.h">
-      <Filter>util\json</Filter>
     </ClInclude>
     <ClInclude Include="CLiveProgram.h">
       <Filter>头文件</Filter>
@@ -240,6 +234,27 @@
     <ClInclude Include="IButtonCallback.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CMinClassListDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMinClassDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMinClassDataShowView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CStarWhitePanel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWhitePanelDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IWhitePanelCallback.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WhitePanelActionType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -363,6 +378,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CCustomButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CMinClassListDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CMinClassDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CMinClassDataShowView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CStarWhitePanel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CWhitePanelDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
