@@ -266,6 +266,8 @@ public:
 		int videoSmallWidth, int videoSmallHeight, int videoSmallFps, int videoSmallBitrate,
 		int openGLESEnable, int dynamicBitrateAndFpsEnable, int voipP2PEnable);
 
+	void setRuntimeAudioEnable(int audioEnable);
+	void setRuntimeVideoEnable(int videoEnable);
 	/*
 	 * 设置数据流配置
 	 */
@@ -291,6 +293,8 @@ public:
 	//videoData由在函数内释放
 	//成功返回0，失败返回-1
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
+	//realtimeData的释放由此函数负责
+	void insertRealtimeData(uint8_t* realtimeData, int dataLen);
 	void querySoundData(uint8_t** pData, int* nLength);
 	//=========================================================================
 	//===========================    Msg回调    ===========================

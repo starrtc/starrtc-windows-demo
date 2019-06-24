@@ -89,7 +89,11 @@ DWORD WINAPI GetCameraDataThread(LPVOID p)
 		Mat frame;
 
 		CImage image;
-		pDataControl->addUpId();
+		if (pDataControl->m_bInsertData)
+		{
+			pDataControl->addUpId();
+		}
+		
 		while (pDataControl->m_bExit == false && pDataControl->m_bStop == false)
 		{
 			cap >> frame;

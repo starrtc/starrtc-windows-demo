@@ -189,6 +189,7 @@ public:
 	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
 	void querySoundData(uint8_t** pData, int* nLength);
+	void insertRealtimeData(uint8_t* realtimeData, int dataLen);
 private:
 	CLiveManager* m_pLiveManager;
 };

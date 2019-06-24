@@ -115,7 +115,7 @@ void CInterfaceUrls::demoRequestMiniClassList(list<ChatroomInfo>& listData, CUse
 {
 	listData.clear();
 	string strData = "appid=";
-	strData = strData + pUserManager->m_ServiceParam.m_strAgentId.c_str();
+	strData = strData + "stargWeHN8Y7";
 
 	CString strContent = "";
 	CHttpClient httpClient;
@@ -415,6 +415,19 @@ void CInterfaceUrls::demoRequestAudioLiveList(list<ChatroomInfo>& listData, CUse
 					{
 						livePro.m_strCreaterId = data[i]["Creator"].asCString();
 					}
+					if (data[i].isMember("liveState"))
+					{
+						string strStatus = data[i]["liveState"].asCString();
+						if (strStatus == "1")
+						{
+							livePro.m_bLive = true;
+						}
+						else
+						{
+							livePro.m_bLive = false;
+						}
+					}
+					
 
 					listData.push_back(livePro);
 				}
@@ -452,7 +465,7 @@ void CInterfaceUrls::demoReportAudioLive(string liveID, string liveName, string 
 //ÉÏ±¨Ð¡°à¿Î
 void CInterfaceUrls::demoReportMiniClass(string liveID, string liveName, string creatorID, CUserManager* pUserManager)
 {
-	string url = REPORT_MINI_CLASS_INFO_URL + "?ID=" + liveID + "&Name=" + liveName + "&Creator=" + creatorID + "&appid=" + pUserManager->m_ServiceParam.m_strAgentId;
+	string url = REPORT_MINI_CLASS_INFO_URL + "?ID=" + liveID + "&Name=" + liveName + "&Creator=" + creatorID + "&appid=" + "stargWeHN8Y7";
 	string strData = "";
 	std::string strVal = "";
 	std::string strErrInfo = "";

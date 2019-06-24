@@ -1,7 +1,7 @@
 # starrtc windows示例程序
 
 
-![主界面](assets/主界面.png)
+![主界面](assets/demo.png)
 
 本产品完全免费，并且提供免费的私有部署服务端程序，支持全部功能，并提供第三方拉流、推流功能。
 
@@ -28,9 +28,12 @@ https://github.com/starrtc/starrtc-server
 
 IM
 ====
-![IM_一对一](assets/IM_一对一.png)
+![IM_一对一](assets/IM_OneToOne.png)
 
-![聊天室](assets/聊天室.png)
+聊天室
+====
+
+![聊天室](assets/Chatroom.png)
 
 VOIP视频通话
 ====
@@ -39,17 +42,29 @@ VOIP视频通话
 
 多人会议
 ====
-![多人会议](assets/多人会议.png)
+![多人会议](assets/Meeting.png)
 
 
 互动直播
 ====
-![互动直播](assets/互动直播.png)
+![互动直播](assets/Live.png)
 
 
 监控
 ====
-![监控](assets/监控.png)
+![监控](assets/Monitor.png)
+ 
+语音聊天室
+====
+![语音聊天室](assets/AudioChatroom.png)
+
+内网直连
+====
+
+小班课
+====
+![监控](assets/MinClass.png)
+
 
 更新记录
 =====

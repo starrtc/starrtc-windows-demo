@@ -16,12 +16,14 @@ public:
 	 * 全局参数设置
 	 */
 	void globalSetting(int fps, int bitrate);
-
+	void setRuntimeAudioEnable(int audioEnable);
+	void setRuntimeVideoEnable(int videoEnable);
 	/*
 	 * 设置数据流配置
 	 */
 	virtual bool setStreamConfig(int upId, bool isBig);
 	virtual void querySoundData(uint8_t** pData, int* nLength);
+	virtual void insertRealtimeData(uint8_t* realtimeData, int dataLen);
 	/*
 	 * 通过调度获取ChatRoom服务地址
 	 */
