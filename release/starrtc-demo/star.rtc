@@ -1,0 +1,171 @@
+===============================================================
+========================starRTC_INIT===========================
+===============================================================
+[2019-07-05 18:17:59.912] [starrtc_starSDK]:(1238):interface_configLog_args:level=3,filter=31,freq=1
+[2019-07-05 18:18:00.434] [starrtc_msgSocket]:(284):=======msgServerStart======== addr=msg.starrtc.com:9903,g_agentId=stargWeHN8Y7,userId=1006611,token=U801AF2ZRUB1W1A4EANWF16BC1A40542
+[2019-07-05 18:18:00.434] [starrtc_msgSocket]:(334):reConnNewThread_thread_success
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(1706):__sync_lock_test_and_set
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(1711):start_linkToMsgServer:tidNeedExit=0,msgIsConnected=0,threadWriteIdle=1,threadReadIdle=1
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(1764):createSocketAndConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(352):contentLoopCheckRead_thread_success
+[2019-07-05 18:18:00.435] [starrtc_autils]:(1154):createSocketAndConnectTo_servUrl=msg.starrtc.com:9903
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(366):contentLoopCheckWrite_thread_success
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(3469):contentLoopCheckWrite_thread_start!
+[2019-07-05 18:18:00.435] [starrtc_msgSocket]:(3242):contentLoopCheckRead_thread_start!
+[2019-07-05 18:18:00.486] [starrtc_msgSocket]:(1767):createSocketAndConnectTo_cfd=652
+[2019-07-05 18:18:00.486] [starrtc_msgSocket]:(1819):nwrite=69, len=69
+[2019-07-05 18:18:00.486] [starrtc_autils]:(1795):starrtc_chatRoom: starRecvLoop: bufferLen=300,endPtr-ptr=300
+[2019-07-05 18:18:00.486] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=-1
+
+[2019-07-05 18:18:00.486] [starrtc_autils]:(361):inBUffLen:0,13
+[2019-07-05 18:18:00.586] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=17
+
+[2019-07-05 18:18:00.586] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=283,ret=-1
+
+[2019-07-05 18:18:00.586] [starrtc_autils]:(1841):starrtc_chatRoom: starRecvLoop readLen=17
+
+[2019-07-05 18:18:00.586] [starrtc_msgSocket]:(1835):read auth packet = 17, getPackLen=13
+[2019-07-05 18:18:00.586] [starrtc_msgSocket]:(1865):msg auth ok,maxContentLen=2048
+[2019-07-05 18:18:00.586] [starrtc_msgSocket]:(1734):linkToMsgServer_success!g_localIp=172.30.156.114
+===============================================================
+========================starRTC_INIT===========================
+===============================================================
+[2019-07-05 18:18:25.570] [starrtc_starSDK]:(1238):interface_configLog_args:level=3,filter=31,freq=1
+[2019-07-05 18:18:26.006] [starrtc_msgSocket]:(284):=======msgServerStart======== addr=msg.starrtc.com:9903,g_agentId=stargWeHN8Y7,userId=1006611,token=WE73B1IDRRIAP1A5TVR6C16BC1A46929
+[2019-07-05 18:18:26.006] [starrtc_msgSocket]:(334):reConnNewThread_thread_success
+[2019-07-05 18:18:26.007] [starrtc_msgSocket]:(352):contentLoopCheckRead_thread_success
+[2019-07-05 18:18:26.007] [starrtc_msgSocket]:(366):contentLoopCheckWrite_thread_success
+[2019-07-05 18:18:26.007] [starrtc_msgSocket]:(3242):contentLoopCheckRead_thread_start!
+[2019-07-05 18:18:26.007] [starrtc_msgSocket]:(3469):contentLoopCheckWrite_thread_start!
+[2019-07-05 18:18:26.008] [starrtc_msgSocket]:(1706):__sync_lock_test_and_set
+[2019-07-05 18:18:26.008] [starrtc_msgSocket]:(1711):start_linkToMsgServer:tidNeedExit=0,msgIsConnected=0,threadWriteIdle=1,threadReadIdle=1
+[2019-07-05 18:18:26.008] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:26.008] [starrtc_msgSocket]:(1764):createSocketAndConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:26.008] [starrtc_autils]:(1154):createSocketAndConnectTo_servUrl=msg.starrtc.com:9903
+[2019-07-05 18:18:26.016] [starrtc_msgSocket]:(1767):createSocketAndConnectTo_cfd=624
+[2019-07-05 18:18:26.016] [starrtc_msgSocket]:(1819):nwrite=69, len=69
+[2019-07-05 18:18:26.016] [starrtc_autils]:(1795):starrtc_chatRoom: starRecvLoop: bufferLen=300,endPtr-ptr=300
+[2019-07-05 18:18:26.016] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=-1
+
+[2019-07-05 18:18:26.016] [starrtc_autils]:(361):inBUffLen:0,13
+[2019-07-05 18:18:26.116] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=17
+
+[2019-07-05 18:18:26.116] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=283,ret=-1
+
+[2019-07-05 18:18:26.116] [starrtc_autils]:(1841):starrtc_chatRoom: starRecvLoop readLen=17
+
+[2019-07-05 18:18:26.116] [starrtc_msgSocket]:(1835):read auth packet = 17, getPackLen=13
+[2019-07-05 18:18:26.116] [starrtc_msgSocket]:(1865):msg auth ok,maxContentLen=2048
+[2019-07-05 18:18:26.116] [starrtc_msgSocket]:(1734):linkToMsgServer_success!g_localIp=172.30.156.114
+[2019-07-05 18:18:26.141] [starrtc_msgSocket]:(3395):The connection of msgServer is disconnected
+[2019-07-05 18:18:26.141] [starrtc_msgSocket]:(3201):MSG_ERR: MSGSERVER_ERRID_DUPLICATE_LOGIN
+[2019-07-05 18:18:26.141] [starrtc_msgSocket]:(3409):parse data from msgServer error
+[2019-07-05 18:18:26.588] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:26.588] [starrtc_msgSocket]:(1769):socketConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:26.588] [starrtc_autils]:(1435):socketConnectTo: msg.starrtc.com:9903
+[2019-07-05 18:18:26.588] [starrtc_msgSocket]:(1772):socketConnectTo_cfd=-1
+[2019-07-05 18:18:26.588] [starrtc_msgSocket]:(1776):createSocketAndConnectTo_failed
+[2019-07-05 18:18:26.588] [starrtc_msgSocket]:(1739):linkToMsgServer_failed!g_localIp=172.30.156.114
+[2019-07-05 18:18:27.588] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:27.588] [starrtc_msgSocket]:(1764):createSocketAndConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:27.588] [starrtc_autils]:(1154):createSocketAndConnectTo_servUrl=msg.starrtc.com:9903
+[2019-07-05 18:18:27.592] [starrtc_msgSocket]:(1767):createSocketAndConnectTo_cfd=700
+[2019-07-05 18:18:27.592] [starrtc_msgSocket]:(1819):nwrite=69, len=69
+[2019-07-05 18:18:27.592] [starrtc_autils]:(1795):starrtc_chatRoom: starRecvLoop: bufferLen=300,endPtr-ptr=300
+[2019-07-05 18:18:27.592] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=-1
+
+[2019-07-05 18:18:27.592] [starrtc_autils]:(361):inBUffLen:0,13
+[2019-07-05 18:18:27.692] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=45
+
+[2019-07-05 18:18:27.692] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=255,ret=0
+
+[2019-07-05 18:18:27.692] [starrtc_autils]:(1841):starrtc_chatRoom: starRecvLoop readLen=45
+
+[2019-07-05 18:18:27.692] [starrtc_msgSocket]:(1835):read auth packet = 45, getPackLen=13
+[2019-07-05 18:18:27.692] [starrtc_msgSocket]:(1871):====msg auth failed====
+[2019-07-05 18:18:27.692] [starrtc_msgSocket]:(1739):linkToMsgServer_failed!g_localIp=172.30.156.114
+[2019-07-05 18:18:28.692] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:28.692] [starrtc_msgSocket]:(1769):socketConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:28.692] [starrtc_autils]:(1435):socketConnectTo: msg.starrtc.com:9903
+[2019-07-05 18:18:28.692] [starrtc_msgSocket]:(1772):socketConnectTo_cfd=-1
+[2019-07-05 18:18:28.692] [starrtc_msgSocket]:(1776):createSocketAndConnectTo_failed
+[2019-07-05 18:18:28.692] [starrtc_msgSocket]:(1739):linkToMsgServer_failed!g_localIp=172.30.156.114
+[2019-07-05 18:18:29.693] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:29.693] [starrtc_msgSocket]:(1764):createSocketAndConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:29.693] [starrtc_autils]:(1154):createSocketAndConnectTo_servUrl=msg.starrtc.com:9903
+[2019-07-05 18:18:29.696] [starrtc_msgSocket]:(1767):createSocketAndConnectTo_cfd=696
+[2019-07-05 18:18:29.696] [starrtc_msgSocket]:(1819):nwrite=69, len=69
+[2019-07-05 18:18:29.696] [starrtc_autils]:(1795):starrtc_chatRoom: starRecvLoop: bufferLen=300,endPtr-ptr=300
+[2019-07-05 18:18:29.696] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=-1
+
+[2019-07-05 18:18:29.696] [starrtc_autils]:(361):inBUffLen:0,13
+[2019-07-05 18:18:29.796] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=45
+
+[2019-07-05 18:18:29.796] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=255,ret=0
+
+[2019-07-05 18:18:29.796] [starrtc_autils]:(1841):starrtc_chatRoom: starRecvLoop readLen=45
+
+[2019-07-05 18:18:29.796] [starrtc_msgSocket]:(1835):read auth packet = 45, getPackLen=13
+[2019-07-05 18:18:29.796] [starrtc_msgSocket]:(1871):====msg auth failed====
+[2019-07-05 18:18:29.796] [starrtc_msgSocket]:(1739):linkToMsgServer_failed!g_localIp=172.30.156.114
+[2019-07-05 18:18:30.796] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:30.796] [starrtc_msgSocket]:(1769):socketConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:30.796] [starrtc_autils]:(1435):socketConnectTo: msg.starrtc.com:9903
+[2019-07-05 18:18:30.796] [starrtc_msgSocket]:(1772):socketConnectTo_cfd=-1
+[2019-07-05 18:18:30.796] [starrtc_msgSocket]:(1776):createSocketAndConnectTo_failed
+[2019-07-05 18:18:30.796] [starrtc_msgSocket]:(1739):linkToMsgServer_failed!g_localIp=172.30.156.114
+[2019-07-05 18:18:31.796] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:31.796] [starrtc_msgSocket]:(1764):createSocketAndConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:31.796] [starrtc_autils]:(1154):createSocketAndConnectTo_servUrl=msg.starrtc.com:9903
+[2019-07-05 18:18:31.799] [starrtc_msgSocket]:(1767):createSocketAndConnectTo_cfd=692
+[2019-07-05 18:18:31.799] [starrtc_msgSocket]:(1819):nwrite=69, len=69
+[2019-07-05 18:18:31.799] [starrtc_autils]:(1795):starrtc_chatRoom: starRecvLoop: bufferLen=300,endPtr-ptr=300
+[2019-07-05 18:18:31.799] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=-1
+
+[2019-07-05 18:18:31.799] [starrtc_autils]:(361):inBUffLen:0,13
+[2019-07-05 18:18:31.899] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=45
+
+[2019-07-05 18:18:31.899] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=255,ret=0
+
+[2019-07-05 18:18:31.899] [starrtc_autils]:(1841):starrtc_chatRoom: starRecvLoop readLen=45
+
+[2019-07-05 18:18:31.899] [starrtc_msgSocket]:(1835):read auth packet = 45, getPackLen=13
+[2019-07-05 18:18:31.899] [starrtc_msgSocket]:(1871):====msg auth failed====
+[2019-07-05 18:18:31.899] [starrtc_msgSocket]:(1739):linkToMsgServer_failed!g_localIp=172.30.156.114
+[2019-07-05 18:18:32.899] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:32.899] [starrtc_msgSocket]:(1769):socketConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:32.899] [starrtc_autils]:(1435):socketConnectTo: msg.starrtc.com:9903
+[2019-07-05 18:18:32.899] [starrtc_msgSocket]:(1772):socketConnectTo_cfd=-1
+[2019-07-05 18:18:32.899] [starrtc_msgSocket]:(1776):createSocketAndConnectTo_failed
+[2019-07-05 18:18:32.899] [starrtc_msgSocket]:(1739):linkToMsgServer_failed!g_localIp=172.30.156.114
+===============================================================
+========================starRTC_INIT===========================
+===============================================================
+[2019-07-05 18:18:34.539] [starrtc_starSDK]:(1238):interface_configLog_args:level=3,filter=31,freq=1
+[2019-07-05 18:18:34.940] [starrtc_msgSocket]:(284):=======msgServerStart======== addr=msg.starrtc.com:9903,g_agentId=stargWeHN8Y7,userId=1006611,token=D8E0OADI49XTP1A6RLSA316BC1A48C11
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(334):reConnNewThread_thread_success
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(1706):__sync_lock_test_and_set
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(1711):start_linkToMsgServer:tidNeedExit=0,msgIsConnected=0,threadWriteIdle=1,threadReadIdle=1
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(1716):start_linkToMsgServer
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(1764):createSocketAndConnectTo_start:msg.starrtc.com:9903
+[2019-07-05 18:18:34.941] [starrtc_autils]:(1154):createSocketAndConnectTo_servUrl=msg.starrtc.com:9903
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(352):contentLoopCheckRead_thread_success
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(366):contentLoopCheckWrite_thread_success
+[2019-07-05 18:18:34.941] [starrtc_msgSocket]:(3242):contentLoopCheckRead_thread_start!
+[2019-07-05 18:18:34.942] [starrtc_msgSocket]:(3469):contentLoopCheckWrite_thread_start!
+[2019-07-05 18:18:34.945] [starrtc_msgSocket]:(1767):createSocketAndConnectTo_cfd=628
+[2019-07-05 18:18:34.945] [starrtc_msgSocket]:(1819):nwrite=69, len=69
+[2019-07-05 18:18:34.945] [starrtc_autils]:(1795):starrtc_chatRoom: starRecvLoop: bufferLen=300,endPtr-ptr=300
+[2019-07-05 18:18:34.945] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=-1
+
+[2019-07-05 18:18:34.945] [starrtc_autils]:(361):inBUffLen:0,13
+[2019-07-05 18:18:35.045] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=300,ret=17
+
+[2019-07-05 18:18:35.045] [starrtc_autils]:(1800):starrtc_chatRoom: starRecvLoop endPtr-ptr=283,ret=-1
+
+[2019-07-05 18:18:35.045] [starrtc_autils]:(1841):starrtc_chatRoom: starRecvLoop readLen=17
+
+[2019-07-05 18:18:35.045] [starrtc_msgSocket]:(1835):read auth packet = 17, getPackLen=13
+[2019-07-05 18:18:35.045] [starrtc_msgSocket]:(1865):msg auth ok,maxContentLen=2048
+[2019-07-05 18:18:35.045] [starrtc_msgSocket]:(1734):linkToMsgServer_success!g_localIp=172.30.156.114
