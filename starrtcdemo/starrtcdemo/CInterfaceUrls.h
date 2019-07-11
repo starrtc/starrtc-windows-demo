@@ -11,6 +11,25 @@ class CInterfaceUrls
 public:
 	CInterfaceUrls();
 	virtual ~CInterfaceUrls();
+	//UTF8转ANSI
+	static string UTF8toANSI(string strUTF8);
+	//ANSI转UTF8
+	static string ANSItoUTF8(string strAnsi);
+	static unsigned char ToHex(unsigned char x);
+	static unsigned char FromHex(unsigned char x);
+	static std::string UrlEncode(const std::string& str);
+	static std::string UrlDecode(const std::string& str);
+
+	static void demoSaveToList(string userId, int listType, string id, string data);
+
+	static void demoDeleteFromList(string userId, int listType, string id);
+
+	static void demoQueryList(string listType, list<ChatroomInfo>& listData);
+
+	static void demoQueryImGroupList(string userId, list<CGroupInfo>& groupInfoList);
+
+	static void demoQueryImGroupInfo(string userId, string groupId, CGroupMemoryInfo& userList);
+
 	static void setBaseUrl(string baseUrl);
 	//会议室列表
 	static void demoRequestMeetingList(list<ChatroomInfo>& listData, CUserManager* pUserManager);

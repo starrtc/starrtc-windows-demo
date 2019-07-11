@@ -104,7 +104,7 @@ public:
 	/**
 	 * 获取group 成员信息回调函数
 	 */
-	virtual int applyGetUserListFin(list<string>& userList);
+	virtual int applyGetUserListFin(CGroupMemoryInfo& userList);
 	/**
 	 * 群成员数发生变化
 	 * @param groupID

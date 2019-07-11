@@ -12,7 +12,7 @@ public:
 public:
 	//ray0306-3
 	virtual int applyGetGroupListFin(list<CGroupInfo>& groupInfoList) = 0;
-	virtual int applyGetUserListFin(list<string>& userList) = 0;
+	virtual int applyGetUserListFin(CGroupMemoryInfo& userList) = 0;
 
 	/**
 	 * 群成员数发生变化

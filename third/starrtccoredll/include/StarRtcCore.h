@@ -64,6 +64,7 @@ public:
 	 * @param listener
 	 */
 	void addGetListListener(IChatroomGetListListener* listener);
+
 	/**
 	 * 添加C2C消息监听
 	 * @param listener
@@ -272,11 +273,18 @@ public:
 	 * 设置数据流配置
 	 */
 	bool setStreamConfigSrc(int* sendBuf, int length);
-	
+	//int queryAllChannelList(char* servAddr, int servPort, char* userId, char* listType);
+
 	/*
 	 * 创建Channel
 	 */
-	bool createPublicChannel(string strServerIp, int port, string strName, int channelType, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
+	bool createPublicChannel(string strServerIp, int port, string strName, int listType, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
+	/*
+	 * 创建Channel
+	 */
+	bool starLiveCreateLoginChannel(string strServerIp, int servPort, string strName, int listType, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
+
+
 	int startLiveSrcEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
 	int startUploadSrcServer(char* servAddr, int servPort, char* agentId, char* userId, char* starToken, char* channelId/* ,int maxAudioPacketNum,int maxVideoPacketNum */);
 	void setUploader(char* userId);
@@ -519,7 +527,7 @@ public:
 	static int pushRtmpFailedSrc(char* errString, char* channelId, void* userData);
 	static int stopPushRtmpOKSrc(char* channelId, void* userData);
 	static int stopPushRtmpFailedSrc(char* errString, char* channelId, void* userData);
-
+	//static int channelQueryAllListOK(char* listData, void* userData);
 	
 	static int getVideoRaw(int upId, int w, int h, uint8_t* videoData, int videoDataLen, void* userData);
 private:

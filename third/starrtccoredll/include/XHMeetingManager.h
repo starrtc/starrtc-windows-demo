@@ -10,7 +10,7 @@ public:
 	virtual ~XHMeetingManager();
 public:
 	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
-	static void getMeetingList(string strUserId, int listType);
+	static void getMeetingList(string strUserId, string listType);
 
 	/**
 	 * 设置媒体类型

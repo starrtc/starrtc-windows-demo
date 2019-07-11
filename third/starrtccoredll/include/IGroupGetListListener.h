@@ -12,5 +12,5 @@ public:
 	/**
 	 * 查询用户列表回调
 	 */
-	virtual int applyGetUserListFin(list<string>& userList) = 0;
+	virtual int applyGetUserListFin(CGroupMemoryInfo& userList) = 0;
 };
