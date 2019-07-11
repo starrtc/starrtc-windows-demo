@@ -16,7 +16,7 @@ public:
 	XHLiveManager(ILiveManagerListener* pLiveListener);
 	virtual ~XHLiveManager();
 	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
-	static void getLiveList(string strUserId, int listType);
+	static void getLiveList(string strUserId, string listType);
 
 
 	/**

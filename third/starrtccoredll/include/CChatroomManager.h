@@ -37,7 +37,7 @@ public:
 	 * @param pUserManager 用户信息
 	 * @param listType 类型
 	 */
-	static void getChatroomList(CUserManager* pUserManager, string strUserId, int listType);
+	static void getChatroomList(CUserManager* pUserManager, string strUserId, string listType);
 
 	/*
 	 * 重置返回值

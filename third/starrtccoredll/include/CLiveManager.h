@@ -15,13 +15,13 @@ enum LIVE_VIDEO_TYPE
 
 
 
-class CLiveManager: public IChatroomManagerListener, public ISrcManagerListener, public IVdnManagerListener
+class CLiveManager:public IChatroomManagerListener, public ISrcManagerListener, public IVdnManagerListener
 {
 public:
 	CLiveManager(CUserManager* pUserManager, ILiveManagerListener* pLiveListener);
 	virtual ~CLiveManager();
 	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
-	static void getLiveList(CUserManager* pUserManager);
+	static void getLiveList(CUserManager* pUserManager, string strUserId, string listType);
 
 	bool createLive(string strName, int chatroomType, int channelType);
 	/**
@@ -191,7 +191,6 @@ public:
 	virtual int srcError(char* errString);
 
 public:
-	static IChatroomGetListListener* m_pChatroomGetListListener;
 	ILiveManagerListener* m_pLiveListener;
 	CUserManager* m_pUserManager;
 	CChatroomManager* m_pChatroomManager;

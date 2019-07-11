@@ -11,6 +11,12 @@ public:
 	virtual ~CSrcManager();
 
 public:
+	/*
+	 * 获取channel列表
+	 * @param pUserManager 用户信息
+	 * @param listType 类型
+	 */
+	//static void getChannelList(CUserManager* pUserManager, string strUserId, int listType);
 
 	/*
 	 * 全局参数设置
@@ -32,7 +38,12 @@ public:
 	/*
 	 * 创建Channel
 	 */
-	bool createChannel(string strName, int channelType, string strChatroomId);
+	bool createChannel(string strName, string strChatroomId);
+
+	/*
+	 * 创建Channel
+	 */
+	bool createLoginChannel(string strName, string strChatroomId);
 
 	/*
 	 * Channel 申请上传

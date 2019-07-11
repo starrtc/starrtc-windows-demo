@@ -229,6 +229,7 @@
     <ClInclude Include="..\..\third\starrtccoredll\include\StarRtcCore.h" />
     <ClInclude Include="CAudioChatroomDlg.h" />
     <ClInclude Include="CChatroomDlg.h" />
+    <ClInclude Include="CConfigManager.h" />
     <ClInclude Include="CCreateLiveDialog.h" />
     <ClInclude Include="CCreateNewChatOneToOne.h" />
     <ClInclude Include="CCreateNewChatroomDlg.h" />
@@ -291,6 +292,7 @@
   <ItemGroup>
     <ClCompile Include="CAudioChatroomDlg.cpp" />
     <ClCompile Include="CChatroomDlg.cpp" />
+    <ClCompile Include="CConfigManager.cpp" />
     <ClCompile Include="CCreateLiveDialog.cpp" />
     <ClCompile Include="CCreateNewChatOneToOne.cpp" />
     <ClCompile Include="CCreateNewChatroomDlg.cpp" />

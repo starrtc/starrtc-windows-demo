@@ -19,17 +19,32 @@ public:
 	virtual ~CMeetingManager();
 public:
 	static void addChatroomGetListListener(IChatroomGetListListener* pChatroomGetListListener);
-	static void getMeetingList(CUserManager* pUserManager);
+	static void getMeetingList(CUserManager* pUserManager, string strUserId, string listType);
 	bool createMeeting(string strName, int chatroomType, int channelType);
 	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	void insertVideoNalu(uint8_t* videoData, int dataLen);
 	void insertVideoRaw(uint8_t* videoData, int dataLen, int isBig);
 	int cropVideoRawNV12(int w, int h, uint8_t* videoData, int dataLen, int yuvProcessPlan, int rotation, int needMirror, uint8_t* outVideoDataBig, uint8_t* outVideoDataSmall);
+	/**
+	 * 保存到列表
+	 * @param userId
+	 * @param type
+	 * @param strChatroomId
+	 * @param data
+	 */
+	bool saveToList(string userId, int type, string strChatroomId, string data);
 
+	/**
+	 * 从列表删除
+	 * @param userId 用户ID
+	 * @param type 类型
+	 * @param strChatroomId ID
+	 */
+	bool deleteFromList(string userId, int type, string strChatroomId);
 	/*
 	 * 上报chatroom 和 channelID
 	 */
-	bool reportChatRoomAndChannel(string strName, string strChatroomId, string strChannelId);
+	//bool reportChatRoomAndChannel(string strName, string strChatroomId, string strChannelId);
 	bool joinChatroom(string strChatroomId);
 	bool join(string strChatroomId, string strChannelId);
 	bool closeChatroom();
@@ -156,7 +171,6 @@ public:
 	virtual int srcError(char* errString);
 
 public:
-	static IChatroomGetListListener* m_pChatroomGetListListener;
 	IMeetingManagerListener* m_pMeetingManagerListener;
 	CUserManager* m_pUserManager;
 	CChatroomManager* m_pChatroomManager;

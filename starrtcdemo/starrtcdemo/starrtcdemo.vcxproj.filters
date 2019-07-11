@@ -255,6 +255,9 @@
     <ClInclude Include="WhitePanelActionType.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CConfigManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -394,6 +397,9 @@
     </ClCompile>
     <ClCompile Include="CWhitePanelDlg.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CConfigManager.cpp">
+      <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
