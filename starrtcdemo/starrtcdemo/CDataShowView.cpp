@@ -201,6 +201,7 @@ void CDataShowView::setShowPictures()
 			m_upUserInfoArr[i]->m_showRect = smallRect;
 			m_upUserInfoArr[i]->m_pPictureControl->MoveWindow(smallRect);
 			m_upUserInfoArr[i]->m_pPictureControl->ShowWindow(SW_SHOW);
+			useIndex++;
 		}
 	}
 	LeaveCriticalSection(&m_critPicture);
