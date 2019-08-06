@@ -4,7 +4,7 @@
 ![main interface](assets/demo.png)
 
 This product is free completely and provides a free private deployment server program that supports all features .
-and it provides push and pull third-party stream.
+And it also provides push and pull third-party stream.
 
 Support
 ====
@@ -15,7 +15,7 @@ Please download at the following address for private deployment:
 https://github.com/starrtc/starrtc-server
 
 
-The demo is in the release directory which is named starrtcdemo.exe,and edit the file param.ini to configure the private deployment
+The demo is in the release directory which is named starrtcdemo.exe,and you can edit the file param.ini to configure the private deployment
 
 Project directory：starrtcdemo\starrtcdemo.sln
 
