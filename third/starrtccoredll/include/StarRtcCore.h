@@ -13,6 +13,7 @@
 #include "IStarVoipP2PListener.h"
 #include "IRecvDataListener.h"
 #include "IChatroomGetListListener.h"
+#include "ILoginListener.h"
 /*
  * StarRtc接口类
  */
@@ -59,6 +60,12 @@ public:
 	void saveFile(int save_mode);
 
 	void setconfigLog(int log_level, int log_filter, int log_freq);
+	/**
+	 * 添加IM监听
+	 * @param listener
+	 */
+	void addLoginListener(ILoginListener* listener);
+	
 	/**
 	 * 添加获取列表监听
 	 * @param listener
@@ -279,18 +286,19 @@ public:
 	 * 创建Channel
 	 */
 	bool createPublicChannel(string strServerIp, int port, string strName, int listType, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
+	
 	/*
 	 * 创建Channel
 	 */
 	bool starLiveCreateLoginChannel(string strServerIp, int servPort, string strName, int listType, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
 
-
+	bool createBroadcastChannel(string strServerIp, int port, string strName, int listType, string strChatroomId, string strAgentId, string strUserId, string strTokenId);
 	int startLiveSrcEncoder(int audioSampleRateInHz, int audioChannels, int audioBitRate, int rotation);
 	int startUploadSrcServer(char* servAddr, int servPort, char* agentId, char* userId, char* starToken, char* channelId/* ,int maxAudioPacketNum,int maxVideoPacketNum */);
 	void setUploader(char* userId);
 	
 	int stopUploadSrcServer();
-	int stopLiveSrcCodec();
+	int stopLiveSrcCodec(int disable_decoder);
 
 	void insertAudioRaw(uint8_t* audioData, int dataLen);
 	//videoData的释放由此函数负责
@@ -531,6 +539,7 @@ public:
 	
 	static int getVideoRaw(int upId, int w, int h, uint8_t* videoData, int videoDataLen, void* userData);
 private:
+	ILoginListener* m_pLoginListener;
 	IChatroomGetListListener* m_pGetListListener;
 	IStarIMC2CListener* m_pc2cMsgListener;
 	IGroupListener* m_pGroupMsgListener;

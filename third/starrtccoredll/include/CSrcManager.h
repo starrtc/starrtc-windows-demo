@@ -46,6 +46,11 @@ public:
 	bool createLoginChannel(string strName, string strChatroomId);
 
 	/*
+	 * 创建Channel
+	 */
+	bool createBroadcastChannel(string strName, string strChatroomId);
+
+	/*
 	 * Channel 申请上传
 	 */
 	bool applyUpload();
@@ -65,7 +70,7 @@ public:
 	/*
 	 *  停止直播编码器
 	 */
-	bool stopEncoder();
+	bool stopEncoder(int disable_decoder);
 
 	bool stop();
 	void insertAudioRaw(uint8_t* audioData, int dataLen);

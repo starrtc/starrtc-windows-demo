@@ -4,11 +4,7 @@
 #define MATH_API _declspec(dllexport)
 #endif
 
-enum LIVE_MEDIA_TYPE {
-	LIVE_MEDIA_TYPE_VIDEO_AND_AUDIO,
-	LIVE_MEDIA_TYPE_VIDEO_ONLY,
-	LIVE_MEDIA_TYPE_AUDIO_ONLY
-};
+
 
 class MATH_API XHLiveManager
 {

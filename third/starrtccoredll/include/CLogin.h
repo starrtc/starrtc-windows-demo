@@ -6,9 +6,9 @@
 
 #include<string>
 using namespace std;
-
+#include "ILoginListener.h"
 #include "CUserManager.h"
-class MATH_API CLogin
+class MATH_API CLogin :public ILoginListener
 {
 public:
 	CLogin(CUserManager* pUserManager);
@@ -28,6 +28,26 @@ public:
 	 * 开启IM服务
 	 */
 	bool stopIMServer();
+public:
+	/**
+	 * msgServer错误,这个函数是新线程调用
+	 */
+	virtual int msgErr(char* errString);
+
+	/**
+	 * 重试多次后仍不能连接到msgServer，或用户主动调用stop后回调
+	 */
+	virtual int stop();
+
+	/**
+	 * msgServer处于在线状态
+	 */
+	virtual int online(int maxContentLen);
+
+	/**
+	 * msgServer中断状态
+	 */
+	virtual int offline();
 private:
 	/*
 	 * 获取authKey

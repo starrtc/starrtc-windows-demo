@@ -258,6 +258,9 @@
     <ClInclude Include="CConfigManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CSuperAudioChatroomDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -400,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="CConfigManager.cpp">
       <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CSuperAudioChatroomDlg.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
