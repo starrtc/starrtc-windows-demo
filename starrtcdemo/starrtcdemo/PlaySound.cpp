@@ -19,9 +19,8 @@ CPlaySound::CPlaySound()
 	m_WaveFormatEx.wBitsPerSample = 16;
 	m_WaveFormatEx.cbSize = 0;
 	m_WaveFormatEx.nSamplesPerSec = 16000;
-	m_WaveFormatEx.nAvgBytesPerSec = 32000;
 	m_WaveFormatEx.nBlockAlign = 2;
-
+	m_WaveFormatEx.nAvgBytesPerSec = 32000;
 	m_IsPlaying = FALSE;	
 }
 
