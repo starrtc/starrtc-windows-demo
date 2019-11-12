@@ -228,26 +228,31 @@ void CDataShowView::drawPic(YUV_TYPE type, string userId, int w, int h, uint8_t*
 	{
 		EnterCriticalSection(&m_critPicture);
 		CUpUserInfo* pUpUserInfo = findUpUserInfo(userId);
+		LeaveCriticalSection(&m_critPicture);
+		uint8_t* videoDataRGB = NULL;
+		if (pUpUserInfo != NULL && videoData != NULL && videoDataLen > 0)
+		{
+			videoDataRGB = new uint8_t[w*h * 3];
+			if (type == FMT_NV12 || type == FMT_NV21)
+			{
+				CUtil::yuv420sp_to_rgb24(type, videoData, videoDataRGB, w, h);
+			}
+			else if (type == FMT_YUV420P)
+			{
+				CUtil::yuv420p_to_rgb24(videoData, videoDataRGB, w, h);
+			}
+			else
+			{
+				memcpy(videoDataRGB, videoData, sizeof(uint8_t)*videoDataLen);
+			}
+		}
+
+		EnterCriticalSection(&m_critPicture);
+		pUpUserInfo = findUpUserInfo(userId);
 		if (pUpUserInfo != NULL && pUpUserInfo->m_pPictureControl != NULL)
 		{
-			if (videoData != NULL && videoDataLen > 0)
+			if (videoDataRGB != NULL && videoDataLen > 0)
 			{
-				uint8_t* videoDataRGB = new uint8_t[w*h * 3];
-				if (type == FMT_NV12 || type == FMT_NV21)
-				{
-					CUtil::yuv420sp_to_rgb24(type, videoData, videoDataRGB, w, h);
-				}
-				else if (type == FMT_YUV420P)
-				{
-					CUtil::yuv420p_to_rgb24(videoData, videoDataRGB, w, h);
-				}
-				else
-				{
-					memcpy(videoDataRGB, videoData, sizeof(uint8_t)*videoDataLen);
-				}
-
-				
-
 				CRect rect;
 
 				pUpUserInfo->m_pPictureControl->GetClientRect(&rect);     //m_picture为Picture Control控件变量，获得控件的区域对象

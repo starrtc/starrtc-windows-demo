@@ -407,11 +407,11 @@ public:
 	//calling失败
 	static void voipCallingFailed(char* errString, void* userData);
 	//接收方准备好，可以开始插入数据
-	static void voipResponseOk(void* userData);
+	static void voipResponseOk(char* recSessionId, void* userData);
 	//response失败
 	static void voipResponseFailed(char* errString, void* userData);
 	//发送方准备好，可以开始插入数据
-	static void voipCallingOk(void* userData);
+	static void voipCallingOk(char* recSessionId, void* userData);
 	static int voipError(char* errString, void* userData);
 	static int voipSpeedTestFinish(char* userIp, int uploadVariance, int uploadSpeed, int downloadVariance, int downSpeed, void* userData);
 	static int voipEchoTestFinish(int index, int len, int timeCost, void* userData);
@@ -494,7 +494,7 @@ public:
 	static int createChannelOK(char* channelId, void* userData);
 	static int createChannelFailed(char* errString, void* userData);
 
-	static int applyUploadChannelOK(char* channelId, void* userData);
+	static int applyUploadChannelOK(char* channelId, char* recSessionId, void* userData);
 	static int applyUploadChannelFailed(char* errString, char* channelId, void* userData);
 
 	static int setUploaderOK(char* channelId, char* uploadUserId, void* userData);
